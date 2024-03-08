@@ -44,10 +44,17 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        // Get installed Apps for RecyclerView:
         final PackageManager pm = getPackageManager();
-        //get a list of installed apps.
+        List<PackageInfo> packs = pm.getInstalledPackages(PackageManager.GET_META_DATA);
+
+        // Filter out system apps from list:
+        packs.removeIf(packageInfo ->
+                (packageInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0);
+
+
         RecyclerView appRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        AppsAdapter adapter = new AppsAdapter(pm.getInstalledPackages(PackageManager.GET_META_DATA), pm);
+        AppsAdapter adapter = new AppsAdapter(packs, pm);
         appRecyclerView.setAdapter(adapter);
         appRecyclerView.setLayoutManager(new GridLayoutManager( binding.getRoot().getContext(), 5));
     }
