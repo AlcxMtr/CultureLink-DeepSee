@@ -5,9 +5,12 @@ import static android.content.ContentValues.TAG;
 import android.app.Application;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 
+import com.example.deepsee.AppDrawerFragment;
+import com.example.deepsee.R;
 import com.example.deepsee.app_drawer.AppsAdapter;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -29,26 +32,50 @@ import com.example.deepsee.databinding.ActivityMainBinding;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 
 import java.util.List;
 
+
 public class MainActivity extends AppCompatActivity {
 
-    private AppBarConfiguration appBarConfiguration;
-    private ActivityMainBinding binding;
+    private boolean isAppDrawerVisible = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        Button showHideButton = findViewById(R.id.show_hide_button);
+        showHideButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) { // TODO: fahiiiiiiiiiim jaani pls fragmentise
+                //toggleAppDrawer(); // Temporarily disabled, see below launching activity:
 
-        final PackageManager pm = getPackageManager();
-        //get a list of installed apps.
-        RecyclerView appRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        AppsAdapter adapter = new AppsAdapter(pm.getInstalledPackages(PackageManager.GET_META_DATA), pm);
-        appRecyclerView.setAdapter(adapter);
-        appRecyclerView.setLayoutManager(new GridLayoutManager( binding.getRoot().getContext(), 5));
+                // Start AppDrawerActivity
+                Intent intent = new Intent(MainActivity.this, AppDrawerActivity.class);
+                startActivity(intent);
+            }
+        });
     }
+
+    // Toggles the App Drawer:
+    private void toggleAppDrawer() {
+
+        if (!isAppDrawerVisible) {
+            // If the App Drawer is not visible, show it
+
+            // TODO: THIS DOES NOT WORK JAANI FIX IT ILY
+            // supportFragmentManager is an inbuilt, we should be using it:
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, new AppDrawerFragment())
+                    .commit();
+        } else {
+            // If it is visible, hide it:
+            isAppDrawerVisible = !isAppDrawerVisible; // placeholder
+        }
+
+        isAppDrawerVisible = !isAppDrawerVisible;
+    }
+
 }
