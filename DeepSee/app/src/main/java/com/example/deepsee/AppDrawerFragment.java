@@ -12,30 +12,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import java.util.List;
-import com.example.deepsee.databinding.ActivityMainBinding;
+
 import android.content.pm.ApplicationInfo;
 import com.example.deepsee.app_drawer.AppsAdapter;
-import androidx.core.view.WindowCompat;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
+
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import android.view.Menu;
-import android.view.MenuItem;
 
 
 public class AppDrawerFragment extends Fragment {
 
-    private ActivityMainBinding binding;
+    private View binding;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = ActivityMainBinding.inflate(inflater, container, false);
-        return binding.getRoot();
+        binding = inflater.inflate(R.layout.fragment_app_drawer, container, false);
+        return binding;
     }
 
     @Override
@@ -43,6 +36,14 @@ public class AppDrawerFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         setupAppRecyclerView();
+    }
+
+    private void setViewLayout(int id){
+        LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(binding.getContext().LAYOUT_INFLATER_SERVICE);
+        binding = inflater.inflate(id, null);
+        ViewGroup rootView = (ViewGroup) getView();
+        rootView.removeAllViews();
+        rootView.addView(binding);
     }
 
     private void setupAppRecyclerView() {
@@ -56,7 +57,7 @@ public class AppDrawerFragment extends Fragment {
                 (packageInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0);
 
         // Create and draw the app drawer as a recyclerView:
-        RecyclerView appRecyclerView = binding.getRoot().findViewById(R.id.recycler_view);
+        RecyclerView appRecyclerView = binding.findViewById(R.id.apps_recycler);
         AppsAdapter adapter = new AppsAdapter(apps, pm);
         appRecyclerView.setAdapter(adapter);
         appRecyclerView.setLayoutManager(new GridLayoutManager(requireContext(), 5));
