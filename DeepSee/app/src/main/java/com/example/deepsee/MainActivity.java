@@ -5,6 +5,7 @@ import static android.content.ContentValues.TAG;
 import android.app.Application;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 
