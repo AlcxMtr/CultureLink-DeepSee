@@ -27,7 +27,8 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.ViewHolder>{
         this.pm = pm;
     }
 
-
+    /*
+    * Creates view for whole recycler*/
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -40,6 +41,8 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.ViewHolder>{
         return v;
     }
 
+    /*
+    * Binds data to one View in list of Views*/
     @Override
     public void onBindViewHolder(@NonNull AppsAdapter.ViewHolder holder, int position) {
         PackageInfo p = apps.get(position);
@@ -68,6 +71,8 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.ViewHolder>{
         return apps.size();
     }
 
+    /*
+    * Data structure that holds View for one item*/
     public class ViewHolder extends RecyclerView.ViewHolder{
         public ImageView icon;
         public TextView name;
