@@ -38,8 +38,9 @@ public class MainActivity extends AppCompatActivity {
 //                apps.get(0).applicationInfo.category
 
         // Remove System Packages from the list before drawing:
-//        apps.removeIf(packageInfo ->
-//                (packageInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0);
+
+        apps.removeIf(packageInfo ->
+                (pm.getLaunchIntentForPackage(packageInfo.packageName) == null));
 
         //Create dictionary from category number -> list of apps in said category
         categories = new HashMap<>();
