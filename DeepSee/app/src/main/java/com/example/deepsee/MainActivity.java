@@ -1,12 +1,9 @@
 package com.example.deepsee;
 
-import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-
-import com.example.deepsee.app_drawer.AppsAdapter;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -14,8 +11,6 @@ import android.view.View;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.widget.Button;
 
@@ -27,8 +22,8 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     private boolean isAppDrawerVisible = false;
-    public List<PackageInfo> apps;
-    public HashMap<Integer, List<PackageInfo>> categories;
+    public List<ApplicationInfo> apps;
+    public HashMap<Integer, List<ApplicationInfo>> categories;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,20 +34,20 @@ public class MainActivity extends AppCompatActivity {
         final PackageManager pm = getPackageManager();
 
         // Get Package List:
-        apps = pm.getInstalledPackages(PackageManager.GET_META_DATA);
+        apps = pm.getInstalledApplications(PackageManager.GET_META_DATA);
 //                apps.get(0).applicationInfo.category
 
         // Remove System Packages from the list before drawing:
-        apps.removeIf(packageInfo ->
-                (packageInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0);
+//        apps.removeIf(packageInfo ->
+//                (packageInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0);
 
         //Create dictionary from category number -> list of apps in said category
         categories = new HashMap<>();
-        for (PackageInfo p : apps){
-            if (!categories.containsKey(p.applicationInfo.category)){
-                categories.put(p.applicationInfo.category,new ArrayList<PackageInfo>());
+        for (ApplicationInfo p : apps){
+            if (!categories.containsKey(p.category)){
+                categories.put(p.category,new ArrayList<ApplicationInfo>());
             }
-            categories.get(p.applicationInfo.category).add(p);
+            categories.get(p.category).add(p);
         }
 
         showHideButton.setOnClickListener(new View.OnClickListener() {
@@ -62,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
                 // Start AppDrawerFragment
                 Fragment fragment = new AppDrawerFragment(categories, apps, pm);
 
+                //Draw AppDrawerFragment overtop current view
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                 transaction.replace(R.id.fragment_container, fragment);
                 transaction.commit();
