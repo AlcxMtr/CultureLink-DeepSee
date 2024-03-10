@@ -1,5 +1,6 @@
 package com.example.deepsee;
 
+import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -11,6 +12,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.view.View;
 
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -24,6 +27,8 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     private boolean isAppDrawerVisible = false;
+    public List<PackageInfo> apps;
+    public HashMap<Integer, List<PackageInfo>> categories;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,46 +36,42 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         Button showHideButton = findViewById(R.id.show_hide_button);
+        final PackageManager pm = getPackageManager();
+
+        // Get Package List:
+        apps = pm.getInstalledPackages(PackageManager.GET_META_DATA);
+//                apps.get(0).applicationInfo.category
+
+        // Remove System Packages from the list before drawing:
+        apps.removeIf(packageInfo ->
+                (packageInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0);
+
+        categories = new HashMap<>();
+        for (PackageInfo p : apps){
+            if (!categories.containsKey(p.applicationInfo.category)){
+                categories.put(p.applicationInfo.category,new ArrayList<PackageInfo>());
+            }
+            categories.get(p.applicationInfo.category).add(p);
+        }
         showHideButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) { // TODO: fahiiiiiiiiiim jaani pls fragmentise
 //                //toggleAppDrawer(); // Temporarily disabled, see below launching activity:
 //
-//                // Start AppDrawerActivity
-//                Intent intent = new Intent(MainActivity.this, AppDrawerActivity.class);
-//                startActivity(intent);
-
-//                Fragment fragment = new AppDrawerFragment();
-//
-//                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-//                transaction.replace(R.id.fragment_container, fragment);
-//                transaction.commit();
-
-                findViewById(R.id.fragmentContainerView).setVisibility(View.VISIBLE);
-                final PackageManager pm = getPackageManager();
-
-                // Get Package List:
-                List<PackageInfo> apps = pm.getInstalledPackages(PackageManager.GET_META_DATA);
-//                apps.get(0).applicationInfo.category
-
-                // Remove System Packages from the list before drawing:
-                apps.removeIf(packageInfo ->
-                        (packageInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0);
-
-                HashMap<Integer, List<PackageInfo>> categories = new HashMap<>();
-                for (PackageInfo p : apps){
-                    if (!categories.containsKey(p.applicationInfo.category)){
-                        categories.put(p.applicationInfo.category,new ArrayList<PackageInfo>());
-                    }
-                    categories.get(p.applicationInfo.category).add(p);
-                }
-
+//                findViewById(R.id.fragmentContainerView).setVisibility(View.VISIBLE);
 
                 // Create and draw the app drawer as a recyclerView:
-                RecyclerView appRecyclerView = findViewById(R.id.apps_recycler);
-                AppsAdapter adapter = new AppsAdapter(apps, pm);
-                appRecyclerView.setAdapter(adapter);
-                appRecyclerView.setLayoutManager(new GridLayoutManager(v.getContext(), 5));
+//                RecyclerView appRecyclerView = findViewById(R.id.apps_recycler);
+//                AppsAdapter adapter = new AppsAdapter(apps, pm);
+//                appRecyclerView.setAdapter(adapter);
+//                appRecyclerView.setLayoutManager(new GridLayoutManager(v.getContext(), 5));
+
+                // Start AppDrawerFragment
+                Fragment fragment = new AppDrawerFragment(categories, apps, pm);
+
+                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.fragment_container, fragment);
+                transaction.commit();
             }
         });
     }
@@ -84,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
             // TODO: THIS DOES NOT WORK JAANI FIX IT ILY
             // supportFragmentManager is an inbuilt, we should be using it:
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, new AppDrawerFragment())
+                    .replace(R.id.fragment_container, new AppDrawerFragment(categories, apps, getPackageManager()))
                     .commit();
         } else {
             // If it is visible, hide it:

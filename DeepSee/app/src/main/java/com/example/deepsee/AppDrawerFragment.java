@@ -11,6 +11,8 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import java.util.HashMap;
 import java.util.List;
 
 import android.content.pm.ApplicationInfo;
@@ -23,6 +25,16 @@ import androidx.recyclerview.widget.RecyclerView;
 public class AppDrawerFragment extends Fragment {
 
     private View binding;
+    private HashMap categories;
+    private List<PackageInfo> apps;
+    private PackageManager pm;
+
+    public AppDrawerFragment(HashMap<Integer, List<PackageInfo>> categories, List<PackageInfo> apps, PackageManager pm) {
+        super();
+        this.categories = categories;
+        this.apps = apps;
+        this.pm = pm;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -47,19 +59,12 @@ public class AppDrawerFragment extends Fragment {
     }
 
     private void setupAppRecyclerView() {
-        final PackageManager pm = requireActivity().getPackageManager();
-
-        // Get Package List:
-        List<PackageInfo> apps = pm.getInstalledPackages(PackageManager.GET_META_DATA);
-
-        // Remove System Packages from the list before drawing:
-        apps.removeIf(packageInfo ->
-                (packageInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0);
 
         // Create and draw the app drawer as a recyclerView:
         RecyclerView appRecyclerView = binding.findViewById(R.id.apps_recycler);
         AppsAdapter adapter = new AppsAdapter(apps, pm);
         appRecyclerView.setAdapter(adapter);
         appRecyclerView.setLayoutManager(new GridLayoutManager(requireContext(), 5));
+
     }
 }
