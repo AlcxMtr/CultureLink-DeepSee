@@ -59,7 +59,6 @@ public class AppDrawerFragment extends Fragment {
     }
 
     private void setupAppRecyclerView() {
-
         // Create and draw the app drawer as a recyclerView:
         RecyclerView appRecyclerView = binding.findViewById(R.id.apps_recycler);
         AppsAdapter adapter = new AppsAdapter(apps, pm);

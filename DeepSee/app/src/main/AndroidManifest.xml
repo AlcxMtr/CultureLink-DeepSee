@@ -27,18 +27,6 @@
         </activity>
 
 
-        <activity
-            android:name=".AppDrawerActivity"
-            android:exported="true"
-            android:label="AppDrawer"
-            android:theme="@style/Theme.DeepSee">
-            <intent-filter>
-                <action android:name="android.intent.action.APPDRAWER" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-
-
     </application>
     <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" tools:ignore="QueryAllPackagesPermission" />
 </manifest>

@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
         apps.removeIf(packageInfo ->
                 (packageInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0);
 
+        //Create dictionary from category number -> list of apps in said category
         categories = new HashMap<>();
         for (PackageInfo p : apps){
             if (!categories.containsKey(p.applicationInfo.category)){
@@ -53,18 +54,10 @@ public class MainActivity extends AppCompatActivity {
             }
             categories.get(p.applicationInfo.category).add(p);
         }
+
         showHideButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) { // TODO: fahiiiiiiiiiim jaani pls fragmentise
-//                //toggleAppDrawer(); // Temporarily disabled, see below launching activity:
-//
-//                findViewById(R.id.fragmentContainerView).setVisibility(View.VISIBLE);
-
-                // Create and draw the app drawer as a recyclerView:
-//                RecyclerView appRecyclerView = findViewById(R.id.apps_recycler);
-//                AppsAdapter adapter = new AppsAdapter(apps, pm);
-//                appRecyclerView.setAdapter(adapter);
-//                appRecyclerView.setLayoutManager(new GridLayoutManager(v.getContext(), 5));
 
                 // Start AppDrawerFragment
                 Fragment fragment = new AppDrawerFragment(categories, apps, pm);
