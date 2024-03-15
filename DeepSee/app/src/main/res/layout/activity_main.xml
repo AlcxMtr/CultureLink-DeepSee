@@ -16,4 +16,11 @@
         android:layout_gravity="bottom|center"
         android:text="Show/Hide App Drawer" />
 
+    <Button
+        android:id="@+id/t2s_button"
+        android:layout_width="156dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:text="Text To Speech" />
+
 </FrameLayout>
