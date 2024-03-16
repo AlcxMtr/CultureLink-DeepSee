@@ -1,12 +1,13 @@
 package com.example.deepsee;
 import android.Manifest;
 
+import android.content.Intent;
 import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Bundle;
 
+import com.example.deepsee.accessibility.TextAndSpeech;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.view.View;
@@ -114,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
                 transaction.commit();
             }
         });
+
         emergencyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -125,6 +127,15 @@ public class MainActivity extends AppCompatActivity {
         });
 
         requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, 1);
+
+        Button t2s = findViewById(R.id.t2s_button);
+        t2s.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this, TextAndSpeech.class);
+                startActivity(i);
+            }
+        });
     }
 
     // Toggles the App Drawer:

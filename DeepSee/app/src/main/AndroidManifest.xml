@@ -26,6 +26,11 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".accessibility.TextAndSpeech"
+            android:exported="true"
+            android:parentActivityName=".MainActivity">
+        </activity>
 
     </application>
     <uses-permission android:name="android.permission.READ_CONTACTS" />
