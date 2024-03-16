@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         Button showHideButton = findViewById(R.id.show_hide_button);
+        Button messagesButton = findViewById(R.id.messagesbutton);
         final PackageManager pm = getPackageManager();
 
         // Get Package List:
@@ -65,6 +66,13 @@ public class MainActivity extends AppCompatActivity {
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                 transaction.replace(R.id.fragment_container, fragment);
                 transaction.commit();
+            }
+        });
+
+        messagesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View k) {
+                setContentView(R.layout.messages);
             }
         });
     }
