@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/FirstFragment"
-        android:name="com.example.deepsee.FirstFragment"
+        android:name="com.example.deepsee.app_drawer_fragment"
         android:label="@string/first_fragment_label"
         tools:layout="@layout/fragment_first">
 
