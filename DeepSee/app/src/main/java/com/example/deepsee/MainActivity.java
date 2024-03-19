@@ -8,14 +8,16 @@ import android.database.Cursor;
 import android.os.Bundle;
 
 import com.example.deepsee.accessibility.TextAndSpeech;
+import com.example.deepsee.databinding.ActivityMainBinding;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.view.View;
+import android.widget.Button;
+
+import androidx.navigation.ui.AppBarConfiguration;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-
-import android.widget.Button;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,6 +31,10 @@ public class MainActivity extends AppCompatActivity {
     private boolean isAppDrawerVisible = false;
     public List<ApplicationInfo> apps;
     public HashMap<Integer, List<ApplicationInfo>> categories;
+
+    private AppBarConfiguration appBarConfiguration;
+    Button btnSettings;
+    private ActivityMainBinding binding;
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions,
@@ -61,11 +67,7 @@ public class MainActivity extends AppCompatActivity {
                                 }
                             }
                             phoneNumCursor.close();
-
-
                         }
-
-
                     } while (cursor.moveToNext());
                 }
                 cursor.close();
@@ -136,7 +138,16 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
+
+        btnSettings = (Button) findViewById(R.id.btnSettings);
+        btnSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+            }
+        });
     }
+
 
     // Toggles the App Drawer:
     private void toggleAppDrawer() {

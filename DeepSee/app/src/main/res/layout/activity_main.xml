@@ -26,4 +26,11 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end"
         android:text="Text To Speech" />
+
+    <Button
+        android:id="@+id/btnSettings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/settings" />
 </FrameLayout>
+
