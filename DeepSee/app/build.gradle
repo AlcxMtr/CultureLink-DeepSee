@@ -7,10 +7,12 @@ android {
     namespace 'com.example.deepsee'
     compileSdk 34
 
+
     defaultConfig {
         applicationId "com.example.deepsee"
         minSdk 24
-        targetSdk 33
+        //noinspection ExpiredTargetSdkVersion
+        targetSdk 30
         versionCode 1
         versionName "1.0"
 
