@@ -19,6 +19,7 @@ import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -48,7 +49,7 @@ public class SettingsActivity extends AppCompatActivity {
         lvSettings.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                if(i == 1) {
+                if(i == 0) {
 
                     boolean settingsPer = Settings.System.canWrite(SettingsActivity.this);
                     if(settingsPer){
@@ -90,6 +91,39 @@ public class SettingsActivity extends AppCompatActivity {
                         startActivity(intent);
 
                     }
+                } else if(i == 1) {
+
+                    boolean settingsPer = Settings.System.canWrite(SettingsActivity.this);
+                    if(settingsPer){
+                        //Log.d("ListView", "Item clicked: " + i);
+                        String[] options = {"Light Mode", "Dark Mode"};
+                        AlertDialog.Builder builder = new AlertDialog.Builder(SettingsActivity.this);
+                        builder.setTitle("Set Theme");
+                        builder.setItems(options, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int opt) {
+                                if (opt == 0) {
+
+                                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+
+                                } else if(opt == 1) {
+
+                                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+
+                                }
+                            }
+                        });
+                        builder.show();
+
+                    }else{
+                        Toast.makeText(SettingsActivity.this, "Please allow write permissions", Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(android.provider.Settings.ACTION_MANAGE_WRITE_SETTINGS);
+                        intent.setData(Uri.parse("package:" + SettingsActivity.this.getPackageName()));
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+
+                    }
+
                 }
             }
         });
