@@ -1,6 +1,7 @@
 package com.example.deepsee;
 import android.Manifest;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
@@ -15,6 +16,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 
 import androidx.fragment.app.FragmentContainerView;
@@ -88,9 +90,8 @@ public class MainActivity extends AppCompatActivity {
 
         Button showHideButton = findViewById(R.id.show_hide_button);
         Button emergencyButton = findViewById(R.id.emergency_button);
-        FloatingActionButton shortcutsContainerButton = findViewById(R.id.shortcutsContainerButton);
+        Button shortcutsContainerButton = findViewById(R.id.shortcutsContainerButton);
         final PackageManager pm = getPackageManager();
-
         // Get Package List:
         apps = pm.getInstalledApplications(PackageManager.GET_META_DATA);
 
@@ -138,8 +139,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 ShortcutsContainerFragment shortcutsFragment = new ShortcutsContainerFragment(launchables, pm);
-                shortcutsFragment.setVisibility();
-
+                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.shortcuts_container, shortcutsFragment);
+                transaction.commit();
+//                findViewById(R.id.shortcuts_container).setVisibility(View.VISIBLE);
             }
         });
 

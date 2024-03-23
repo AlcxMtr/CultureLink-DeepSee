@@ -7,6 +7,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +40,7 @@ public class ShortcutsContainerFragment extends Fragment {
     private List<AppContainer> launchables = new ArrayList<>();
     private PackageManager pm;
     RecyclerView launchablesContainer;
+    View binding;
 
     public ShortcutsContainerFragment (List<AppContainer> launchables, PackageManager pm) {
         super();
@@ -54,8 +57,22 @@ public class ShortcutsContainerFragment extends Fragment {
 
         // Set up the dropdown button
         this.launchablesContainer = view.findViewById(R.id.launchablesContainer);
-
+//        setVisibility();
     }
+
+    @Override
+    public void onInflate(@NonNull Context context, @NonNull AttributeSet attrs, @Nullable Bundle savedInstanceState) {
+        super.onInflate(context, attrs, savedInstanceState);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        this.binding = inflater.inflate(R.layout.shortcuts_fragment, container, false);
+        System.out.println("Called binder");
+        return binding;
+    }
+
 
     public void setVisibility() {
         int newVisibility = (this.launchablesContainer.getVisibility() == View.VISIBLE) ? View.GONE : View.VISIBLE;
