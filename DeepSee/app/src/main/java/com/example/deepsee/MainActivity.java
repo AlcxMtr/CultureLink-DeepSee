@@ -215,6 +215,9 @@ public class MainActivity extends AppCompatActivity {
                                 } catch (IOException e) {
                                     e.printStackTrace();
                                 }
+                            } else {
+                                weather_location.setText("Mountain View, United States");
+                                getWeather(37.4220936,-122.083922);
                             }
                         }
                     });
