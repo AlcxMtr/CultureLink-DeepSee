@@ -8,12 +8,14 @@ import android.database.Cursor;
 import android.os.Bundle;
 
 import com.example.deepsee.accessibility.TextAndSpeech;
+import com.example.deepsee.app_drawer.AppContainer;
 import com.example.deepsee.databinding.ActivityMainBinding;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.view.View;
 import android.widget.Button;
 
+import androidx.fragment.app.FragmentContainerView;
 import androidx.navigation.ui.AppBarConfiguration;
 
 import androidx.fragment.app.Fragment;
@@ -84,14 +86,13 @@ public class MainActivity extends AppCompatActivity {
 
         Button showHideButton = findViewById(R.id.show_hide_button);
         Button emergencyButton = findViewById(R.id.emergency_button);
+        FragmentContainerView shortcutsContainerView = findViewById(R.id.shortcutsContainerView);
         final PackageManager pm = getPackageManager();
 
         // Get Package List:
         apps = pm.getInstalledApplications(PackageManager.GET_META_DATA);
-//                apps.get(0).applicationInfo.category
 
         // Remove System Packages from the list before drawing:
-
         apps.removeIf(packageInfo ->
                 (pm.getLaunchIntentForPackage(packageInfo.packageName) == null));
 
@@ -106,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
 
         showHideButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) { // TODO: fahiiiiiiiiiim jaani pls fragmentise
+            public void onClick(View v) {
 
                 // Start AppDrawerFragment
                 Fragment fragment = new AppDrawerFragment(categories, apps, pm);
@@ -128,6 +129,17 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        shortcutsContainerView.setOnClickListener(new View.OnClickListener() {
+
+            // Create your list:
+            List<AppContainer> launchables = null;
+            @Override
+            public void onClick(View view) {
+                Fragment shortcutsFragment = new ShortcutsContainerFragment(launchables, pm);
+                // Fill in appear logic
+            }
+        });
+
         requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, 1);
 
         Button t2s = findViewById(R.id.t2s_button);
@@ -146,6 +158,9 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this, SettingsActivity.class));
             }
         });
+
+
+
     }
 
 
