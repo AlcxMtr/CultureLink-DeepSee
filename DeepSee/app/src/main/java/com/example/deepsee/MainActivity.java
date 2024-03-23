@@ -10,6 +10,8 @@ import android.os.Bundle;
 import com.example.deepsee.accessibility.TextAndSpeech;
 import com.example.deepsee.app_drawer.AppContainer;
 import com.example.deepsee.databinding.ActivityMainBinding;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.view.View;
@@ -86,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
 
         Button showHideButton = findViewById(R.id.show_hide_button);
         Button emergencyButton = findViewById(R.id.emergency_button);
-        FragmentContainerView shortcutsContainerView = findViewById(R.id.shortcutsContainerView);
+        FloatingActionButton shortcutsContainerButton = findViewById(R.id.shortcutsContainerButton);
         final PackageManager pm = getPackageManager();
 
         // Get Package List:
@@ -129,14 +131,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        shortcutsContainerView.setOnClickListener(new View.OnClickListener() {
+        shortcutsContainerButton.setOnClickListener(new View.OnClickListener() {
 
             // Create your list:
-            List<AppContainer> launchables = null;
+            List<AppContainer> launchables = new ArrayList<AppContainer>();
             @Override
             public void onClick(View view) {
-                Fragment shortcutsFragment = new ShortcutsContainerFragment(launchables, pm);
-                // Fill in appear logic
+                ShortcutsContainerFragment shortcutsFragment = new ShortcutsContainerFragment(launchables, pm);
+                shortcutsFragment.setVisibility();
+
             }
         });
 

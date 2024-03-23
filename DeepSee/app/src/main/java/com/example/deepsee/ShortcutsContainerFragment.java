@@ -37,6 +37,7 @@ public class ShortcutsContainerFragment extends Fragment {
     // List holding AppContainers that allow us to have app shortcuts
     private List<AppContainer> launchables = new ArrayList<>();
     private PackageManager pm;
+    RecyclerView launchablesContainer;
 
     public ShortcutsContainerFragment (List<AppContainer> launchables, PackageManager pm) {
         super();
@@ -52,22 +53,18 @@ public class ShortcutsContainerFragment extends Fragment {
         populateLaunchables();
 
         // Set up the dropdown button
-        final FloatingActionButton dropdownButton = view.findViewById(R.id.dropdownButton);
-        final RecyclerView launchablesContainer = view.findViewById(R.id.launchablesContainer);
+        this.launchablesContainer = view.findViewById(R.id.launchablesContainer);
 
-        dropdownButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Toggle visibility of the list container and FloatingActionButton
-                int newVisibility = (launchablesContainer.getVisibility() == View.VISIBLE) ? View.GONE : View.VISIBLE;
-                launchablesContainer.setVisibility(newVisibility);
+    }
 
-                // Adjust RecyclerView height based on visibility
-                ViewGroup.LayoutParams params = launchablesContainer.getLayoutParams();
-                params.height = newVisibility == View.VISIBLE ? ViewGroup.LayoutParams.WRAP_CONTENT : 0;
-                launchablesContainer.setLayoutParams(params);
-            }
-        });
+    public void setVisibility() {
+        int newVisibility = (this.launchablesContainer.getVisibility() == View.VISIBLE) ? View.GONE : View.VISIBLE;
+        this.launchablesContainer.setVisibility(newVisibility);
+
+        // Adjust RecyclerView height based on visibility
+        ViewGroup.LayoutParams params = launchablesContainer.getLayoutParams();
+        params.height = newVisibility == View.VISIBLE ? ViewGroup.LayoutParams.WRAP_CONTENT : 0;
+        launchablesContainer.setLayoutParams(params);
     }
 
     private void populateLaunchables() {
