@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.widget.Button;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,6 +38,8 @@ public class MainActivity extends AppCompatActivity {
 
         Button showHideButton = findViewById(R.id.show_hide_button);
         final PackageManager pm = getPackageManager();
+
+        TextView weather_location = findViewById(R.id.weather_location);
 
         // Get Package List:
         apps = pm.getInstalledPackages(PackageManager.GET_META_DATA);
