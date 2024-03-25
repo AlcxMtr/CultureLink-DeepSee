@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private AppBarConfiguration appBarConfiguration;
     Button btnSettings;
     private ActivityMainBinding binding;
+    PackageManager pm;
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions,
@@ -84,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
 
         Button showHideButton = findViewById(R.id.show_hide_button);
         Button emergencyButton = findViewById(R.id.emergency_button);
-        final PackageManager pm = getPackageManager();
+        pm = getPackageManager();
 
         // Get Package List:
         apps = pm.getInstalledApplications(PackageManager.GET_META_DATA);
@@ -104,19 +105,13 @@ public class MainActivity extends AppCompatActivity {
             categories.get(p.category).add(p);
         }
 
-        showHideButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) { // TODO: fahiiiiiiiiiim jaani pls fragmentise
-
-                // Start AppDrawerFragment
-                Fragment fragment = new AppDrawerFragment(categories, apps, pm);
-
-                //Draw AppDrawerFragment overtop current view
-                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.fragment_container, fragment);
-                transaction.commit();
-            }
-        });
+//        showHideButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) { // TODO: fahiiiiiiiiiim jaani pls fragmentise
+//
+//
+//            }
+//        });
 
         emergencyButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -148,7 +143,15 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    public void startDrawer(View v){
+        // Start AppDrawerFragment
+        Fragment fragment = new AppDrawerFragment(categories, apps, pm);
 
+        //Draw AppDrawerFragment overtop current view
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragment_container, fragment);
+        transaction.commit();
+    }
     // Toggles the App Drawer:
     private void toggleAppDrawer() {
 

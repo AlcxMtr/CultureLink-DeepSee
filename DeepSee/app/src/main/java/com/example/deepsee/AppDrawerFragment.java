@@ -57,4 +57,5 @@ public class AppDrawerFragment extends Fragment {
         appRecyclerView.setAdapter(adapter);
         appRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
     }
+
 }
