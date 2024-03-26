@@ -54,6 +54,7 @@ public class AppsAdapter extends RecyclerView.Adapter<AppContainer> {
             @Override
             public void onClick(View view) {
                 Intent launchIntent = new Intent(pm.getLaunchIntentForPackage(p.packageName));
+                // TODO: THIS IS WHERE WE NOTIFY ALEX'S ALGORITHM
                 holder.con.startActivity(launchIntent);
             }
         });

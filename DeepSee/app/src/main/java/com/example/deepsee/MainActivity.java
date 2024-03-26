@@ -31,6 +31,8 @@ import java.util.List;
 
 import android.provider.ContactsContract;
 
+import org.xmlpull.v1.XmlPullParser;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -91,6 +93,8 @@ public class MainActivity extends AppCompatActivity {
         Button showHideButton = findViewById(R.id.show_hide_button);
         Button emergencyButton = findViewById(R.id.emergency_button);
         Button shortcutsContainerButton = findViewById(R.id.shortcutsContainerButton);
+
+
         final PackageManager pm = getPackageManager();
         // Get Package List:
         apps = pm.getInstalledApplications(PackageManager.GET_META_DATA);
@@ -142,7 +146,6 @@ public class MainActivity extends AppCompatActivity {
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                 transaction.replace(R.id.shortcuts_container, shortcutsFragment);
                 transaction.commit();
-//                findViewById(R.id.shortcuts_container).setVisibility(View.VISIBLE);
             }
         });
 

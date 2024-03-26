@@ -37,7 +37,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 public class ShortcutsContainerFragment extends Fragment {
 
     // List holding AppContainers that allow us to have app shortcuts
-    private List<AppContainer> launchables = new ArrayList<>();
+    private List<AppContainer> launchables;
     private PackageManager pm;
     RecyclerView launchablesContainer;
     View binding;
@@ -60,16 +60,15 @@ public class ShortcutsContainerFragment extends Fragment {
 //        setVisibility();
     }
 
-    @Override
-    public void onInflate(@NonNull Context context, @NonNull AttributeSet attrs, @Nullable Bundle savedInstanceState) {
-        super.onInflate(context, attrs, savedInstanceState);
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         this.binding = inflater.inflate(R.layout.shortcuts_fragment, container, false);
         System.out.println("Called binder");
+        // Use the inflated rootView as needed
+        ViewGroup.LayoutParams params = launchablesContainer.getLayoutParams();
+        launchablesContainer.setLayoutParams(params);
         return binding;
     }
 
