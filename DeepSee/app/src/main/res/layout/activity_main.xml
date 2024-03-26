@@ -16,8 +16,8 @@
 
     <Button
         android:id="@+id/emergency_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="190dp"
+        android:layout_height="165dp"
         android:text="Emergency!" />
 
     <Button
@@ -32,5 +32,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/settings" />
+
 </FrameLayout>
 
