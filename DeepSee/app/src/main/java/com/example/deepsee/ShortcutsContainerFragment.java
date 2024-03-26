@@ -27,6 +27,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.example.deepsee.app_drawer.AppContainer;
+import com.example.deepsee.app_drawer.AppsAdapter;
+import com.example.deepsee.app_drawer.CategoriesAdapter;
 import com.example.deepsee.placeholder.PlaceholderContent;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -72,6 +74,13 @@ public class ShortcutsContainerFragment extends Fragment {
         return binding;
     }
 
+    private void setupShortcutsRecyclerView() {
+        // Find RecyclerView within AppDrawerLayout and initialize it
+        RecyclerView appRecyclerView = binding.findViewById(R.id.categories_recycler);
+        CategoriesAdapter adapter = new AppsAdapter(this.binding.getContext(), launchables, pm);
+        appRecyclerView.setAdapter(adapter);
+        appRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+    }
 
     public void setVisibility() {
         int newVisibility = (this.launchablesContainer.getVisibility() == View.VISIBLE) ? View.GONE : View.VISIBLE;
