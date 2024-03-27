@@ -77,19 +77,12 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        Button showHideButton = findViewById(R.id.show_hide_button);
-        Button emergencyButton = findViewById(R.id.emergency_button);
+    void sortAppCategories(){
         pm = getPackageManager();
 
         // Get Package List:
         apps = pm.getInstalledApplications(PackageManager.GET_META_DATA);
-//                apps.get(0).applicationInfo.category
+    //                apps.get(0).applicationInfo.category
 
         // Remove System Packages from the list before drawing:
 
@@ -104,15 +97,15 @@ public class MainActivity extends AppCompatActivity {
             }
             categories.get(p.category).add(p);
         }
+    }
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
-//        showHideButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) { // TODO: fahiiiiiiiiiim jaani pls fragmentise
-//
-//
-//            }
-//        });
-
+        Button showHideButton = findViewById(R.id.show_hide_button);
+        Button emergencyButton = findViewById(R.id.emergency_button);
+        sortAppCategories();
         emergencyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

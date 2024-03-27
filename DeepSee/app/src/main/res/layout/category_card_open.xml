@@ -12,15 +12,15 @@
 
         <TextView
             android:id="@+id/category_grid_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="392dp"
+            android:layout_height="27dp"
             android:layout_gravity="left|center_vertical"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:layout_weight=".9"
             android:text="TextView"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/apps_recycler"
