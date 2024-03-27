@@ -97,12 +97,12 @@ public class MainActivity extends AppCompatActivity {
                 Manifest.permission.ACCESS_FINE_LOCATION
         };
 
-        if(!hasPermissions()) {
+        if (!hasPermissions()) {
             ActivityCompat.requestPermissions(MainActivity.this, permissions, 1);
         }
 
-        getContacts();
-
+        requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, 200);
+        
         Button showHideButton = findViewById(R.id.show_hide_button);
         Button emergencyButton = findViewById(R.id.emergency_button);
         final PackageManager pm = getPackageManager();
