@@ -113,10 +113,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (requestCode == 200) {
-            for (int i = 0; i < permissions.length; i++) {
-                if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
-                    System.out.println("Permission not granted");
-                }
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                getLastLocation();
             }
         }
     }
@@ -199,6 +197,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 200);
 
         weather_location = (TextView) findViewById(R.id.weather_location);
         temp = (TextView) findViewById(R.id.temperature);
