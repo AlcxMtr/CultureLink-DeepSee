@@ -79,6 +79,12 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }
+
+        if (requestCode == 200) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                getContacts();
+            }
+        }
     }
 
     @Override
@@ -142,9 +148,6 @@ public class MainActivity extends AppCompatActivity {
                 transaction.commit();
             }
         });
-
-        requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, 1);
-        requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 100);
 
         Button t2s = findViewById(R.id.t2s_button);
         t2s.setOnClickListener(new View.OnClickListener() {
@@ -233,34 +236,38 @@ public class MainActivity extends AppCompatActivity {
 
     private void getContacts() {
         // Permission is granted
-        String[] projection = new String[]{
-                ContactsContract.Profile._ID,
-                ContactsContract.Profile.DISPLAY_NAME_PRIMARY,
-                ContactsContract.Profile.LOOKUP_KEY,
-                ContactsContract.Profile.HAS_PHONE_NUMBER
-        };
-        Cursor cursor = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, projection, null, null, null);
-        if (cursor.moveToFirst()) {
-            do {
-                int id = cursor.getColumnIndex(ContactsContract.Contacts._ID);
-                int displayName = cursor.getColumnIndex(ContactsContract.Profile.DISPLAY_NAME);
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
+            String[] projection = new String[]{
+                    ContactsContract.Profile._ID,
+                    ContactsContract.Profile.DISPLAY_NAME_PRIMARY,
+                    ContactsContract.Profile.LOOKUP_KEY,
+                    ContactsContract.Profile.HAS_PHONE_NUMBER
+            };
+            Cursor cursor = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, projection, null, null, null);
+            if (cursor.moveToFirst()) {
+                do {
+                    int id = cursor.getColumnIndex(ContactsContract.Contacts._ID);
+                    int displayName = cursor.getColumnIndex(ContactsContract.Profile.DISPLAY_NAME);
 
-                if (id >= 0 && displayName >= 0) {
-                    String contactID = cursor.getString(id);
-                    Cursor phoneNumCursor = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                            null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + "=?", new String[]{contactID}, null);
+                    if (id >= 0 && displayName >= 0) {
+                        String contactID = cursor.getString(id);
+                        Cursor phoneNumCursor = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                                null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + "=?", new String[]{contactID}, null);
 
-                    if (phoneNumCursor.moveToFirst()) {
-                        int num = phoneNumCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
-                        if (num >= 0) {
-                            System.out.println(cursor.getString(displayName) + ": " + phoneNumCursor.getString(num));
+                        if (phoneNumCursor.moveToFirst()) {
+                            int num = phoneNumCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
+                            if (num >= 0) {
+                                System.out.println(cursor.getString(displayName) + ": " + phoneNumCursor.getString(num));
+                            }
                         }
+                        phoneNumCursor.close();
                     }
-                    phoneNumCursor.close();
-                }
-            } while (cursor.moveToNext());
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+        } else {
+            requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, 200);
         }
-        cursor.close();
     }
 
     // Toggles the App Drawer:
