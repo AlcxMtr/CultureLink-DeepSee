@@ -73,16 +73,50 @@ public class MainActivity extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
         if (requestCode == 1) {
-            for (int i = 0; i < permissions.length; i++) {
-                if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
-                    System.out.println("Permission not granted");
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission is granted
+                String[] projection = new String[]{
+                        ContactsContract.Profile._ID,
+                        ContactsContract.Profile.DISPLAY_NAME_PRIMARY,
+                        ContactsContract.Profile.LOOKUP_KEY,
+                        ContactsContract.Profile.HAS_PHONE_NUMBER
+                };
+                Cursor cursor = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, projection, null, null, null);
+                if (cursor.moveToFirst()) {
+                    do {
+                        int id = cursor.getColumnIndex(ContactsContract.Contacts._ID);
+                        int displayName = cursor.getColumnIndex(ContactsContract.Profile.DISPLAY_NAME);
+
+                        if(id >= 0 && displayName >= 0){
+                            String contactID = cursor.getString(id);
+                            Cursor phoneNumCursor = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                                    null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + "=?", new String[] { contactID }, null);
+
+                            if (phoneNumCursor.moveToFirst()){
+                                int num = phoneNumCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
+                                if(num >=0){
+                                    System.out.println(cursor.getString(displayName) + ": " + phoneNumCursor.getString(num));
+                                }
+                            }
+                            phoneNumCursor.close();
+
+
+                        }
+
+
+                    } while (cursor.moveToNext());
                 }
+                cursor.close();
+            } else {
+                System.out.println("Woops...");
             }
         }
 
         if (requestCode == 200) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                getContacts();
+            for (int i = 0; i < permissions.length; i++) {
+                if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
+                    System.out.println("Permission not granted");
+                }
             }
         }
     }
@@ -93,12 +127,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         permissions = new String[]{
-                Manifest.permission.READ_CONTACTS,
                 Manifest.permission.ACCESS_FINE_LOCATION
         };
 
         if (!hasPermissions()) {
-            ActivityCompat.requestPermissions(MainActivity.this, permissions, 1);
+            ActivityCompat.requestPermissions(MainActivity.this, permissions, 200);
         }
 
         Button showHideButton = findViewById(R.id.show_hide_button);
@@ -137,7 +170,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, 200);
+        requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, 1);
 
         emergencyButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -234,39 +267,7 @@ public class MainActivity extends AppCompatActivity {
         }
         return true;
     }
-
-    private void getContacts() {
-        // Permission is granted
-            String[] projection = new String[]{
-                    ContactsContract.Profile._ID,
-                    ContactsContract.Profile.DISPLAY_NAME_PRIMARY,
-                    ContactsContract.Profile.LOOKUP_KEY,
-                    ContactsContract.Profile.HAS_PHONE_NUMBER
-            };
-            Cursor cursor = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, projection, null, null, null);
-            if (cursor.moveToFirst()) {
-                do {
-                    int id = cursor.getColumnIndex(ContactsContract.Contacts._ID);
-                    int displayName = cursor.getColumnIndex(ContactsContract.Profile.DISPLAY_NAME);
-
-                    if (id >= 0 && displayName >= 0) {
-                        String contactID = cursor.getString(id);
-                        Cursor phoneNumCursor = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                                null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + "=?", new String[]{contactID}, null);
-
-                        if (phoneNumCursor.moveToFirst()) {
-                            int num = phoneNumCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
-                            if (num >= 0) {
-                                System.out.println(cursor.getString(displayName) + ": " + phoneNumCursor.getString(num));
-                            }
-                        }
-                        phoneNumCursor.close();
-                    }
-                } while (cursor.moveToNext());
-            }
-            cursor.close();
-        }
-
+    
     // Toggles the App Drawer:
     private void toggleAppDrawer() {
 
