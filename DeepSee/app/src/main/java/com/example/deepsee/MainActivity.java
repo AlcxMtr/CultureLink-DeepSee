@@ -100,8 +100,6 @@ public class MainActivity extends AppCompatActivity {
         if (!hasPermissions()) {
             ActivityCompat.requestPermissions(MainActivity.this, permissions, 1);
         }
-
-        requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, 200);
         
         Button showHideButton = findViewById(R.id.show_hide_button);
         Button emergencyButton = findViewById(R.id.emergency_button);
@@ -266,7 +264,7 @@ public class MainActivity extends AppCompatActivity {
             }
             cursor.close();
         } else {
-            requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, 200);
+            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_CONTACTS}, 200);
         }
     }
 
