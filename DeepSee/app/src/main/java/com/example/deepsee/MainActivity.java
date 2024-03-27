@@ -170,31 +170,38 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    // Creates a persistent Notification for the accessibility shortcut
     private void showAlert() {
+
+        // Creates a Channel (Needed after API 26)
         CharSequence name = "Accessibility Shortcut";
         String description = "Persistent Notification for Accessibility Features.";
         int importance = NotificationManager.IMPORTANCE_HIGH;
         NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
         channel.setDescription(description);
+
+
         // Register the channel with the system; you can't change the importance
         // or other notification behaviors after this.
         NotificationManager notificationManager = getSystemService(NotificationManager.class);
         notificationManager.createNotificationChannel(channel);
 
+        /// TODO: HERE AKS!!! THIS IS WHERE YOU ADD YOUR INTENT
         Intent intent = new Intent(this, SettingsActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
 
+        // This generates the properties and Intent/Content for the notification.
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
                 .setContentTitle("Persistent Notification")
                 .setContentText("Akshath, check here to fix stuff. Change the pendingIntent above.")
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setColor(451)
-                .setOngoing(true)
-                // Set the intent that fires when the user taps the notification.
+                .setColor(451)  // Customise in Visual Overhaul
+                .setOngoing(true)   // Persistence.
                 .setContentIntent(pendingIntent);
 
+        // This is a hacky fix that just DEPLOYS the notification.
         NotificationManagerCompat nm = NotificationManagerCompat.from(this);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
                 != PackageManager.PERMISSION_GRANTED) {
