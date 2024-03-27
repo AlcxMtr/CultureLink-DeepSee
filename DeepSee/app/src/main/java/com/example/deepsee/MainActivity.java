@@ -1,6 +1,7 @@
 package com.example.deepsee;
 import android.Manifest;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
@@ -9,6 +10,8 @@ import android.os.Bundle;
 
 import com.example.deepsee.accessibility.TextAndSpeech;
 import com.example.deepsee.databinding.ActivityMainBinding;
+
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.view.View;
@@ -104,6 +107,10 @@ public class MainActivity extends AppCompatActivity {
             categories.get(p.category).add(p);
         }
 
+
+        // Persistent notification:
+        showAlert();
+
         showHideButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) { // TODO: fahiiiiiiiiiim jaani pls fragmentise
@@ -148,6 +155,20 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+
+    private void showAlert() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Alert")
+                .setMessage("You tapped the notification!")
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
 
     // Toggles the App Drawer:
     private void toggleAppDrawer() {
