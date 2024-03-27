@@ -25,7 +25,7 @@ public class PersistentNotification extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        return START_NOT_STICKY;
+        return START_STICKY;
     }
 
     @Nullable
@@ -37,7 +37,7 @@ public class PersistentNotification extends Service {
     private void showNotification() {
         // Create notification intent
         // TODO: Akshath, this is where you put your intent.
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, AppDrawerFragment.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         // Create notification
@@ -45,6 +45,7 @@ public class PersistentNotification extends Service {
                 .setSmallIcon(R.drawable.persistent_notification)   // TODO: fix drawable
                 .setContentTitle("Persistent Notification")
                 .setContentText("akshath!!!")
+                .setOngoing(true)
                 .setContentIntent(pendingIntent);
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
