@@ -65,49 +65,18 @@ public class MainActivity extends AppCompatActivity {
     private TextView cond;
     private FusedLocationProviderClient fusedLocationProviderClient;
 
+    private String[] permissions;
+
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions,
                                            int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        if (requestCode == 100) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                getLastLocation();
-            }
-        }
         if (requestCode == 1) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Permission is granted
-                String[] projection = new String[]{
-                        ContactsContract.Profile._ID,
-                        ContactsContract.Profile.DISPLAY_NAME_PRIMARY,
-                        ContactsContract.Profile.LOOKUP_KEY,
-                        ContactsContract.Profile.HAS_PHONE_NUMBER
-                };
-                Cursor cursor = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, projection, null, null, null);
-                if (cursor.moveToFirst()) {
-                    do {
-                        int id = cursor.getColumnIndex(ContactsContract.Contacts._ID);
-                        int displayName = cursor.getColumnIndex(ContactsContract.Profile.DISPLAY_NAME);
-
-                        if(id >= 0 && displayName >= 0){
-                            String contactID = cursor.getString(id);
-                            Cursor phoneNumCursor = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                                    null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + "=?", new String[] { contactID }, null);
-
-                            if (phoneNumCursor.moveToFirst()){
-                                int num = phoneNumCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
-                                if(num >=0){
-                                    System.out.println(cursor.getString(displayName) + ": " + phoneNumCursor.getString(num));
-                                }
-                            }
-                            phoneNumCursor.close();
-                        }
-                    } while (cursor.moveToNext());
+            for (int i = 0; i < permissions.length; i++) {
+                if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
+                    System.out.println("Permission not granted");
                 }
-                cursor.close();
-            } else {
-                System.out.println("Woops...");
             }
         }
     }
@@ -116,6 +85,17 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        permissions = new String[]{
+                Manifest.permission.READ_CONTACTS,
+                Manifest.permission.ACCESS_FINE_LOCATION
+        };
+
+        if(!hasPermissions()) {
+            ActivityCompat.requestPermissions(MainActivity.this, permissions, 1);
+        }
+
+        getContacts();
 
         Button showHideButton = findViewById(R.id.show_hide_button);
         Button emergencyButton = findViewById(R.id.emergency_button);
@@ -132,9 +112,9 @@ public class MainActivity extends AppCompatActivity {
 
         //Create dictionary from category number -> list of apps in said category
         categories = new HashMap<>();
-        for (ApplicationInfo p : apps){
-            if (!categories.containsKey(p.category)){
-                categories.put(p.category,new ArrayList<ApplicationInfo>());
+        for (ApplicationInfo p : apps) {
+            if (!categories.containsKey(p.category)) {
+                categories.put(p.category, new ArrayList<ApplicationInfo>());
             }
             categories.get(p.category).add(p);
         }
@@ -164,6 +144,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, 1);
+        requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 100);
 
         Button t2s = findViewById(R.id.t2s_button);
         t2s.setOnClickListener(new View.OnClickListener() {
@@ -192,7 +173,7 @@ public class MainActivity extends AppCompatActivity {
         getLastLocation();
     }
 
-    private void getLastLocation () {
+    private void getLastLocation() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             fusedLocationProviderClient.getLastLocation()
                     .addOnSuccessListener(this, new OnSuccessListener<Location>() {
@@ -201,7 +182,7 @@ public class MainActivity extends AppCompatActivity {
                             if (location != null) {
                                 Geocoder geocoder = new Geocoder(MainActivity.this, Locale.getDefault());
                                 try {
-                                    List <Address> addresses = geocoder
+                                    List<Address> addresses = geocoder
                                             .getFromLocation(location.getLatitude(), location.getLongitude(), 1);
                                     String loc = addresses.get(0).getLocality() + ", " + addresses.get(0).getCountryName();
                                     weather_location.setText(loc);
@@ -211,17 +192,18 @@ public class MainActivity extends AppCompatActivity {
                                 }
                             } else {
                                 weather_location.setText("Mountain View, United States");
-                                getWeather(37.4220936,-122.083922);
+                                getWeather(37.4220936, -122.083922);
                             }
                         }
                     });
         } else {
-            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 100);
+            weather_location.setText("Mountain View, United States");
+            getWeather(37.4220936, -122.083922);
         }
 
     }
 
-    private void getWeather (double latitude, double longitude) {
+    private void getWeather(double latitude, double longitude) {
         WeatherListener weatherListener = new WeatherListener() {
             @Override
             public void onWeatherReceived(int temperature, int rainChance, int humidity, int windSpeed, String condition) {
@@ -240,6 +222,46 @@ public class MainActivity extends AppCompatActivity {
         WeatherRequest.getWeatherInfo(weatherListener, latitude, longitude);
     }
 
+    private boolean hasPermissions() {
+        for (String permission : permissions) {
+            if (ContextCompat.checkSelfPermission(MainActivity.this, permission) != PackageManager.PERMISSION_GRANTED) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private void getContacts() {
+        // Permission is granted
+        String[] projection = new String[]{
+                ContactsContract.Profile._ID,
+                ContactsContract.Profile.DISPLAY_NAME_PRIMARY,
+                ContactsContract.Profile.LOOKUP_KEY,
+                ContactsContract.Profile.HAS_PHONE_NUMBER
+        };
+        Cursor cursor = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, projection, null, null, null);
+        if (cursor.moveToFirst()) {
+            do {
+                int id = cursor.getColumnIndex(ContactsContract.Contacts._ID);
+                int displayName = cursor.getColumnIndex(ContactsContract.Profile.DISPLAY_NAME);
+
+                if (id >= 0 && displayName >= 0) {
+                    String contactID = cursor.getString(id);
+                    Cursor phoneNumCursor = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                            null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + "=?", new String[]{contactID}, null);
+
+                    if (phoneNumCursor.moveToFirst()) {
+                        int num = phoneNumCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
+                        if (num >= 0) {
+                            System.out.println(cursor.getString(displayName) + ": " + phoneNumCursor.getString(num));
+                        }
+                    }
+                    phoneNumCursor.close();
+                }
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+    }
 
     // Toggles the App Drawer:
     private void toggleAppDrawer() {
