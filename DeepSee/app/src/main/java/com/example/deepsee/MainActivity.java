@@ -105,7 +105,10 @@ public class MainActivity extends AppCompatActivity {
 
         // Get Package List:
         apps = pm.getInstalledApplications(PackageManager.GET_META_DATA);
-//                apps.get(0).applicationInfo.category
+
+        // Starts the signalHandler background service:
+        Intent signalhandler = new Intent(this, SignalHandler.class);
+        startService(signalhandler);
 
         // Remove System Packages from the list before drawing:
 
