@@ -171,9 +171,9 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void showAlert() {
-        CharSequence name = "channel mame";
-        String description = "persistent notif";
-        int importance = NotificationManager.IMPORTANCE_DEFAULT;
+        CharSequence name = "Accessibility Shortcut";
+        String description = "Persistent Notification for Accessibility Features.";
+        int importance = NotificationManager.IMPORTANCE_HIGH;
         NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
         channel.setDescription(description);
         // Register the channel with the system; you can't change the importance
@@ -189,7 +189,7 @@ public class MainActivity extends AppCompatActivity {
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
                 .setContentTitle("Persistent Notification")
                 .setContentText("Akshath, check here to fix stuff. Change the pendingIntent above.")
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setColor(451)
                 .setOngoing(true)
                 // Set the intent that fires when the user taps the notification.
