@@ -41,21 +41,23 @@ public class PersistentNotification extends Service {
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         // Create notification
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
-                .setSmallIcon(R.drawable.persistent_notification)   // TODO: fix drawable
+        NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        Notification n  = new Notification.Builder(this)
                 .setContentTitle("Persistent Notification")
-                .setContentText("akshath!!!")
+                .setContentText("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+                .setSmallIcon(R.drawable.ic_launcher_foreground)
                 .setOngoing(true)
-                .setContentIntent(pendingIntent);
+                .setContentIntent(pendingIntent)
+                .build();
+        n.flags |= Notification.FLAG_NO_CLEAR;
 
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
 
         // Create notification channel for Android Oreo and above
         NotificationChannel channel = new NotificationChannel(CHANNEL_ID, "Accessibility Shortcut",
                 NotificationManager.IMPORTANCE_HIGH);
-        notificationManager.createNotificationChannel(channel);
+        nm.createNotificationChannel(channel);
 
-        // Show notification
-        notificationManager.notify(NOTIFICATION_ID, builder.build());
+        nm.notify(NOTIFICATION_ID, n);
     }
 }
