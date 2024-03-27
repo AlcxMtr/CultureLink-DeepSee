@@ -101,8 +101,6 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(MainActivity.this, permissions, 1);
         }
 
-        getContacts();
-
         Button showHideButton = findViewById(R.id.show_hide_button);
         Button emergencyButton = findViewById(R.id.emergency_button);
         final PackageManager pm = getPackageManager();
@@ -139,6 +137,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, 200);
+
         emergencyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -165,6 +165,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this, SettingsActivity.class));
             }
         });
+
 
         weather_location = (TextView) findViewById(R.id.weather_location);
         temp = (TextView) findViewById(R.id.temperature);
