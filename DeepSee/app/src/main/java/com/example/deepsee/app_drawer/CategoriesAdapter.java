@@ -56,6 +56,11 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoryContainer>{
         if (Objects.equals(cat, null))
             cat = "Utility";
         holder.category_name.setText(cat);
+
+        //Open first category
+        if (position == 0){
+            holder.toggleCategoryView();
+        }
     }
 
     @Override
