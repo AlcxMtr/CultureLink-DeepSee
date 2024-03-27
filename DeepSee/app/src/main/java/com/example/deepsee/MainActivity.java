@@ -100,7 +100,9 @@ public class MainActivity extends AppCompatActivity {
         if (!hasPermissions()) {
             ActivityCompat.requestPermissions(MainActivity.this, permissions, 1);
         }
-        
+
+        getContacts();
+
         Button showHideButton = findViewById(R.id.show_hide_button);
         Button emergencyButton = findViewById(R.id.emergency_button);
         final PackageManager pm = getPackageManager();
@@ -234,7 +236,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void getContacts() {
         // Permission is granted
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
             String[] projection = new String[]{
                     ContactsContract.Profile._ID,
                     ContactsContract.Profile.DISPLAY_NAME_PRIMARY,
@@ -263,10 +264,7 @@ public class MainActivity extends AppCompatActivity {
                 } while (cursor.moveToNext());
             }
             cursor.close();
-        } else {
-            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_CONTACTS}, 200);
         }
-    }
 
     // Toggles the App Drawer:
     private void toggleAppDrawer() {
