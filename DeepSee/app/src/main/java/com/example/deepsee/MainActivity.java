@@ -1,12 +1,21 @@
 package com.example.deepsee;
+
+
+
 import android.Manifest;
 
+import android.annotation.SuppressLint;
+import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.os.Build;
 import android.os.Bundle;
 
 import com.example.deepsee.accessibility.TextAndSpeech;
@@ -18,6 +27,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.navigation.ui.AppBarConfiguration;
 
 import androidx.fragment.app.Fragment;
@@ -32,6 +44,7 @@ import android.provider.ContactsContract;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final String CHANNEL_ID = "Persistneces";
     private boolean isAppDrawerVisible = false;
     public List<ApplicationInfo> apps;
     public HashMap<Integer, List<ApplicationInfo>> categories;
@@ -59,14 +72,14 @@ public class MainActivity extends AppCompatActivity {
                         int id = cursor.getColumnIndex(ContactsContract.Contacts._ID);
                         int displayName = cursor.getColumnIndex(ContactsContract.Profile.DISPLAY_NAME);
 
-                        if(id >= 0 && displayName >= 0){
+                        if (id >= 0 && displayName >= 0) {
                             String contactID = cursor.getString(id);
                             Cursor phoneNumCursor = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                                    null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + "=?", new String[] { contactID }, null);
+                                    null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + "=?", new String[]{contactID}, null);
 
-                            if (phoneNumCursor.moveToFirst()){
+                            if (phoneNumCursor.moveToFirst()) {
                                 int num = phoneNumCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
-                                if(num >=0){
+                                if (num >= 0) {
                                     System.out.println(cursor.getString(displayName) + ": " + phoneNumCursor.getString(num));
                                 }
                             }
@@ -101,9 +114,9 @@ public class MainActivity extends AppCompatActivity {
 
         //Create dictionary from category number -> list of apps in said category
         categories = new HashMap<>();
-        for (ApplicationInfo p : apps){
-            if (!categories.containsKey(p.category)){
-                categories.put(p.category,new ArrayList<ApplicationInfo>());
+        for (ApplicationInfo p : apps) {
+            if (!categories.containsKey(p.category)) {
+                categories.put(p.category, new ArrayList<ApplicationInfo>());
             }
             categories.get(p.category).add(p);
         }
@@ -158,20 +171,39 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void showAlert() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Alert")
-                .setMessage("You tapped the notification!")
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-        Intent serviceIntent = new Intent(this, PersistentNotification.class);
-        startService(serviceIntent);
-        AlertDialog alertDialog = builder.create();
-        alertDialog.show();
+        CharSequence name = "channel mame";
+        String description = "persistent notif";
+        int importance = NotificationManager.IMPORTANCE_DEFAULT;
+        NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+        channel.setDescription(description);
+        // Register the channel with the system; you can't change the importance
+        // or other notification behaviors after this.
+        NotificationManager notificationManager = getSystemService(NotificationManager.class);
+        notificationManager.createNotificationChannel(channel);
+
+        Intent intent = new Intent(this, SettingsActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .setContentTitle("Persistent Notification")
+                .setContentText("Akshath, check here to fix stuff. Change the pendingIntent above.")
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setColor(451)
+                .setOngoing(true)
+                // Set the intent that fires when the user taps the notification.
+                .setContentIntent(pendingIntent);
+
+        NotificationManagerCompat nm = NotificationManagerCompat.from(this);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+                != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        nm.notify(0, builder.build());
+
     }
+
 
     // Toggles the App Drawer:
     private void toggleAppDrawer() {
