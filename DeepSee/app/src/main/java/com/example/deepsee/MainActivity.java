@@ -64,7 +64,6 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView cond;
     private FusedLocationProviderClient fusedLocationProviderClient;
-    private RequestQueue requestQueue;
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions,
@@ -189,13 +188,8 @@ public class MainActivity extends AppCompatActivity {
         wind_speed = (TextView) findViewById(R.id.wind_speed);
         humid = (TextView) findViewById(R.id.humidity);
         cond = (TextView) findViewById(R.id.condition);
-        requestQueue = Volley.newRequestQueue(this);
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         getLastLocation();
-    }
-
-    private void askPermission () {
-        requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 100);
     }
 
     private void getLastLocation () {
@@ -222,7 +216,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
         } else {
-            askPermission();
+            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 100);
         }
 
     }
@@ -240,10 +234,10 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onWeatherError(String errorMessage) {
-                // Handle weather error
+                System.out.print("Error retrieving weather");
             }
         };
-        WeatherRequest weatherRequest = new WeatherRequest(requestQueue, weatherListener, latitude, longitude);
+        WeatherRequest.getWeatherInfo(weatherListener, latitude, longitude);
     }
 
 
