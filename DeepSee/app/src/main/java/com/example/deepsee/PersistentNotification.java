@@ -45,8 +45,7 @@ public class PersistentNotification extends Service {
                 .setSmallIcon(R.drawable.persistent_notification)   // TODO: fix drawable
                 .setContentTitle("Persistent Notification")
                 .setContentText("akshath!!!")
-                .setContentIntent(pendingIntent)
-                .setAutoCancel(true);
+                .setContentIntent(pendingIntent);
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
