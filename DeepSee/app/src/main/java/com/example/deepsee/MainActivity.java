@@ -197,8 +197,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 200);
-
         weather_location = (TextView) findViewById(R.id.weather_location);
         temp = (TextView) findViewById(R.id.temperature);
         rain_chance = (TextView) findViewById(R.id.rain_chance);
