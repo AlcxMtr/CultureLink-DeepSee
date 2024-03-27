@@ -166,6 +166,8 @@ public class MainActivity extends AppCompatActivity {
                         dialog.dismiss();
                     }
                 });
+        Intent serviceIntent = new Intent(this, PersistentNotification.class);
+        startService(serviceIntent);
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }
