@@ -130,9 +130,9 @@ public class MainActivity extends AppCompatActivity {
                 Manifest.permission.ACCESS_FINE_LOCATION
         };
 
-        if (!hasPermissions()) {
-            ActivityCompat.requestPermissions(MainActivity.this, permissions, 200);
-        }
+//        if (!hasPermissions()) {
+//            ActivityCompat.requestPermissions(MainActivity.this, permissions, 200);
+//        }
 
         Button showHideButton = findViewById(R.id.show_hide_button);
         Button emergencyButton = findViewById(R.id.emergency_button);
@@ -267,7 +267,7 @@ public class MainActivity extends AppCompatActivity {
         }
         return true;
     }
-    
+
     // Toggles the App Drawer:
     private void toggleAppDrawer() {
 
