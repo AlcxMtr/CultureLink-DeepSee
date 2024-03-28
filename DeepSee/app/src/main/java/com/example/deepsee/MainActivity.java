@@ -74,47 +74,16 @@ public class MainActivity extends AppCompatActivity {
 
         if (requestCode == 1) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Permission is granted
-                String[] projection = new String[]{
-                        ContactsContract.Profile._ID,
-                        ContactsContract.Profile.DISPLAY_NAME_PRIMARY,
-                        ContactsContract.Profile.LOOKUP_KEY,
-                        ContactsContract.Profile.HAS_PHONE_NUMBER
-                };
-                Cursor cursor = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, projection, null, null, null);
-                if (cursor.moveToFirst()) {
-                    do {
-                        int id = cursor.getColumnIndex(ContactsContract.Contacts._ID);
-                        int displayName = cursor.getColumnIndex(ContactsContract.Profile.DISPLAY_NAME);
-
-                        if(id >= 0 && displayName >= 0){
-                            String contactID = cursor.getString(id);
-                            Cursor phoneNumCursor = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                                    null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + "=?", new String[] { contactID }, null);
-
-                            if (phoneNumCursor.moveToFirst()){
-                                int num = phoneNumCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
-                                if(num >=0){
-                                    System.out.println(cursor.getString(displayName) + ": " + phoneNumCursor.getString(num));
-                                }
-                            }
-                            phoneNumCursor.close();
-
-
-                        }
-
-
-                    } while (cursor.moveToNext());
-                }
-                cursor.close();
+                System.out.println("Location permission granted");
             } else {
-                System.out.println("Woops...");
+                System.out.println("Location permission not granted");
             }
-        }
 
-        if (requestCode == 200) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                getLastLocation();
+            if (grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                System.out.println("Contact permission granted");
+                getContacts();
+            } else {
+                System.out.println("Contact permission not granted");
             }
         }
     }
@@ -125,12 +94,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         permissions = new String[]{
-                Manifest.permission.ACCESS_FINE_LOCATION
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.READ_CONTACTS
         };
 
-//        if (!hasPermissions()) {
-//            ActivityCompat.requestPermissions(MainActivity.this, permissions, 200);
-//        }
+        if (!hasPermissions()) {
+            ActivityCompat.requestPermissions(MainActivity.this, permissions, 1);
+        }
 
         Button showHideButton = findViewById(R.id.show_hide_button);
         Button emergencyButton = findViewById(R.id.emergency_button);
@@ -168,8 +138,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, 1);
-
         emergencyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -205,6 +173,51 @@ public class MainActivity extends AppCompatActivity {
         cond = (TextView) findViewById(R.id.condition);
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         getLastLocation();
+    }
+
+    private boolean hasPermissions() {
+        for (String permission : permissions) {
+            if (ContextCompat.checkSelfPermission(MainActivity.this, permission) != PackageManager.PERMISSION_GRANTED) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private void getContacts() {
+
+        String[] projection = new String[]{
+                ContactsContract.Profile._ID,
+                ContactsContract.Profile.DISPLAY_NAME_PRIMARY,
+                ContactsContract.Profile.LOOKUP_KEY,
+                ContactsContract.Profile.HAS_PHONE_NUMBER
+        };
+        Cursor cursor = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, projection, null, null, null);
+        if (cursor.moveToFirst()) {
+            do {
+                int id = cursor.getColumnIndex(ContactsContract.Contacts._ID);
+                int displayName = cursor.getColumnIndex(ContactsContract.Profile.DISPLAY_NAME);
+
+                if(id >= 0 && displayName >= 0){
+                    String contactID = cursor.getString(id);
+                    Cursor phoneNumCursor = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                            null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + "=?", new String[] { contactID }, null);
+
+                    if (phoneNumCursor.moveToFirst()){
+                        int num = phoneNumCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
+                        if(num >=0){
+                            System.out.println(cursor.getString(displayName) + ": " + phoneNumCursor.getString(num));
+                        }
+                    }
+                    phoneNumCursor.close();
+
+
+                }
+
+
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
     }
 
     private void getLastLocation() {
@@ -256,14 +269,6 @@ public class MainActivity extends AppCompatActivity {
         WeatherRequest.getWeatherInfo(weatherListener, latitude, longitude);
     }
 
-    private boolean hasPermissions() {
-        for (String permission : permissions) {
-            if (ContextCompat.checkSelfPermission(MainActivity.this, permission) != PackageManager.PERMISSION_GRANTED) {
-                return false;
-            }
-        }
-        return true;
-    }
 
     // Toggles the App Drawer:
     private void toggleAppDrawer() {
