@@ -4,18 +4,17 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
-
-import com.example.deepsee.app_drawer.AppsAdapter;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.view.LayoutInflater;
 import android.view.View;
 
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.widget.Button;
 
@@ -23,6 +22,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -72,10 +73,55 @@ public class MainActivity extends AppCompatActivity {
         messagesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View k) {
-                setContentView(R.layout.messages);
+                // Create an instance of the SMSReader class
+                SMSReader smsReader = new SMSReader();
+//                // Call the readSMS method with the context of the MainActivity
+                smsReader.readSMS(MainActivity.this);
+                setContentView(R.layout.message);
+//                SMSAdapter adapter = new SMSAdapter(MainActivity.this, R.layout.messages,smsReader.readSMS(MainActivity.this));
+                List<SMSMessages> smsMessages = smsReader.readSMS(MainActivity.this);
+
+                // Display SMS messages
+                displaySMSMessages(smsMessages);
+
             }
         });
+
     }
+
+
+
+    private void displaySMSMessages(List<SMSMessages> smsMessages) {
+        LinearLayout linearLayout = findViewById(R.id.linear_layout);
+        for (SMSMessages smsMessage : smsMessages) {
+            // Inflate the card_sms_message layout
+            View cardView = LayoutInflater.from(this).inflate(R.layout.layout_msgs, null);
+
+            // Get references to the TextViews inside the CardView
+            TextView contactNameTextView = cardView.findViewById(R.id.contact_name);
+            TextView timeTextView = cardView.findViewById(R.id.timeofmsg);
+            TextView messageTextView = cardView.findViewById(R.id.textmsg_shortened);
+
+            // Set the text for each TextView
+            contactNameTextView.setText(smsMessage.getContactName());
+            timeTextView.setText(smsMessage.getTimestamp());
+            messageTextView.setText(smsMessage.getMessage());
+
+            // Add the CardView to the LinearLayout
+            linearLayout.addView(cardView);
+            cardView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Create an intent to open the messages app
+                    Intent intent = new Intent(Intent.ACTION_MAIN);
+                    intent.addCategory(Intent.CATEGORY_APP_MESSAGING);
+                    startActivity(intent);
+                }
+            });
+    }}
+
+
+
 
     // Toggles the App Drawer:
     private void toggleAppDrawer() {
