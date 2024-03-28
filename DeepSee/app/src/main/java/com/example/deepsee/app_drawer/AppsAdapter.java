@@ -1,11 +1,10 @@
 package com.example.deepsee.app_drawer;
 
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageInstaller;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,32 +12,43 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.deepsee.AppDrawerFragment;
 import com.example.deepsee.R;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.function.Function;
+import java.util.function.Consumer;
 
 public class AppsAdapter extends RecyclerView.Adapter<AppContainer> {
-    private List<ApplicationInfo> apps;
-    private final PackageManager pm;
+    private final List<ApplicationInfo> apps;
     private final Context con;
-    private final List<Function<Boolean, Boolean>> toggleAppMode;
-    private final Function<View, Boolean> longPressHandler;
-    public AppsAdapter(@NonNull Context context, List<ApplicationInfo> apps, PackageManager pm, Function<View, Boolean> longPressHandler) {
+    private final List<Consumer<Boolean>> toggleAppMode;
+    private final List<Drawable> icons;
+    private final List<CharSequence> labels;
+    private final List<Intent> launchers;
+    private final Runnable longPressHandler;
+    public AppsAdapter(@NonNull Context context, List<ApplicationInfo> apps, List<Drawable> icons, List<CharSequence> labels, List<Intent> launchers, Runnable longPressHandler) {
         super();
         this.apps = apps;
-        this.pm = pm;
         this.con = context;
         this.longPressHandler = longPressHandler;
-        toggleAppMode = new LinkedList<>();
+        this.icons = icons;
+        this.labels = labels;
+        this.launchers = launchers;
+        toggleAppMode = new ArrayList<>(apps.size());
     }
 
+
+
+    public void clearToggleList(){
+        toggleAppMode.clear();
+    }
     //Toggles behaviour and design of app container according to deleteMode
-    private Boolean toggleAppDeleteMode(AppContainer v, boolean deleteMode, int pos, Function<View, Boolean> normalOnClickHandler){
+    private void toggleAppDeleteMode(AppContainer v, boolean deleteMode){
         View icon = v.itemView.findViewById(R.id.delete_icon);
         if (deleteMode){
-            v.itemView.setOnClickListener(view -> deleteModeOnClick(pos));
+            v.itemView.setOnClickListener(view -> deleteModeOnClick(v.getAdapterPosition()));
             icon.setVisibility(View.VISIBLE);
             /* Idea:
                 App have some form of jiggle/animation to indicate deletion mode
@@ -46,18 +56,16 @@ public class AppsAdapter extends RecyclerView.Adapter<AppContainer> {
                 and cancel button.
             * */
         }else{
-            v.itemView.setOnClickListener(normalOnClickHandler::apply);
+            v.itemView.setOnClickListener(view->launchApp(v, v.getAdapterPosition()));
             icon.setVisibility(View.GONE);
         }
-        return true;
     }
 
     //Iterate through all apps in category and toggle delete mode
-    public Boolean setDeleteMode(boolean deleteMode){
-        for (Function<Boolean, Boolean> f:toggleAppMode){
-            f.apply(deleteMode);
+    public void setDeleteMode(boolean deleteMode){
+        for (Consumer<Boolean> f:toggleAppMode){
+            f.accept(deleteMode);
         }
-        return true;
     }
 
     //Uninstalls app held at position pos
@@ -86,6 +94,9 @@ public class AppsAdapter extends RecyclerView.Adapter<AppContainer> {
         View app_square = inflater.inflate(R.layout.app_square, parent, false);
 
         AppContainer v = new AppContainer(app_square);
+        //Allows Adapter to iterate through all apps for delete mode
+
+        toggleAppDeleteMode(v, AppDrawerFragment.deleteMode);
         v.con = con;
         return v;
     }
@@ -94,23 +105,21 @@ public class AppsAdapter extends RecyclerView.Adapter<AppContainer> {
      * Bind app name, app icon, and app launch-intent to app square*/
     @Override
     public void onBindViewHolder(@NonNull AppContainer holder, int position) {
-        ApplicationInfo p = apps.get(position);
-        try {
-            holder.icon.setImageDrawable(pm.getApplicationIcon(p.packageName));
-            holder.name.setText(pm.getApplicationLabel(pm.getApplicationInfo(p.packageName,0)));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        holder.icon.setImageDrawable(icons.get(position));
+        holder.name.setText(labels.get(position));
 
-        holder.itemView.setOnClickListener(view -> launchApp(holder, p));
-        holder.itemView.setOnLongClickListener(longPressHandler::apply);
+        holder.itemView.setOnClickListener(view -> launchApp(holder, position));
+        holder.itemView.setOnLongClickListener(view -> {
+            longPressHandler.run();
+            return true;
+        });
 
-        //Allows Adapter to iterate through all apps for delete mode
-        toggleAppMode.add(x -> toggleAppDeleteMode(holder, x, position, view->launchApp(holder, p)));
+        toggleAppMode.add(x -> toggleAppDeleteMode(holder, x));
+        toggleAppDeleteMode(holder, AppDrawerFragment.deleteMode);
     }
 
-    private Boolean launchApp(AppContainer v, ApplicationInfo info){
-        Intent launchIntent = new Intent(pm.getLaunchIntentForPackage(info.packageName));
+    private Boolean launchApp(AppContainer v, int pos){
+        Intent launchIntent = launchers.get(pos);
         v.con.startActivity(launchIntent);
         return true;
     }

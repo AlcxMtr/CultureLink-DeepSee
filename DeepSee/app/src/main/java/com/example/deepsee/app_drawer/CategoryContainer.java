@@ -21,6 +21,8 @@ import com.example.deepsee.R;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class CategoryContainer extends RecyclerView.ViewHolder {
@@ -51,8 +53,8 @@ public class CategoryContainer extends RecyclerView.ViewHolder {
         return adapter;
     }
 
-    public void initRecyclerView(List<ApplicationInfo> apps, Function<View, Boolean> longPressHandler){
-        adapter = new AppsAdapter(con, apps, pm, longPressHandler);
+    public void initRecyclerView(List<ApplicationInfo> apps, AppsAdapter adapter){
+        this.adapter = adapter;
         this.apps.setAdapter(adapter);
         this.apps.setLayoutManager(new GridLayoutManager(con, Math.min(Math.max(3, apps.size()/3), 6)));
     }

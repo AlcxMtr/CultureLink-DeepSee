@@ -27,6 +27,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class AppDrawerFragment extends Fragment {
 
+    public static boolean deleteMode = false;
     private View binding;
     private final HashMap<Integer, List<ApplicationInfo>> categories;
     private List<ApplicationInfo> apps;
