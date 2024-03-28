@@ -74,16 +74,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View k) {
                 // Create an instance of the SMSReader class
-                SMSReader smsReader = new SMSReader();
-//                // Call the readSMS method with the context of the MainActivity
-                smsReader.readSMS(MainActivity.this);
-                setContentView(R.layout.message);
-//                SMSAdapter adapter = new SMSAdapter(MainActivity.this, R.layout.messages,smsReader.readSMS(MainActivity.this));
-                List<SMSMessages> smsMessages = smsReader.readSMS(MainActivity.this);
-
-                // Display SMS messages
-                displaySMSMessages(smsMessages);
-
+                Intent msg_intent = new Intent(MainActivity.this,SMSActivity.class);
+                startActivity(msg_intent);
             }
         });
 
@@ -91,34 +83,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    private void displaySMSMessages(List<SMSMessages> smsMessages) {
-        LinearLayout linearLayout = findViewById(R.id.linear_layout);
-        for (SMSMessages smsMessage : smsMessages) {
-            // Inflate the card_sms_message layout
-            View cardView = LayoutInflater.from(this).inflate(R.layout.layout_msgs, null);
 
-            // Get references to the TextViews inside the CardView
-            TextView contactNameTextView = cardView.findViewById(R.id.contact_name);
-            TextView timeTextView = cardView.findViewById(R.id.timeofmsg);
-            TextView messageTextView = cardView.findViewById(R.id.textmsg_shortened);
-
-            // Set the text for each TextView
-            contactNameTextView.setText(smsMessage.getContactName());
-            timeTextView.setText(smsMessage.getTimestamp());
-            messageTextView.setText(smsMessage.getMessage());
-
-            // Add the CardView to the LinearLayout
-            linearLayout.addView(cardView);
-            cardView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // Create an intent to open the messages app
-                    Intent intent = new Intent(Intent.ACTION_MAIN);
-                    intent.addCategory(Intent.CATEGORY_APP_MESSAGING);
-                    startActivity(intent);
-                }
-            });
-    }}
 
 
 

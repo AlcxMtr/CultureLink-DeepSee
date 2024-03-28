@@ -27,7 +27,10 @@
             </intent-filter>
         </activity>
 
-
+        <activity
+            android:name=".SMSActivity"
+            android:label="SMS Activity"
+            android:theme="@style/Theme.DeepSee" />
     </application>
     <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" tools:ignore="QueryAllPackagesPermission" />
     <uses-permission android:name="android.permission.READ_SMS" />

@@ -1,9 +1,11 @@
 package com.example.deepsee;
 
+import android.annotation.SuppressLint;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
+import android.provider.ContactsContract;
 import android.provider.Telephony;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -26,6 +28,7 @@ public class SMSReader {
                 int addressIndex = cursor.getColumnIndex(Telephony.Sms.ADDRESS);
                 int bodyIndex = cursor.getColumnIndex(Telephony.Sms.BODY);
                 int timeIndex = cursor.getColumnIndex(Telephony.Sms.DATE);
+                
 
                 String address = cursor.getString(addressIndex);
                 String body = cursor.getString(bodyIndex);
@@ -40,7 +43,7 @@ public class SMSReader {
                 boolean addressExists = false;
                 for (SMSMessages message : smsMessages) {
                     if (message.getContactName().equals(address)) {
-                        // Update the existing message if the address matches
+                         //Update the existing message if the address matches
                         message.setMessage(shortBody);
                         message.setTimestamp(timestamp);
                         addressExists = true;
@@ -60,5 +63,20 @@ public class SMSReader {
 
         return smsMessages;
     }
+
+//    public static String getPhoneNumberFromContactName(Context context, String contactName) {
+//        String phoneNumber = null;
+//        ContentResolver contentResolver = context.getContentResolver();
+//
+//        Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(contactName));
+//        Cursor cursor = contentResolver.query(uri, new String[]{ContactsContract.PhoneLookup.NUMBER}, null, null, null);
+//
+//        if (cursor != null && cursor.moveToFirst()) {
+//            phoneNumber = cursor.getString(cursor.getColumnIndex(ContactsContract.PhoneLookup.NUMBER));
+//            cursor.close();
+//        }
+//
+//        return phoneNumber;
+//    }
 }
 
