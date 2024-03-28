@@ -3,6 +3,7 @@ package com.example.deepsee;
 import static android.app.PendingIntent.getActivity;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.FragmentManager;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
@@ -17,6 +18,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -34,42 +36,52 @@ import androidx.fragment.app.FragmentTransaction;
 
 import java.util.ArrayList;
 
-public class SettingsActivity extends AppCompatActivity {
+public class QuickSettingsActivity extends AppCompatActivity {
 
 
-    ListView lvSettings;
+    ListView lvQuickSettings;
+    Button btnDone;
 
     int textSize = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_settings);
+        setContentView(R.layout.activity_quick_settings);
 
 //        getSupportActionBar().setTitle("Deepsee Settings");
 
-        lvSettings = (ListView) findViewById(R.id.lvSettings);
+        lvQuickSettings = (ListView) findViewById(R.id.lvQuickSettings);
+
+        btnDone = (Button) findViewById(R.id.btnDone);
 
         ArrayAdapter<String> array_adapter = getStringArrayAdapter();
-        lvSettings.setAdapter(array_adapter);
+        lvQuickSettings.setAdapter(array_adapter);
 
-        lvSettings.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+        btnDone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                QuickSettingsActivity.this.finish();
+            }
+        });
+
+        lvQuickSettings.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 if (i == 0) {
 
-                    boolean settingsPer = Settings.System.canWrite(SettingsActivity.this);
+                    boolean settingsPer = Settings.System.canWrite(QuickSettingsActivity.this);
                     if (settingsPer) {
                         //Log.d("ListView", "Item clicked: " + i);
                         String[] options = {"Small", "Medium", "Large"};
-                        AlertDialog.Builder builder = new AlertDialog.Builder(SettingsActivity.this);
+                        AlertDialog.Builder builder = new AlertDialog.Builder(QuickSettingsActivity.this);
                         builder.setTitle("Set Text Size");
                         builder.setItems(options, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int size) {
                                 if (size == 0) {
 
-                                    //SettingsActivity.this.setTheme((R.style.FontSizeSmall));
                                     Settings.System.putFloat(getBaseContext().getContentResolver(),
                                             Settings.System.FONT_SCALE, (float) 0.5);
 
@@ -91,20 +103,20 @@ public class SettingsActivity extends AppCompatActivity {
                         builder.show();
 
                     } else {
-                        Toast.makeText(SettingsActivity.this, "Please allow write permissions", Toast.LENGTH_LONG).show();
+                        Toast.makeText(QuickSettingsActivity.this, "Please allow write permissions", Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(android.provider.Settings.ACTION_MANAGE_WRITE_SETTINGS);
-                        intent.setData(Uri.parse("package:" + SettingsActivity.this.getPackageName()));
+                        intent.setData(Uri.parse("package:" + QuickSettingsActivity.this.getPackageName()));
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);
 
                     }
                 } else if (i == 1) {
 
-                    boolean settingsPer = Settings.System.canWrite(SettingsActivity.this);
+                    boolean settingsPer = Settings.System.canWrite(QuickSettingsActivity.this);
                     if (settingsPer) {
                         //Log.d("ListView", "Item clicked: " + i);
                         String[] options = {"Light Mode", "Dark Mode"};
-                        AlertDialog.Builder builder = new AlertDialog.Builder(SettingsActivity.this);
+                        AlertDialog.Builder builder = new AlertDialog.Builder(QuickSettingsActivity.this);
                         builder.setTitle("Set Theme");
                         builder.setItems(options, new DialogInterface.OnClickListener() {
                             @Override
@@ -123,15 +135,18 @@ public class SettingsActivity extends AppCompatActivity {
                         builder.show();
 
                     } else {
-                        Toast.makeText(SettingsActivity.this, "Please allow write permissions", Toast.LENGTH_LONG).show();
+                        Toast.makeText(QuickSettingsActivity.this, "Please allow write permissions", Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(android.provider.Settings.ACTION_MANAGE_WRITE_SETTINGS);
-                        intent.setData(Uri.parse("package:" + SettingsActivity.this.getPackageName()));
+                        intent.setData(Uri.parse("package:" + QuickSettingsActivity.this.getPackageName()));
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);
 
                     }
 
-                } else if (i == 3) {
+                } else if (i == 2) {
+
+                    Toast.makeText(QuickSettingsActivity.this, "Jello", Toast.LENGTH_LONG).show();
+
 
                 }
 
@@ -147,7 +162,7 @@ public class SettingsActivity extends AppCompatActivity {
         ArrayList<String> setting_arr = new ArrayList<String>();
         setting_arr.add("Easy Viewing");
         setting_arr.add("Display Settings");
-        setting_arr.add("Sound Volume");
+        setting_arr.add("Language");
         setting_arr.add("Bluetooth");
         setting_arr.add("Night Mode");
         setting_arr.add("Notifications");
