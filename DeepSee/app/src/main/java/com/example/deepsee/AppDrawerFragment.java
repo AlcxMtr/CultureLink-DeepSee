@@ -15,8 +15,10 @@ import android.view.ViewGroup;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.example.deepsee.app_drawer.CategoriesAdapter;
+import com.example.deepsee.app_drawer.CategoryContainer;
 
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -26,9 +28,10 @@ import androidx.recyclerview.widget.RecyclerView;
 public class AppDrawerFragment extends Fragment {
 
     private View binding;
-    private HashMap categories;
+    private final HashMap<Integer, List<ApplicationInfo>> categories;
     private List<ApplicationInfo> apps;
     private PackageManager pm;
+    private RecyclerView appRecyclerView;
 
     public AppDrawerFragment(HashMap<Integer, List<ApplicationInfo>> categories, List<ApplicationInfo> apps, PackageManager pm) {
         super();
@@ -49,10 +52,9 @@ public class AppDrawerFragment extends Fragment {
 
         setupAppRecyclerView();
     }
-
     private void setupAppRecyclerView() {
         // Find RecyclerView within AppDrawerLayout and initialize it
-        RecyclerView appRecyclerView = binding.findViewById(R.id.categories_recycler);
+        appRecyclerView = binding.findViewById(R.id.categories_recycler);
         CategoriesAdapter adapter = new CategoriesAdapter(categories, pm, appRecyclerView);
         appRecyclerView.setAdapter(adapter);
         appRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));

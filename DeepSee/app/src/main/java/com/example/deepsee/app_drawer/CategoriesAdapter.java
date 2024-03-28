@@ -13,21 +13,25 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.deepsee.R;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Function;
 
 public class CategoriesAdapter extends RecyclerView.Adapter<CategoryContainer>{
     private HashMap<Integer, List<ApplicationInfo>> categories;
     private Integer[] keys;
     private PackageManager pm;
     private RecyclerView rv;
-
+    private final List<Function<View, Boolean>> toggleCategoriesDeleteMode;
+    private boolean deleteMode = false;
 
     public CategoriesAdapter(HashMap<Integer, List<ApplicationInfo>> categories, PackageManager pm, RecyclerView rv) {
         this.categories = categories;
         this.keys = categories.keySet().toArray(new Integer[]{});
         this.pm = pm;
         this.rv = rv;
+        toggleCategoriesDeleteMode = new LinkedList<>();
     }
 
     /*
@@ -38,7 +42,7 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoryContainer>{
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
 
-        View category_card = inflater.inflate(R.layout.category_card_open, parent, false);
+        View category_card = inflater.inflate(R.layout.category_card, parent, false);
 
         CategoryContainer v = new CategoryContainer(category_card, pm);
         v.con = context;
@@ -52,7 +56,7 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoryContainer>{
     @Override
     public void onBindViewHolder(@NonNull CategoryContainer holder, int position) {
         //Initialize recycler view for holding apps
-        holder.initRecyclerView(categories.get(keys[position]));
+        holder.initRecyclerView(categories.get(keys[position]), this::toggleDeleteMode);
         String cat = (String)ApplicationInfo.getCategoryTitle(holder.con, keys[position]);
 
         if (Objects.equals(cat, null))
@@ -60,11 +64,16 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoryContainer>{
         holder.category_name.setText(cat);
         holder.apps.setRecycledViewPool(rv.getRecycledViewPool());
         holder.setPos(position);
+        toggleCategoriesDeleteMode.add(view -> holder.getAdapter().setDeleteMode(deleteMode));
+    }
 
-        //Open first category
-        if (position == keys.length-1){
-            holder.itemView.findViewById(R.id.category_grid_name).setOnClickListener(x -> holder.finalToggleView(rv));
+    //Iterate through all categories and run their respective toggleDeleteMode functions
+    private Boolean toggleDeleteMode(View v){
+        deleteMode = !deleteMode;
+        for (Function<View, Boolean> f:toggleCategoriesDeleteMode){
+            f.apply(v);
         }
+        return true;
     }
 
     @Override

@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.media.Image;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,12 +19,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.deepsee.R;
 
+import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Function;
 
 public class CategoryContainer extends RecyclerView.ViewHolder {
     public TextView category_name;
     public RecyclerView apps;
     private PackageManager pm;
+
+    private AppsAdapter adapter;
     public Context con;
     private boolean open;
     private ImageView arrow;
@@ -41,22 +46,23 @@ public class CategoryContainer extends RecyclerView.ViewHolder {
         itemView.findViewById(R.id.category_grid_name).setOnClickListener(view -> toggleCategoryView());
     }
 
-    public void initRecyclerView(List<ApplicationInfo> apps){
-        this.apps.setAdapter(new AppsAdapter(con, apps, pm));
+
+    public AppsAdapter getAdapter() {
+        return adapter;
+    }
+
+    public void initRecyclerView(List<ApplicationInfo> apps, Function<View, Boolean> longPressHandler){
+        adapter = new AppsAdapter(con, apps, pm, longPressHandler);
+        this.apps.setAdapter(adapter);
         this.apps.setLayoutManager(new GridLayoutManager(con, Math.min(Math.max(3, apps.size()/3), 6)));
     }
+
+
 
     public void setPos(int pos) {
         if (this.pos == -1)
             this.pos = pos;
     }
-
-    public void finalToggleView(RecyclerView rv){
-        toggleCategoryView();
-        rv.scrollBy(0,200);
-        rv.scrollToPosition(this.pos);
-    }
-
     public void toggleCategoryView(){
         open = !open;
         apps.setVisibility(open ? View.VISIBLE : GONE);
