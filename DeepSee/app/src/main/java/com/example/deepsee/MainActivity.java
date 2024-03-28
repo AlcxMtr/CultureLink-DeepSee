@@ -65,6 +65,8 @@ public class MainActivity extends AppCompatActivity {
     private TextView cond;
     private FusedLocationProviderClient fusedLocationProviderClient;
 
+    private RequestQueue requestQueue;
+
     private String[] permissions;
 
     @Override
@@ -171,6 +173,7 @@ public class MainActivity extends AppCompatActivity {
         wind_speed = (TextView) findViewById(R.id.wind_speed);
         humid = (TextView) findViewById(R.id.humidity);
         cond = (TextView) findViewById(R.id.condition);
+        requestQueue = Volley.newRequestQueue(this);
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         getLastLocation();
     }
@@ -263,10 +266,10 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onWeatherError(String errorMessage) {
-                System.out.print("Error retrieving weather");
+                System.out.println("Error retrieving weather");
             }
         };
-        WeatherRequest.getWeatherInfo(weatherListener, latitude, longitude);
+        WeatherRequest.getWeatherInfo(requestQueue, weatherListener, latitude, longitude);
     }
 
 

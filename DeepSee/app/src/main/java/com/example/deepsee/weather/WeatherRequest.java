@@ -14,8 +14,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class WeatherRequest {
-    public static void getWeatherInfo(WeatherListener listener, double latitude, double longitude) {
+    public static void getWeatherInfo(RequestQueue requestQueue, WeatherListener listener, double latitude, double longitude) {
         String url = "http://api.weatherapi.com/v1/forecast.json?key=3ea1bd4ac87f447685323119242303&q=" + latitude + "," + longitude + "&days=1&aqi=no&alerts=no";
+        System.out.println("reached 1");
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -38,6 +39,7 @@ public class WeatherRequest {
                 listener.onWeatherError(error.getMessage());
             }
         });
+        requestQueue.add(jsonObjectRequest);
     }
 
 }
