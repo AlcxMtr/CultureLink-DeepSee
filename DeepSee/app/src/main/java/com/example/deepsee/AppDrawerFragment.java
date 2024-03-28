@@ -53,7 +53,7 @@ public class AppDrawerFragment extends Fragment {
     private void setupAppRecyclerView() {
         // Find RecyclerView within AppDrawerLayout and initialize it
         RecyclerView appRecyclerView = binding.findViewById(R.id.categories_recycler);
-        CategoriesAdapter adapter = new CategoriesAdapter(categories, pm);
+        CategoriesAdapter adapter = new CategoriesAdapter(categories, pm, appRecyclerView);
         appRecyclerView.setAdapter(adapter);
         appRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
     }

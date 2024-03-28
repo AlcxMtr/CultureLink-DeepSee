@@ -12,8 +12,8 @@
 
         <TextView
             android:id="@+id/category_grid_name"
-            android:layout_width="392dp"
-            android:layout_height="27dp"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
             android:layout_gravity="left|center_vertical"
             android:layout_marginStart="16dp"
             android:layout_weight=".9"
@@ -22,13 +22,23 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <ImageView
+            android:id="@+id/category_arrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:rotation="90"
+            app:layout_constraintBottom_toBottomOf="@+id/category_grid_name"
+            app:layout_constraintEnd_toEndOf="@+id/category_grid_name"
+            app:layout_constraintTop_toTopOf="@+id/category_grid_name"
+            app:srcCompat="@android:drawable/ic_media_play" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/apps_recycler"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="13dp"
             android:nestedScrollingEnabled="false"
-            android:visibility="gone"
             app:layout_constraintTop_toBottomOf="@+id/category_grid_name" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

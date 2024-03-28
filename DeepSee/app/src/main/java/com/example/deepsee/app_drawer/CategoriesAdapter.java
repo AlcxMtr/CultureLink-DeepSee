@@ -20,12 +20,14 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoryContainer>{
     private HashMap<Integer, List<ApplicationInfo>> categories;
     private Integer[] keys;
     private PackageManager pm;
+    private RecyclerView rv;
 
 
-    public CategoriesAdapter(HashMap<Integer, List<ApplicationInfo>> categories, PackageManager pm) {
+    public CategoriesAdapter(HashMap<Integer, List<ApplicationInfo>> categories, PackageManager pm, RecyclerView rv) {
         this.categories = categories;
         this.keys = categories.keySet().toArray(new Integer[]{});
         this.pm = pm;
+        this.rv = rv;
     }
 
     /*
@@ -56,10 +58,12 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoryContainer>{
         if (Objects.equals(cat, null))
             cat = "Utility";
         holder.category_name.setText(cat);
+        holder.apps.setRecycledViewPool(rv.getRecycledViewPool());
+        holder.setPos(position);
 
         //Open first category
-        if (position == 0){
-            holder.toggleCategoryView();
+        if (position == keys.length-1){
+            holder.itemView.findViewById(R.id.category_grid_name).setOnClickListener(x -> holder.finalToggleView(rv));
         }
     }
 
