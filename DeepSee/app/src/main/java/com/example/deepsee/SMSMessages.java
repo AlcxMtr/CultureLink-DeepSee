@@ -1,12 +1,14 @@
 package com.example.deepsee;
 
+import java.util.Date;
+
 public class SMSMessages {
 
     private String contactName;
     private String message;
-    private String timestamp;
+    private Date timestamp;
 
-    public SMSMessages(String contactName, String message, String timestamp) {
+    public SMSMessages(String contactName, String message, Date timestamp) {
         this.contactName = contactName;
         this.message = message;
         this.timestamp = timestamp;
@@ -20,7 +22,7 @@ public class SMSMessages {
         return message;
     }
 
-    public String getTimestamp() {
+    public Date getTimestamp() {
         return timestamp;
     }
 
@@ -28,7 +30,7 @@ public class SMSMessages {
         this.message=shortBody;
     }
 
-    public void setTimestamp(String timestamp) {
+    public void setTimestamp(Date timestamp) {
         this.timestamp=timestamp;
     }
 }

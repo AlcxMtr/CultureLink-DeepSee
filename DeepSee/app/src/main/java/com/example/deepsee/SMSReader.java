@@ -7,6 +7,8 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.ContactsContract;
 import android.provider.Telephony;
+
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -34,7 +36,15 @@ public class SMSReader {
                 String body = cursor.getString(bodyIndex);
                 long timeMillis = cursor.getLong(timeIndex);
 
-                String timestamp = new SimpleDateFormat("HH:mm", Locale.getDefault()).format(new Date(timeMillis));
+                Date timestamp = null;
+                String time = new SimpleDateFormat("EEE, d MMM yyyy HH:mm", Locale.getDefault()).format(new Date(timeMillis));
+                SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, d MMM yyyy HH:mm");
+
+                try {
+                    timestamp = dateFormat.parse(time);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
 
                 // Create a short version of the message body
                 String shortBody = body.length() > 50 ? body.substring(0, 50) + "..." : body; // Adjust the length as needed
@@ -44,8 +54,10 @@ public class SMSReader {
                 for (SMSMessages message : smsMessages) {
                     if (message.getContactName().equals(address)) {
                          //Update the existing message if the address matches
-                        message.setMessage(shortBody);
-                        message.setTimestamp(timestamp);
+                        if (message.getTimestamp().before(timestamp)) {
+                            message.setMessage(shortBody);
+                            message.setTimestamp(timestamp);
+                        }
                         addressExists = true;
                         break;
                     }

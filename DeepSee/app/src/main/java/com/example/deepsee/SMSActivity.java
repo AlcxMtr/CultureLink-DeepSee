@@ -10,6 +10,8 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.List;
+import java.util.Date;
+import java.text.SimpleDateFormat;
 
 public class SMSActivity extends AppCompatActivity {
     @Override
@@ -31,8 +33,11 @@ public class SMSActivity extends AppCompatActivity {
             TextView timeTextView = cardView.findViewById(R.id.timeofmsg);
             TextView messageTextView = cardView.findViewById(R.id.textmsg_shortened);
 
+            SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
+            String time = dateFormat.format(smsMessage.getTimestamp());
+
             contactNameTextView.setText(smsMessage.getContactName());
-            timeTextView.setText(smsMessage.getTimestamp());
+            timeTextView.setText(time);
             messageTextView.setText(smsMessage.getMessage());
 
             linearLayout.addView(cardView);

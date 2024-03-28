@@ -82,12 +82,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
-
-
-
-
-
     // Toggles the App Drawer:
     private void toggleAppDrawer() {
 
