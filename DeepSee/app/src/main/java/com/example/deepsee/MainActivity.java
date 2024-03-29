@@ -77,8 +77,6 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private ShortcutsContainerFragment shortcutsFragment;
 
-    String [] permissions;
-
     private TextView weather_location;
     private TextView temp;
     private TextView rain_chance;
@@ -224,6 +222,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        shortcutsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, ShortcutsDrawerActivity.class));
+            }
+        });
+
         weather_location = (TextView) findViewById(R.id.weather_location);
         temp = (TextView) findViewById(R.id.temperature);
         rain_chance = (TextView) findViewById(R.id.rain_chance);
@@ -339,12 +344,6 @@ public class MainActivity extends AppCompatActivity {
         };
         WeatherRequest.getWeatherInfo(requestQueue, weatherListener, latitude, longitude);
 
-        shortcutsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, ShortcutsDrawerActivity.class));
-            }
-        });
     }
 
 
