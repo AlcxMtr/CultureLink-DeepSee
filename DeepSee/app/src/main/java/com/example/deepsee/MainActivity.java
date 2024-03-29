@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import android.provider.ContactsContract;
+import android.widget.ImageButton;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -86,6 +87,7 @@ public class MainActivity extends AppCompatActivity {
 
         Button showHideButton = findViewById(R.id.show_hide_button);
         Button emergencyButton = findViewById(R.id.emergency_button);
+        ImageButton shortcutsButton = findViewById(R.id.shDrawerButton);
         Button shortcutsContainerButton = findViewById(R.id.shortcutsContainerButton);
 
 
@@ -161,8 +163,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-
+        shortcutsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, ShortcutsDrawerActivity.class));
+            }
+        });
     }
 
 
