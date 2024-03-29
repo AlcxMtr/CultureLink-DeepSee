@@ -14,7 +14,9 @@
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:layout_margin="10dp"
-        android:background="@drawable/weather_widget">
+        android:background="@drawable/weather_widget"
+        tools:layout_editor_absoluteX="4dp"
+        tools:layout_editor_absoluteY="140dp">
 
 
         <ImageView
@@ -158,67 +160,12 @@
         android:id="@+id/show_hide_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="28dp"
+        android:layout_marginEnd="108dp"
         android:text="Show/Hide App Drawer"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.081" />
-
-    <Button
-        android:id="@+id/emergency_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="31dp"
-        android:text="Emergency!"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnSettings" />
-
-    <Button
-        android:id="@+id/t2s_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="34dp"
-        android:layout_marginEnd="16dp"
-        android:text="Text To Speech"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/show_hide_button" />
-
-    <Button
-        android:id="@+id/btnSettings"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/settings"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/t2s_button" />
-
-    <Button
-        android:id="@+id/shortcutsContainerButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="340dp"
-        android:background="@android:drawable/arrow_down_float"
-        android:clickable="true"
-        android:contentDescription="Did you ever hear the tragedy of Darth Plagueis the Wise?
-I thought not. It's not a story the Jedi would tell you. It's a Sith legend. Darth Plagueis was a Dark Lord of the Sith, so powerful and so wise he could use the Force to influence the midichlorians to create life... He had such a knowledge of the dark side that he could even keep the ones he cared about from dying. The dark side of the Force is a pathway to many abilities some consider to be unnatural. He became so powerful... the only thing he was afraid of was losing his power, which eventually, of course, he did. Unfortunately, he taught his apprentice everything he knew, then his apprentice killed him in his sleep. Ironic, he could save others from death, but not himself."
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <LinearLayout
-        android:id="@+id/shortcuts_holder"
-        android:layout_width="298dp"
-        android:layout_height="65dp"
-        android:layout_marginStart="100dp"
-        android:layout_marginTop="2dp"
-        android:layout_marginEnd="300dp"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.153"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/shortcutsContainerButton" />
 
     <ImageButton
         android:id="@+id/shDrawerButton"
@@ -244,12 +191,6 @@ I thought not. It's not a story the Jedi would tell you. It's a Sith legend. Dar
 <!--        app:layout_constraintStart_toStartOf="parent"-->
 <!--        app:layout_constraintTop_toTopOf="parent"-->
 <!--        app:layout_constraintVertical_bias="0.484" />-->
-
-    <Button
-        android:id="@+id/messagesbutton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="messages" />
 
     <HorizontalScrollView
         android:id="@+id/Messages_widget"

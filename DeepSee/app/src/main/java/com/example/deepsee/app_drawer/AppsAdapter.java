@@ -141,6 +141,7 @@ public class AppsAdapter extends RecyclerView.Adapter<AppContainer> {
         toggleAppDeleteMode(holder, AppDrawerFragment.deleteMode);
     }
 
+
     //Launches app represented by pos
     private void launchApp(AppContainer v, int pos){
         Intent launchIntent = launchers.get(pos);
