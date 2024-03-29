@@ -24,26 +24,23 @@ public class SMSReader {
 
         Uri uri = Uri.parse("content://sms/");
         Cursor cursor = contentResolver.query(uri, null, null, null, null);
+        int num = 0;
 
         if (cursor != null) {
             while (cursor.moveToNext()) {
+                if (num == 100) {
+                    break;
+                }
                 int addressIndex = cursor.getColumnIndex(Telephony.Sms.ADDRESS);
                 int bodyIndex = cursor.getColumnIndex(Telephony.Sms.BODY);
                 int timeIndex = cursor.getColumnIndex(Telephony.Sms.DATE);
                 
 
                 String address = cursor.getString(addressIndex);
-                boolean exists = false;
-                for (String name: names) {
-                    if (name.equals(address)) {
-                        exists = true;
-                        break;
-                    }
-                }
-                if (!exists) {
+                address = getContactNameFromPhoneNumber(context, address);
+                if (address == null) {
                     continue;
                 }
-
                 String body = cursor.getString(bodyIndex);
                 long timeMillis = cursor.getLong(timeIndex);
 
@@ -79,6 +76,7 @@ public class SMSReader {
                     SMSMessages smsMessage = new SMSMessages(address, shortBody, timestamp);
                     smsMessages.add(smsMessage);
                 }
+                num++;
             }
             cursor.close();
         }
