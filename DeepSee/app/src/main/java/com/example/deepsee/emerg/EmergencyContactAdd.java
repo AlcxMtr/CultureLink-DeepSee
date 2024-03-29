@@ -31,6 +31,15 @@ public class EmergencyContactAdd extends Fragment {
     ArrayList<String> name = new ArrayList<>();
     ArrayList<String> number = new ArrayList<>();
     ArrayList<Contact> contacts;
+    //ArrayList<Contact> added_contacts = new ArrayList<>();
+
+    public static ArrayList<Integer> added_img = new ArrayList<>();
+    public static ArrayList<String> added_name = new ArrayList<>();
+    public static ArrayList<String> added_number = new ArrayList<>();
+
+    public static ContactListAdapter adapter;
+    public static ContactListAdapter added_adapter;
+
 
     @Override
     public View onCreateView(
@@ -54,10 +63,20 @@ public class EmergencyContactAdd extends Fragment {
 
             System.out.println("name: " + contact.getName() + " num: " + contact.getContactNumber());
         }
-        ContactListAdapter adapter = new ContactListAdapter(img,name,number);
+        //ContactListAdapter adapter = new ContactListAdapter(img,name,number);
+        adapter = new ContactListAdapter(img,name,number);
         RecyclerView recyclerView = binding.addNewRecyclerview;
+        //RecyclerView recyclerView = binding.addedContactsView;
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+
+        //ContactListAdapter added_adapter = new ContactListAdapter(added_img,added_name,added_number);
+        added_adapter = new ContactListAdapter(added_img,added_name,added_number);
+        RecyclerView added_recyclerView = binding.addedContactsView;
+        added_recyclerView.setAdapter(added_adapter);
+        added_recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+
+
 
         binding.buttonSecond.setOnClickListener(v ->
                 NavHostFragment.findNavController(EmergencyContactAdd.this)
