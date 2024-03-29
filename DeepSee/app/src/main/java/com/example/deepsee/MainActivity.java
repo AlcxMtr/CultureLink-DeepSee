@@ -5,15 +5,12 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.view.LayoutInflater;
 import android.view.View;
 
-import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -24,8 +21,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import com.example.deepsee.messaging.SMSActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -105,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View k) {
                 // Create an instance of the SMSReader class
-                Intent msg_intent = new Intent(MainActivity.this,SMSActivity.class);
+                Intent msg_intent = new Intent(MainActivity.this, SMSActivity.class);
                 startActivity(msg_intent);
             }
         });

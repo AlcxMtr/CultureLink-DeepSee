@@ -1,4 +1,4 @@
-package com.example.deepsee;
+package com.example.deepsee.messaging;
 
 import java.util.ArrayList;
 import java.util.Date;

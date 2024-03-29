@@ -1,4 +1,4 @@
-package com.example.deepsee;
+package com.example.deepsee.messaging;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -13,22 +13,27 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.deepsee.R;
+import com.example.deepsee.contacts.Contact;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Date;
 import java.text.SimpleDateFormat;
 
 public class SMSActivity extends AppCompatActivity {
 
     private Handler handler;
-    ArrayList<String> contacts;
+    ArrayList<Contact> contacts;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.message);
 
-        contacts = getContacts();
+        contacts = Contact.getContacts(SMSActivity.this);
+        for (Contact contact: contacts) {
+            System.out.println("name: " + contact.getName() + " " + contact.getContactNumber());
+        }
         SMSReader smsReader = new SMSReader();
         List<SMSMessages> smsMessages = smsReader.readSMS(SMSActivity.this, contacts);
         displaySMSMessages(smsMessages);
@@ -77,46 +82,6 @@ public class SMSActivity extends AppCompatActivity {
             });
         }
     }
-
-    private ArrayList<String> getContacts() {
-
-        ArrayList <String> names = new ArrayList<>();
-        String[] projection = new String[]{
-                ContactsContract.Profile._ID,
-                ContactsContract.Profile.DISPLAY_NAME_PRIMARY,
-                ContactsContract.Profile.LOOKUP_KEY,
-                ContactsContract.Profile.HAS_PHONE_NUMBER
-        };
-        Cursor cursor = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, projection, null, null, null);
-        if (cursor.moveToFirst()) {
-            do {
-                int id = cursor.getColumnIndex(ContactsContract.Contacts._ID);
-                int displayName = cursor.getColumnIndex(ContactsContract.Profile.DISPLAY_NAME);
-
-                if (id >= 0 && displayName >= 0) {
-                    String contactID = cursor.getString(id);
-                    Cursor phoneNumCursor = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                            null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + "=?", new String[]{contactID}, null);
-
-                    if (phoneNumCursor.moveToFirst()) {
-                        int num = phoneNumCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
-                        if (num >= 0) {
-                            names.add(cursor.getString(displayName));
-                        }
-                    }
-                    phoneNumCursor.close();
-
-
-                }
-
-
-            } while (cursor.moveToNext());
-        }
-        cursor.close();
-
-        return names;
-    }
-
 
     @Override
     protected void onDestroy() {

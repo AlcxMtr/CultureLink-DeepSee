@@ -31,7 +31,7 @@
         </activity>
 
         <activity
-            android:name=".SMSActivity"
+            android:name=".messaging.SMSActivity"
             android:label="SMS Activity"
             android:theme="@style/Theme.DeepSee" />
     </application>
