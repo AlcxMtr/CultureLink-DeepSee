@@ -15,7 +15,6 @@ import android.os.Bundle;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
-import com.example.deepsee.accessibility.TextAndSpeech;
 import com.example.deepsee.databinding.ActivityMainBinding;
 import com.example.deepsee.weather.WeatherListener;
 import com.example.deepsee.weather.WeatherRequest;
@@ -23,8 +22,6 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 
-
-import com.example.deepsee.accessibility.TextAndSpeech;
 import com.example.deepsee.databinding.ActivityMainBinding;
 
 
@@ -158,17 +155,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-//      TODO:
-//        emergencyButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Fragment fragment = new EmergencyContactFragment();
-//                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-//                transaction.replace(R.id.fragment_container, fragment);
-//                transaction.commit();
-//            }
-//        });
-//
         shortcutsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

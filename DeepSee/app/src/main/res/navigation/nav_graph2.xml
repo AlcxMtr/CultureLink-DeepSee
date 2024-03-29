@@ -2,12 +2,12 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/nav_graph"
+    android:id="@+id/nav_graph2"
     app:startDestination="@id/FirstFragment">
 
     <fragment
         android:id="@+id/FirstFragment"
-        android:name="com.example.deepsee.app_drawer_fragment"
+        android:name="com.example.deepsee.EmergencyContactView"
         android:label="@string/first_fragment_label"
         tools:layout="@layout/emrg_content_view">
 
