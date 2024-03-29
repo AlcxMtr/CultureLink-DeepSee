@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/shortcut_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#B13737"
+    android:visibility="gone">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/launchablesContainer"
+        android:layout_width="219dp"
+        android:layout_height="374dp"
+        android:layout_marginTop="517dp">
+
+    </androidx.recyclerview.widget.RecyclerView>
+
+</FrameLayout>
