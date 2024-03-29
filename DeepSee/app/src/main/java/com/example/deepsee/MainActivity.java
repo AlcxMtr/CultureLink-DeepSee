@@ -1,11 +1,24 @@
 package com.example.deepsee;
+
+
+
 import android.Manifest;
 
+import android.annotation.SuppressLint;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Context;
+
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+
+import android.os.Build;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -25,6 +38,9 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.example.deepsee.databinding.ActivityMainBinding;
 
 
+import androidx.appcompat.app.AlertDialog;
+
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Handler;
@@ -32,7 +48,11 @@ import android.view.View;
 import android.widget.Button;
 
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
+
 import androidx.core.content.ContextCompat;
+
 import androidx.navigation.ui.AppBarConfiguration;
 
 import androidx.core.app.ActivityCompat;
@@ -65,12 +85,12 @@ import android.widget.ImageButton;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final String CHANNEL_ID = "Persistence";
     private boolean isAppDrawerVisible = false;
     public List<ApplicationInfo> apps;
     public HashMap<Integer, List<ApplicationInfo>> categories;
 
     private AppBarConfiguration appBarConfiguration;
-    Button btnSettings;
     private ActivityMainBinding binding;
     PackageManager pm;
 
@@ -141,6 +161,10 @@ public class MainActivity extends AppCompatActivity {
 
         sortAppCategories();
 
+
+        // Persistent notification:
+        showAlert();
+
         showHideButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -184,6 +208,48 @@ public class MainActivity extends AppCompatActivity {
         }
         return true;
     }
+
+    }
+
+
+    // Creates a persistent Notification for the accessibility shortcut
+    private void showAlert() {
+
+        // Creates a Channel (Needed after API 26)
+        CharSequence name = "Accessibility Shortcut";
+        String description = "Persistent Notification for Accessibility Features.";
+        int importance = NotificationManager.IMPORTANCE_HIGH;
+        NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+        channel.setDescription(description);
+
+
+        // Register the channel with the system; you can't change the importance
+        // or other notification behaviors after this.
+        NotificationManager notificationManager = getSystemService(NotificationManager.class);
+        notificationManager.createNotificationChannel(channel);
+
+        //Quick Settings Notification
+        Intent intent = new Intent(MainActivity.this, QuickSettingsActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(MainActivity.this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+
+        // This generates the properties and Intent/Content for the notification.
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .setContentTitle("Quick-Settings")
+                .setContentText("Access Your Most Important Settings")
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setColor(451)  // Customise in Visual Overhaul
+                .setOngoing(true)   // Persistence.
+                .setContentIntent(pendingIntent);
+
+        // This is a hacky fix that just DEPLOYS the notification.
+        NotificationManagerCompat nm = NotificationManagerCompat.from(this);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+                != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        nm.notify(0, builder.build());
 
     private Runnable updateTask = new Runnable() {
         @Override
@@ -287,4 +353,11 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
         handler.removeCallbacks(updateTask);
     }
+
+
+    @Override
+    public void onBackPressed() {
+        // Do nothing (override default back button behavior)
+    }
+
 }

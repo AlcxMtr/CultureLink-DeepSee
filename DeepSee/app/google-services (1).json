@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "912610323758",
+    "project_id": "deepsee-16633",
+    "storage_bucket": "deepsee-16633.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:912610323758:android:382254bebe5555f2dfdebf",
+        "android_client_info": {
+          "package_name": "com.example.deepsee"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCwczgpHAtkI2w_uk4c-6EihW7XzU9K_ps"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
