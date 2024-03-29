@@ -1,5 +1,6 @@
 package com.example.deepsee;
 
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -15,10 +16,10 @@ import android.view.ViewGroup;
 import java.util.HashMap;
 import java.util.List;
 
-import android.content.pm.ApplicationInfo;
-import com.example.deepsee.app_drawer.AppsAdapter;
+import com.example.deepsee.app_drawer.CategoriesAdapter;
 
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
@@ -26,13 +27,12 @@ public class AppDrawerFragment extends Fragment {
 
     private View binding;
     private HashMap categories;
-    private List<PackageInfo> apps;
+    private List<ApplicationInfo> apps;
     private PackageManager pm;
 
-    public AppDrawerFragment(HashMap<Integer, List<PackageInfo>> categories, List<PackageInfo> apps, PackageManager pm) {
+    public AppDrawerFragment(HashMap<Integer, List<ApplicationInfo>> categories, List<ApplicationInfo> apps, PackageManager pm) {
         super();
         this.categories = categories;
-        this.apps = apps;
         this.pm = pm;
     }
 
@@ -40,30 +40,22 @@ public class AppDrawerFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = inflater.inflate(R.layout.fragment_app_drawer, container, false);
+        System.out.println("Drawer Binder");
         return binding;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        System.out.println("Drawer created");
         setupAppRecyclerView();
     }
 
-    private void setViewLayout(int id){
-        LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(binding.getContext().LAYOUT_INFLATER_SERVICE);
-        binding = inflater.inflate(id, null);
-        ViewGroup rootView = (ViewGroup) getView();
-        rootView.removeAllViews();
-        rootView.addView(binding);
-    }
-
     private void setupAppRecyclerView() {
-        // Create and draw the app drawer as a recyclerView:
-        RecyclerView appRecyclerView = binding.findViewById(R.id.apps_recycler);
-        AppsAdapter adapter = new AppsAdapter(apps, pm);
+        // Find RecyclerView within AppDrawerLayout and initialize it
+        RecyclerView appRecyclerView = binding.findViewById(R.id.categories_recycler);
+        CategoriesAdapter adapter = new CategoriesAdapter(categories, pm);
         appRecyclerView.setAdapter(adapter);
-        appRecyclerView.setLayoutManager(new GridLayoutManager(requireContext(), 5));
-
+        appRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
     }
 }
