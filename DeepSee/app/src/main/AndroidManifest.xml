@@ -52,14 +52,15 @@
         <activity
             android:name=".TranslationActivity"
             android:label="Translation"
-            android:theme="@style/Theme.Transparent"
-            android:exported="true">
+            android:theme="@style/Theme.Transparent">
             <intent-filter>
                 <action android:name="android.intent.action.PROCESS_TEXT" />
-                <data android:mimeType="text/plain" />
-                <data android:scheme="http" />
-                <data android:scheme="https" />
+
                 <category android:name="android.intent.category.DEFAULT" />
+
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:mimeType="text/plain"/>
             </intent-filter>
         </activity>
 
@@ -70,10 +71,8 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.PROCESS_TEXT" />
-                <data android:scheme="http" />
-                <data android:scheme="https" />
-                <data android:mimeType="text/plain" />
                 <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>
 
