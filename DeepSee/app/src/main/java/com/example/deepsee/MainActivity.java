@@ -46,47 +46,6 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private ShortcutsContainerFragment shortcutsFragment;
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                                           int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == 1) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Permission is granted
-                String[] projection = new String[]{
-                        ContactsContract.Profile._ID,
-                        ContactsContract.Profile.DISPLAY_NAME_PRIMARY,
-                        ContactsContract.Profile.LOOKUP_KEY,
-                        ContactsContract.Profile.HAS_PHONE_NUMBER
-                };
-                Cursor cursor = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, projection, null, null, null);
-                if (cursor.moveToFirst()) {
-                    do {
-                        int id = cursor.getColumnIndex(ContactsContract.Contacts._ID);
-                        int displayName = cursor.getColumnIndex(ContactsContract.Profile.DISPLAY_NAME);
-
-                        if(id >= 0 && displayName >= 0){
-                            String contactID = cursor.getString(id);
-                            Cursor phoneNumCursor = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                                    null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + "=?", new String[] { contactID }, null);
-
-                            if (phoneNumCursor.moveToFirst()){
-                                int num = phoneNumCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
-                                if(num >=0){
-                                    System.out.println(cursor.getString(displayName) + ": " + phoneNumCursor.getString(num));
-                                }
-                            }
-                            phoneNumCursor.close();
-                        }
-                    } while (cursor.moveToNext());
-                }
-                cursor.close();
-            } else {
-                System.out.println("Woops...");
-            }
-        }
-    }
-
     String [] permissions;
 
     @Override
@@ -116,7 +75,8 @@ public class MainActivity extends AppCompatActivity {
 
         permissions = new String[]{
                 Manifest.permission.READ_SMS,
-                Manifest.permission.READ_CONTACTS
+                Manifest.permission.READ_CONTACTS,
+                Manifest.permission.WRITE_CONTACTS
         };
 
         ActivityCompat.requestPermissions(MainActivity.this, permissions, 1);
@@ -192,8 +152,6 @@ public class MainActivity extends AppCompatActivity {
                 shortcutsFragment.toggleVisibility();
             }
         });
-
-        requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, 1);
 
         Button t2s = findViewById(R.id.t2s_button);
         t2s.setOnClickListener(new View.OnClickListener() {
