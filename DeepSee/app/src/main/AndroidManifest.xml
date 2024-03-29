@@ -11,10 +11,12 @@
     <uses-permission
         android:name="android.permission.QUERY_ALL_PACKAGES"
         tools:ignore="QueryAllPackagesPermission" />
-
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
-
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES"/>
 
     <uses-feature
         android:name="android.hardware.telephony"
@@ -35,7 +37,8 @@
         <service
             android:name=".DrawOverlaysService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true">
+        </service>
 
         <activity
             android:name=".TranslationActivity"
@@ -43,10 +46,10 @@
             android:theme="@style/Theme.Transparent">
             <intent-filter>
                 <action android:name="android.intent.action.PROCESS_TEXT" />
-
                 <category android:name="android.intent.category.DEFAULT" />
-
                 <data android:mimeType="text/plain" />
+                <data android:scheme="http" />
+                <data android:scheme="https" />
             </intent-filter>
         </activity>
         <activity
@@ -58,6 +61,8 @@
                 <action android:name="android.intent.action.PROCESS_TEXT" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:mimeType="text/plain" />
+                <data android:scheme="http" />
+                <data android:scheme="https" />
             </intent-filter>
         </activity>
 
@@ -105,15 +110,5 @@
             android:name=".messaging.SMSActivity"
             android:label="SMS Activity"
             android:theme="@style/Theme.DeepSee" />
-
-        <activity
-            android:name=".accessibility.TextAndSpeech"
-            android:exported="true"
-            android:parentActivityName=".MainActivity"></activity>
     </application>
-
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_SMS" />
-    <uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES"/>
 </manifest>

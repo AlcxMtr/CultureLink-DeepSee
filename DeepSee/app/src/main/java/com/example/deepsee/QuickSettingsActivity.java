@@ -34,7 +34,6 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.example.deepsee.accessibility.TextAndSpeech;
 
 import java.util.ArrayList;
 
