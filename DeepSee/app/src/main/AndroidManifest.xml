@@ -43,19 +43,15 @@
                 <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>
-        
-        <service
-            android:name=".PersistentNotification"
-            android:enabled="true"
-            android:exported="true"></service>
 
         <activity
             android:name=".SettingsActivity"
             android:exported="false"
             android:label="@string/title_activity_settings"
-            android:theme="@style/Theme.DeepSee" />
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
         <activity
             android:name=".QuickSettingsActivity"
+            android:exported="true"
             android:theme="@style/Theme.Transparent" />
         <activity
             android:name=".MainActivity"

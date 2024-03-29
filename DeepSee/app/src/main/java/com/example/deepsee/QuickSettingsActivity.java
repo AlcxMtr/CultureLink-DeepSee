@@ -64,7 +64,7 @@ public class QuickSettingsActivity extends AppCompatActivity {
         btnDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                QuickSettingsActivity.this.finish();
+                QuickSettingsActivity.super.onBackPressed();
             }
         });
 
@@ -116,29 +116,25 @@ public class QuickSettingsActivity extends AppCompatActivity {
 
                     boolean settingsPer = Settings.System.canWrite(QuickSettingsActivity.this);
                     if (settingsPer) {
-//                        //Log.d("ListView", "Item clicked: " + i);
-//                        String[] options = {"Light Mode", "Dark Mode"};
-//                        AlertDialog.Builder builder = new AlertDialog.Builder(QuickSettingsActivity.this);
-//                        builder.setTitle("Set Theme");
-//                        builder.setItems(options, new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int opt) {
-//                                if (opt == 0) {
-//
-//                                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-//
-//                                } else if (opt == 1) {
-//
-//                                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-//
-//                                }
-//                            }
-//                        });
-//                        builder.show();
+                        //Log.d("ListView", "Item clicked: " + i);
+                        String[] options = {"Light Mode", "Dark Mode"};
+                        AlertDialog.Builder builder = new AlertDialog.Builder(QuickSettingsActivity.this);
+                        builder.setTitle("Set Theme");
+                        builder.setItems(options, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int opt) {
+                                if (opt == 0) {
 
+                                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
+                                } else if (opt == 1) {
 
+                                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
 
+                                }
+                            }
+                        });
+                        builder.show();
 
                     } else {
                         Toast.makeText(QuickSettingsActivity.this, "Please allow write permissions", Toast.LENGTH_LONG).show();
@@ -146,9 +142,7 @@ public class QuickSettingsActivity extends AppCompatActivity {
                         intent.setData(Uri.parse("package:" + QuickSettingsActivity.this.getPackageName()));
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);
-
                     }
-
 
                 } else if (i == 2) {
 
@@ -167,24 +161,19 @@ public class QuickSettingsActivity extends AppCompatActivity {
                     Intent intent = new Intent(QuickSettingsActivity.this, SettingsActivity.class);
                     startActivity(intent);
                 }
-
             }
-
         });
-
-
     }
 
     @NonNull
     private ArrayAdapter<String> getStringArrayAdapter() {
         ArrayList<String> setting_arr = new ArrayList<String>();
-        setting_arr.add(" T Text Size");
-        setting_arr.add(" ✎ Theme");
-        setting_arr.add(" ⇅ Wifi");
-        setting_arr.add(" ᛒ Bluetooth");
-        setting_arr.add("▯ Battery Saver");
-        setting_arr.add("⚙ Settings");
-
+        setting_arr.add(" T  Text Size");
+        setting_arr.add("\uD83D\uDD8C\uFE0F Theme");
+        setting_arr.add("\uD83D\uDCF6 Wifi");
+        setting_arr.add("\uD83C\uDFA7 Bluetooth");
+        setting_arr.add("\uD83D\uDD0B Battery Saver");
+        setting_arr.add("⚙\uFE0F Settings");
 
         ArrayAdapter<String> array_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, setting_arr);
         return array_adapter;

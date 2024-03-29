@@ -9,8 +9,8 @@
 
     <ListView
         android:id="@+id/lvQuickSettings"
-        android:layout_width="198dp"
-        android:layout_height="363dp"
+        android:layout_width="250dp"
+        android:layout_height="358dp"
         android:clickable="true"
         android:focusable="true"
         app:layout_constraintBottom_toBottomOf="parent"

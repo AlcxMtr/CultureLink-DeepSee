@@ -179,16 +179,16 @@ public class MainActivity extends AppCompatActivity {
         NotificationManager notificationManager = getSystemService(NotificationManager.class);
         notificationManager.createNotificationChannel(channel);
 
-        /// TODO: HERE AKS!!! THIS IS WHERE YOU ADD YOUR INTENT
-        Intent intent = new Intent(this, QuickSettingsActivity.class);
+        //Quick Settings Notification
+        Intent intent = new Intent(MainActivity.this, QuickSettingsActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+        PendingIntent pendingIntent = PendingIntent.getActivity(MainActivity.this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
 
         // This generates the properties and Intent/Content for the notification.
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
-                .setContentTitle("Persistent Notification")
-                .setContentText("Access your most important settings")
+                .setContentTitle("Quick-Settings")
+                .setContentText("Access Your Most Important Settings")
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setColor(451)  // Customise in Visual Overhaul
                 .setOngoing(true)   // Persistence.
@@ -223,4 +223,11 @@ public class MainActivity extends AppCompatActivity {
 
         isAppDrawerVisible = !isAppDrawerVisible;
     }
+
+
+    @Override
+    public void onBackPressed() {
+        // Do nothing (override default back button behavior)
+    }
+
 }

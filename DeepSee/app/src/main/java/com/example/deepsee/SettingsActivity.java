@@ -33,6 +33,7 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -47,8 +48,6 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
-//        getSupportActionBar().setTitle("Deepsee Settings");
-
         lvSettings = (ListView) findViewById(R.id.lvSettings);
 
         ArrayAdapter<String> array_adapter = getStringArrayAdapter();
@@ -61,7 +60,7 @@ public class SettingsActivity extends AppCompatActivity {
 
                     boolean settingsPer = Settings.System.canWrite(SettingsActivity.this);
                     if (settingsPer) {
-                        //Log.d("ListView", "Item clicked: " + i);
+
                         String[] options = {"Small", "Medium", "Large"};
                         builder = new AlertDialog.Builder(SettingsActivity.this);
                         builder.setTitle("Set Text Size");
@@ -70,7 +69,6 @@ public class SettingsActivity extends AppCompatActivity {
                             public void onClick(DialogInterface dialog, int size) {
                                 if (size == 0) {
 
-                                    //SettingsActivity.this.setTheme((R.style.FontSizeSmall));
                                     Settings.System.putFloat(getBaseContext().getContentResolver(),
                                             Settings.System.FONT_SCALE, (float) 0.8);
 
@@ -161,14 +159,14 @@ public class SettingsActivity extends AppCompatActivity {
     @NonNull
     private ArrayAdapter<String> getStringArrayAdapter() {
         ArrayList<String> setting_arr = new ArrayList<String>();
-        setting_arr.add("Text Size");
-        setting_arr.add("Display Settings");
-        setting_arr.add("Network & Internet");
-        setting_arr.add("Bluetooth");
-        setting_arr.add("Battery");
-        setting_arr.add("Language");
-        setting_arr.add("Notifications");
-        setting_arr.add("All Settings");
+        setting_arr.add(" T  Text Size");
+        setting_arr.add("\uD83C\uDFA8 Display Settings");
+        setting_arr.add("\uD83D\uDCF6 Network & Internet");
+        setting_arr.add("\uD83C\uDFA7 Bluetooth");
+        setting_arr.add("\uD83D\uDD0B Battery");
+        setting_arr.add("\uD83C\uDF0D Language");
+        setting_arr.add("\uD83D\uDD14 Notifications");
+        setting_arr.add("⚙\uFE0F All Settings");
 
 
 
