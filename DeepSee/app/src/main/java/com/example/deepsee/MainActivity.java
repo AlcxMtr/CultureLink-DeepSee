@@ -189,10 +189,10 @@ public class MainActivity extends AppCompatActivity {
         emergencyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Fragment fragment = new EmergencyContactFragment();
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.fragment_container, fragment);
+                startActivity(new Intent(MainActivity.this, EmrgActivity.class));
                 transaction.commit();
+                requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, 1);
             }
         });
         List<ShortcutContainer> launchables = new ArrayList<>();

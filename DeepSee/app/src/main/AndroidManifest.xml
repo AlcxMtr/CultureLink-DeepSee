@@ -32,7 +32,14 @@
                 <data android:scheme="http" android:host="assistant.google.com" />
             </intent-filter>
         </activity>
-
+        <activity
+            android:name=".EmrgActivity"
+            android:exported="false"
+            android:theme="@style/Theme.DeepSee" />
+        <activity
+            android:name=".EmergencyActivity"
+            android:exported="false"
+            android:theme="@style/Theme.DeepSee" />
 
         <activity
             android:name=".SettingsActivity"
