@@ -2,6 +2,7 @@ package com.example.deepsee;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.ContactsContract;
@@ -28,7 +29,6 @@ public class SMSActivity extends AppCompatActivity {
         setContentView(R.layout.message);
 
         contacts = getContacts();
-
         SMSReader smsReader = new SMSReader();
         List<SMSMessages> smsMessages = smsReader.readSMS(SMSActivity.this, contacts);
         displaySMSMessages(smsMessages);
@@ -70,8 +70,8 @@ public class SMSActivity extends AppCompatActivity {
             cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(Intent.ACTION_MAIN);
-                    intent.addCategory(Intent.CATEGORY_APP_MESSAGING);
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    intent.setData(Uri.parse("smsto:" + smsMessage.getContactName())); // Opens default messaging app with the specific contact
                     startActivity(intent);
                 }
             });
