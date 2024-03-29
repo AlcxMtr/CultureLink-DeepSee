@@ -80,7 +80,8 @@ public class SMSActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(Intent.ACTION_VIEW);
-                    intent.setData(Uri.parse("smsto:" + smsMessage.getContactName())); // Opens default messaging app with the specific contact
+                    intent.setData(Uri.parse("smsto:" + smsMessage.getContactName()));
+                    // Opens default messaging app with the specific contact
                     startActivity(intent);
                 }
             });

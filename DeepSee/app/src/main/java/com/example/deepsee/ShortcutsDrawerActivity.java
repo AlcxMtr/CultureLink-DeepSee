@@ -8,6 +8,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
 
+import com.example.deepsee.messaging.SMSActivity;
+
 
 public class ShortcutsDrawerActivity extends Activity {
 
@@ -30,8 +32,8 @@ public class ShortcutsDrawerActivity extends Activity {
         conversationsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ShortcutsDrawerActivity.this, MainActivity.class);
-                startActivity(intent);
+                Intent msg_intent = new Intent(ShortcutsDrawerActivity.this, SMSActivity.class);
+                startActivity(msg_intent);
             }
         });
 

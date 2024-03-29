@@ -98,22 +98,9 @@ public class MainActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, String[] permissions,
                                            int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-//         if (requestCode == 1) {
-//             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                 System.out.println("Location permission granted");
-//             } else {
-//                 System.out.println("Location permission not granted");
-//             }
-
-//             if (grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-//                 System.out.println("Contact permission granted");
-//                 getContacts();
-//             } else {
-//                 System.out.println("Contact permission not granted");
-//             }
-//         }
     }
+
+
     void sortAppCategories(){
         pm = getPackageManager();
         // Get Package List:
@@ -148,19 +135,15 @@ public class MainActivity extends AppCompatActivity {
         if (!hasPermissions()) {
             ActivityCompat.requestPermissions(MainActivity.this, permissions, 1);
         }
-
-
         ActivityCompat.requestPermissions(MainActivity.this, permissions, 1);
 
 
         Button showHideButton = findViewById(R.id.show_hide_button);
 
-        Button messagesButton = findViewById(R.id.messagesbutton);
-
-        Button emergencyButton = findViewById(R.id.emergency_button);
         ImageButton shortcutsButton = findViewById(R.id.shDrawerButton);
-        Button shortcutsContainerButton = findViewById(R.id.shortcutsContainerButton);
+
         sortAppCategories();
+
         showHideButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -175,56 +158,17 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-        messagesButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View k) {
-                // Create an instance of the SMSReader class
-                Intent msg_intent = new Intent(MainActivity.this, SMSActivity.class);
-                startActivity(msg_intent);
-            }
-        });
-
-
-        emergencyButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Fragment fragment = new EmergencyContactFragment();
-                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.fragment_container, fragment);
-                transaction.commit();
-            }
-        });
-        List<ShortcutContainer> launchables = new ArrayList<>();
-
-        shortcutsFragment = new ShortcutsContainerFragment(launchables, pm);
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.shortcuts_holder, shortcutsFragment);
-        transaction.commit();
-        shortcutsContainerButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                shortcutsFragment.toggleVisibility();
-            }
-        });
-
-        Button t2s = findViewById(R.id.t2s_button);
-        t2s.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(MainActivity.this, TextAndSpeech.class);
-                startActivity(i);
-            }
-        });
-
-        btnSettings = (Button) findViewById(R.id.btnSettings);
-        btnSettings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, SettingsActivity.class));
-            }
-        });
-
+//      TODO:
+//        emergencyButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Fragment fragment = new EmergencyContactFragment();
+//                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+//                transaction.replace(R.id.fragment_container, fragment);
+//                transaction.commit();
+//            }
+//        });
+//
         shortcutsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -271,7 +215,9 @@ public class MainActivity extends AppCompatActivity {
                 ContactsContract.Profile.LOOKUP_KEY,
                 ContactsContract.Profile.HAS_PHONE_NUMBER
         };
-        Cursor cursor = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, projection, null, null, null);
+        Cursor cursor = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                projection, null, null, null);
+
         if (cursor.moveToFirst()) {
             do {
                 int id = cursor.getColumnIndex(ContactsContract.Contacts._ID);
@@ -279,8 +225,11 @@ public class MainActivity extends AppCompatActivity {
 
                 if(id >= 0 && displayName >= 0){
                     String contactID = cursor.getString(id);
-                    Cursor phoneNumCursor = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                            null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + "=?", new String[] { contactID }, null);
+                    Cursor phoneNumCursor = getContentResolver()
+                            .query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                            null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + "=?",
+                                    new String[] { contactID }, null);
+
 
                     if (phoneNumCursor.moveToFirst()){
                         int num = phoneNumCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
@@ -289,16 +238,14 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                     phoneNumCursor.close();
-
-
                 }
-
-
             } while (cursor.moveToNext());
         }
         cursor.close();
     }
 
+    // TODO: CAUSING A CRASH ON RELOAD OF MAINACTIVITY. POSSIBLE DESYNC. LINE 259.
+    // TODO: CRASH ONLY RESOLVED ON CLEARING APP STORAGE. COULD BE TIED TO "WHILE USING APP" PERMISSION
     private void getLastLocation() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             fusedLocationProviderClient.getLastLocation()
@@ -347,34 +294,6 @@ public class MainActivity extends AppCompatActivity {
         };
         WeatherRequest.getWeatherInfo(requestQueue, weatherListener, latitude, longitude);
 
-    }
-
-    public void startDrawer(View v){
-        // Start AppDrawerFragment
-        Fragment fragment = new AppDrawerFragment(categories, apps, pm);
-
-        //Draw AppDrawerFragment overtop current view
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragment_container, fragment);
-        transaction.commit();
-    }
-    // Toggles the App Drawer:
-    private void toggleAppDrawer() {
-
-        if (!isAppDrawerVisible) {
-            // If the App Drawer is not visible, show it
-
-            // TODO: THIS DOES NOT WORK JAANI FIX IT ILY
-            // supportFragmentManager is an inbuilt, we should be using it:
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, new AppDrawerFragment(categories, apps, getPackageManager()))
-                    .commit();
-        } else {
-            // If it is visible, hide it:
-            isAppDrawerVisible = !isAppDrawerVisible; // placeholder
-        }
-
-        isAppDrawerVisible = !isAppDrawerVisible;
     }
 
     @Override
