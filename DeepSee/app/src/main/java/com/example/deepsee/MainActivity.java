@@ -8,14 +8,16 @@ import android.database.Cursor;
 import android.os.Bundle;
 
 import com.example.deepsee.accessibility.TextAndSpeech;
+import com.example.deepsee.databinding.ActivityMainBinding;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.view.View;
+import android.widget.Button;
+
+import androidx.navigation.ui.AppBarConfiguration;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-
-import android.widget.Button;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,6 +31,11 @@ public class MainActivity extends AppCompatActivity {
     private boolean isAppDrawerVisible = false;
     public List<ApplicationInfo> apps;
     public HashMap<Integer, List<ApplicationInfo>> categories;
+
+    private AppBarConfiguration appBarConfiguration;
+    Button btnSettings;
+    private ActivityMainBinding binding;
+    PackageManager pm;
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions,
@@ -61,11 +68,7 @@ public class MainActivity extends AppCompatActivity {
                                 }
                             }
                             phoneNumCursor.close();
-
-
                         }
-
-
                     } while (cursor.moveToNext());
                 }
                 cursor.close();
@@ -74,19 +77,12 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        Button showHideButton = findViewById(R.id.show_hide_button);
-        Button emergencyButton = findViewById(R.id.emergency_button);
-        final PackageManager pm = getPackageManager();
+    void sortAppCategories(){
+        pm = getPackageManager();
 
         // Get Package List:
         apps = pm.getInstalledApplications(PackageManager.GET_META_DATA);
-//                apps.get(0).applicationInfo.category
+    //                apps.get(0).applicationInfo.category
 
         // Remove System Packages from the list before drawing:
 
@@ -101,21 +97,15 @@ public class MainActivity extends AppCompatActivity {
             }
             categories.get(p.category).add(p);
         }
+    }
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
-        showHideButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) { // TODO: fahiiiiiiiiiim jaani pls fragmentise
-
-                // Start AppDrawerFragment
-                Fragment fragment = new AppDrawerFragment(categories, apps, pm);
-
-                //Draw AppDrawerFragment overtop current view
-                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.fragment_container, fragment);
-                transaction.commit();
-            }
-        });
-
+        Button showHideButton = findViewById(R.id.show_hide_button);
+        Button emergencyButton = findViewById(R.id.emergency_button);
+        sortAppCategories();
         emergencyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -136,8 +126,25 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
+
+        btnSettings = (Button) findViewById(R.id.btnSettings);
+        btnSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+            }
+        });
     }
 
+    public void startDrawer(View v){
+        // Start AppDrawerFragment
+        Fragment fragment = new AppDrawerFragment(categories, apps, pm);
+
+        //Draw AppDrawerFragment overtop current view
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragment_container, fragment);
+        transaction.commit();
+    }
     // Toggles the App Drawer:
     private void toggleAppDrawer() {
 
