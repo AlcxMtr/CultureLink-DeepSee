@@ -9,11 +9,12 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
-import com.example.deepsee.databinding.FragmentFirst2Binding;
+import com.example.deepsee.databinding.EmrgContentAddBinding;
+import com.example.deepsee.databinding.EmrgContentViewBinding;
 
-public class First2Fragment extends Fragment {
+public class EmergencyContactAdd extends Fragment {
 
-    private FragmentFirst2Binding binding;
+    private EmrgContentAddBinding binding;
 
     @Override
     public View onCreateView(
@@ -21,7 +22,7 @@ public class First2Fragment extends Fragment {
             Bundle savedInstanceState
     ) {
 
-        binding = FragmentFirst2Binding.inflate(inflater, container, false);
+        binding = EmrgContentAddBinding.inflate(inflater, container, false);
         return binding.getRoot();
 
     }
@@ -29,9 +30,10 @@ public class First2Fragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        binding.buttonFirst.setOnClickListener(v ->
-                NavHostFragment.findNavController(First2Fragment.this)
-                        .navigate(R.id.action_First2Fragment_to_Second2Fragment)
+        binding.buttonSecond.setOnClickListener(v ->
+                NavHostFragment.findNavController(EmergencyContactAdd.this)
+                        .navigate(R.id.action_SecondFragment_to_FirstFragment)
+
         );
     }
 

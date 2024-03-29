@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- activity_main.xml -->
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/fragment_container"
     android:layout_width="match_parent"
@@ -12,26 +13,56 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center"
-        android:text="Show/Hide App Drawer" />
+        android:text="Show/Hide App Drawer"
+        app:layout_constraintBottom_toTopOf="@+id/emergency_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.273"
+        app:layout_constraintStart_toEndOf="@+id/emergency_button" />
 
     <Button
         android:id="@+id/emergency_button"
-        android:layout_width="190dp"
-        android:layout_height="165dp"
-        android:text="Emergency!" />
+        android:layout_width="199dp"
+        android:layout_height="97dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="159dp"
+        android:layout_marginEnd="193dp"
+        android:layout_marginBottom="343dp"
+        android:text="Emergency!"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/t2s_button" />
 
     <Button
         android:id="@+id/t2s_button"
         android:layout_width="156dp"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
-        android:text="Text To Speech" />
+        android:layout_marginStart="189dp"
+        android:layout_marginTop="92dp"
+        android:layout_marginEnd="66dp"
+        android:layout_marginBottom="107dp"
+        android:text="Text To Speech"
+        app:layout_constraintBottom_toTopOf="@+id/show_hide_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/btnSettings"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/settings" />
+        android:layout_marginEnd="98dp"
+        android:layout_marginBottom="175dp"
+        android:text="@string/settings"
+        app:layout_constraintBottom_toTopOf="@+id/emergency_button"
+        app:layout_constraintEnd_toStartOf="@+id/t2s_button"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
 
-</FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
 

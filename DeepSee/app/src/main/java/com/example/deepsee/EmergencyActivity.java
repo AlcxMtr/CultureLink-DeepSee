@@ -39,8 +39,8 @@ public class EmergencyActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
 
-        //setSupportActionBar(binding.DoneButton);
-
+//        setSupportActionBar(binding.DoneButton);
+//
 //        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_emergency2);
 //        appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
 //        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
@@ -55,10 +55,10 @@ public class EmergencyActivity extends AppCompatActivity {
 //        });
     }
 
-    @Override
-    public boolean onSupportNavigateUp() {
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_emergency2);
-        return NavigationUI.navigateUp(navController, appBarConfiguration)
-                || super.onSupportNavigateUp();
-    }
+//    @Override
+//    public boolean onSupportNavigateUp() {
+//        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_emergency2);
+//        return NavigationUI.navigateUp(navController, appBarConfiguration)
+//                || super.onSupportNavigateUp();
+//    }
 }

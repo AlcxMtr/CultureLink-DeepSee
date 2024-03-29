@@ -122,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                startActivity(new Intent(MainActivity.this, EmergencyActivity.class));
+                startActivity(new Intent(MainActivity.this, EmrgActivity.class));
                 transaction.commit();
                 requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, 1);
             }
