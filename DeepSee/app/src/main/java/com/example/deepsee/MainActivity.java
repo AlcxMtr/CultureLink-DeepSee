@@ -161,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
         ActivityCompat.requestPermissions(MainActivity.this, permissions, 1);
 
 
-        Button showHideButton = findViewById(R.id.show_hide_button);
+        ImageButton showHideButton = findViewById(R.id.show_hide_button);
 
         ImageButton shortcutsButton = findViewById(R.id.shDrawerButton);
 
