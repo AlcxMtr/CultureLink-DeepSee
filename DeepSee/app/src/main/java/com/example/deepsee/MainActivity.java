@@ -208,14 +208,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Button t2s = findViewById(R.id.t2s_button);
-        t2s.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(MainActivity.this, TextAndSpeech.class);
-                startActivity(i);
-            }
-        });
 
         btnSettings = (Button) findViewById(R.id.btnSettings);
         btnSettings.setOnClickListener(new View.OnClickListener() {
