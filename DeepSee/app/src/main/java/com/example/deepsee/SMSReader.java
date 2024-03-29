@@ -18,7 +18,7 @@ import com.example.deepsee.SMSMessages;
 
 public class SMSReader {
 
-    public List<SMSMessages> readSMS(Context context) {
+    public List<SMSMessages> readSMS(Context context, ArrayList <String> names) {
         List<SMSMessages> smsMessages = new ArrayList<>();
         ContentResolver contentResolver = context.getContentResolver();
 
@@ -33,10 +33,17 @@ public class SMSReader {
                 
 
                 String address = cursor.getString(addressIndex);
-                address = getContactNameFromPhoneNumber(context, address);
-                if (address == null) {
+                boolean exists = false;
+                for (String name: names) {
+                    if (name.equals(address)) {
+                        exists = true;
+                        break;
+                    }
+                }
+                if (!exists) {
                     continue;
                 }
+
                 String body = cursor.getString(bodyIndex);
                 long timeMillis = cursor.getLong(timeIndex);
 
