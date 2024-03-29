@@ -189,9 +189,6 @@
         android:id="@+id/btnSettings"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/settings" />
-        android:layout_marginTop="23dp"
-        android:layout_marginEnd="31dp"
         android:text="@string/settings"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/t2s_button" />
@@ -200,13 +197,13 @@
         android:id="@+id/shortcutsContainerButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="736dp"
+        android:layout_marginTop="340dp"
         android:background="@android:drawable/arrow_down_float"
         android:clickable="true"
         android:contentDescription="Did you ever hear the tragedy of Darth Plagueis the Wise?
 I thought not. It's not a story the Jedi would tell you. It's a Sith legend. Darth Plagueis was a Dark Lord of the Sith, so powerful and so wise he could use the Force to influence the midichlorians to create life... He had such a knowledge of the dark side that he could even keep the ones he cared about from dying. The dark side of the Force is a pathway to many abilities some consider to be unnatural. He became so powerful... the only thing he was afraid of was losing his power, which eventually, of course, he did. Unfortunately, he taught his apprentice everything he knew, then his apprentice killed him in his sleep. Ironic, he could save others from death, but not himself."
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.306"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -217,8 +214,9 @@ I thought not. It's not a story the Jedi would tell you. It's a Sith legend. Dar
         android:layout_marginStart="100dp"
         android:layout_marginTop="2dp"
         android:layout_marginEnd="300dp"
+        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.344"
+        app:layout_constraintHorizontal_bias="0.153"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/shortcutsContainerButton" />
 
@@ -252,5 +250,23 @@ I thought not. It's not a story the Jedi would tell you. It's a Sith legend. Dar
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="messages" />
+
+    <HorizontalScrollView
+        android:id="@+id/Messages_widget"
+        android:layout_width="327dp"
+        android:layout_height="167dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.511"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/weather"
+        app:layout_constraintVertical_bias="0.905">
+
+        <LinearLayout
+            android:id="@+id/Messages_widget_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" />
+    </HorizontalScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>
 

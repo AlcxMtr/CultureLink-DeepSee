@@ -10,12 +10,16 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
+import com.example.deepsee.contacts.Contact;
 import com.example.deepsee.databinding.ActivityMainBinding;
+import com.example.deepsee.messaging.SMSMessages;
+import com.example.deepsee.messaging.SMSReader;
 import com.example.deepsee.weather.WeatherListener;
 import com.example.deepsee.weather.WeatherRequest;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -28,6 +32,7 @@ import com.example.deepsee.databinding.ActivityMainBinding;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Handler;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 
@@ -45,7 +50,7 @@ import java.io.IOException;
 import android.widget.Button;
 
 
-
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -55,6 +60,7 @@ import com.example.deepsee.messaging.SMSActivity;
 
 import android.provider.ContactsContract;
 
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.w3c.dom.Text;
@@ -231,6 +237,14 @@ public class MainActivity extends AppCompatActivity {
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         getLastLocation();
 
+
+        ArrayList<Contact> contacts;
+        contacts = Contact.getContacts(MainActivity.this);
+        SMSReader smsReader = new SMSReader();
+        List<SMSMessages> smsMessages = smsReader.readSMS(MainActivity.this, contacts,5);
+        SMSMessages_widget(smsMessages);
+
+
         handler = new Handler();
         handler.postDelayed(updateTask, 10000);
     }
@@ -336,6 +350,42 @@ public class MainActivity extends AppCompatActivity {
         };
         WeatherRequest.getWeatherInfo(requestQueue, weatherListener, latitude, longitude);
 
+    }
+    private void SMSMessages_widget(List<SMSMessages> smsMessages) {
+        LinearLayout linearLayout = findViewById(R.id.Messages_widget_layout);
+        linearLayout.removeAllViews();
+
+        for (SMSMessages smsMessage : smsMessages) {
+            View cardView = LayoutInflater.from(this).inflate(R.layout.widget_msgs, null);
+            TextView contactNameTextView = cardView.findViewById(R.id.contact_name);
+            TextView timeTextView = cardView.findViewById(R.id.timeofmsg);
+            TextView messageTextView = cardView.findViewById(R.id.textmsg_shortened);
+
+            SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
+            String time = dateFormat.format(smsMessage.getTimestamp());
+
+            contactNameTextView.setText(smsMessage.getContactName());
+            timeTextView.setText(time);
+            messageTextView.setText(smsMessage.getMessage());
+
+            // Set layout parameters to make each card fill the layout
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.MATCH_PARENT
+            );
+            cardView.setLayoutParams(layoutParams);
+
+            linearLayout.addView(cardView);
+
+            cardView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    intent.setData(Uri.parse("smsto:" + smsMessage.getContactName())); // Opens default messaging app with the specific contact
+                    startActivity(intent);
+                }
+            });
+        }
     }
 
     public void startDrawer(View v){
