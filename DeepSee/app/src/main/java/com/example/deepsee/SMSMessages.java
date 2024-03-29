@@ -35,5 +35,10 @@ public class SMSMessages {
     public void setTimestamp(Date timestamp) {
         this.timestamp=timestamp;
     }
+
+    public String getPhoneNumber() {
+        return this.contactName;
+    };
+
 }
 

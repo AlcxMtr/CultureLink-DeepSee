@@ -2,6 +2,7 @@ package com.example.deepsee;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.ContactsContract;
@@ -25,8 +26,6 @@ public class SMSActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.message);
-
-        ArrayList<String> contacts = getContacts();
 
         SMSReader smsReader = new SMSReader();
         List<SMSMessages> smsMessages = smsReader.readSMS(SMSActivity.this);
@@ -66,16 +65,19 @@ public class SMSActivity extends AppCompatActivity {
 
             linearLayout.addView(cardView);
 
+            final String phoneNumber = smsMessage.getPhoneNumber(); // Assuming you have a method to get phone number
+
             cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(Intent.ACTION_MAIN);
-                    intent.addCategory(Intent.CATEGORY_APP_MESSAGING);
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    intent.setData(Uri.parse("smsto:" + phoneNumber)); // Opens default messaging app with the specific contact
                     startActivity(intent);
                 }
             });
         }
     }
+
 
     @Override
     protected void onDestroy() {
