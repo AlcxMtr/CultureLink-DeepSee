@@ -75,6 +75,8 @@ public class MainActivity extends AppCompatActivity {
     private AppBarConfiguration appBarConfiguration;
     Button btnSettings;
     private ActivityMainBinding binding;
+    PackageManager pm;
+
     private ShortcutsContainerFragment shortcutsFragment;
 
     private TextView weather_location;
@@ -112,6 +114,24 @@ public class MainActivity extends AppCompatActivity {
 //             }
 //         }
     }
+    void sortAppCategories(){
+        pm = getPackageManager();
+        // Get Package List:
+        apps = pm.getInstalledApplications(PackageManager.GET_META_DATA);
+
+        // Remove System Packages from the list before drawing:
+        apps.removeIf(packageInfo ->
+                (pm.getLaunchIntentForPackage(packageInfo.packageName) == null));
+
+        //Create dictionary from category number -> list of apps in said category
+        categories = new HashMap<>();
+        for (ApplicationInfo p : apps) {
+            if (!categories.containsKey(p.category)) {
+                categories.put(p.category, new ArrayList<ApplicationInfo>());
+            }
+            categories.get(p.category).add(p);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,24 +160,7 @@ public class MainActivity extends AppCompatActivity {
         Button emergencyButton = findViewById(R.id.emergency_button);
         ImageButton shortcutsButton = findViewById(R.id.shDrawerButton);
         Button shortcutsContainerButton = findViewById(R.id.shortcutsContainerButton);
-
-        final PackageManager pm = getPackageManager();
-        // Get Package List:
-        apps = pm.getInstalledApplications(PackageManager.GET_META_DATA);
-
-        // Remove System Packages from the list before drawing:
-        apps.removeIf(packageInfo ->
-                (pm.getLaunchIntentForPackage(packageInfo.packageName) == null));
-
-        //Create dictionary from category number -> list of apps in said category
-        categories = new HashMap<>();
-        for (ApplicationInfo p : apps) {
-            if (!categories.containsKey(p.category)) {
-                categories.put(p.category, new ArrayList<ApplicationInfo>());
-            }
-            categories.get(p.category).add(p);
-        }
-
+        sortAppCategories();
         showHideButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -346,7 +349,15 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public void startDrawer(View v){
+        // Start AppDrawerFragment
+        Fragment fragment = new AppDrawerFragment(categories, apps, pm);
 
+        //Draw AppDrawerFragment overtop current view
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragment_container, fragment);
+        transaction.commit();
+    }
     // Toggles the App Drawer:
     private void toggleAppDrawer() {
 
