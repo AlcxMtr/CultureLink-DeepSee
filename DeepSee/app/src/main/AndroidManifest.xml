@@ -5,6 +5,16 @@
     <uses-permission
         android:name="android.permission.WRITE_SETTINGS"
         tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.WRITE_CONTACTS" />
+    <uses-permission android:name=" android.permission.READ_PROFILE " />
+    <uses-permission
+        android:name="android.permission.QUERY_ALL_PACKAGES"
+        tools:ignore="QueryAllPackagesPermission" />
+
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+
 
     <application
         android:allowBackup="true"
@@ -33,6 +43,12 @@
                 <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>
+        
+        <service
+            android:name=".PersistentNotification"
+            android:enabled="true"
+            android:exported="true"></service>
+
         <activity
             android:name=".SettingsActivity"
             android:exported="false"
@@ -50,8 +66,14 @@
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.HOME" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".accessibility.TextAndSpeech"
+            android:exported="true"
+            android:parentActivityName=".MainActivity"></activity>
     </application>
 
 </manifest>
