@@ -4,21 +4,13 @@
 
     <uses-permission android:name="android.permission.WRITE_SETTINGS"
         tools:ignore="ProtectedPermissions" />
-    <uses-permission
-    android:name="android.permission.WRITE_SETTINGS"
-    tools:ignore="ProtectedPermissions" />
-    <uses-permission android:name="android.permission.READ_CONTACTS" />
-    <uses-permission android:name="android.permission.WRITE_CONTACTS" />
-    <uses-permission android:name=" android.permission.READ_PROFILE " />
-    <uses-permission
-        android:name="android.permission.QUERY_ALL_PACKAGES"
-        tools:ignore="QueryAllPackagesPermission" />
 
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
-
-
+    <uses-feature
+        android:name="android.hardware.telephony"
+        android:required="false" />
+  
     <application
+        android:enableOnBackInvokedCallback="true"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -27,8 +19,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.DeepSee"
-        tools:targetApi="30">
-
+        android:networkSecurityConfig="@xml/network_security_config"
+        tools:targetApi="31">
+      
         <activity
             android:name=".ScreenReaderActivity"
             android:label="ReadOut"
@@ -41,6 +34,24 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".ShortcutsDrawerActivity"
+            android:theme="@style/Theme.Transparent">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="http" android:host="assistant.google.com" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".EmrgActivity"
+            android:exported="false"
+            android:theme="@style/Theme.DeepSee" />
+        <activity
+            android:name=".EmergencyActivity"
+            android:exported="false"
+            android:theme="@style/Theme.DeepSee" />
 
         <activity
             android:name=".SettingsActivity"
@@ -60,6 +71,16 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+      <activity
+            android:name=".messaging.SMSActivity"
+            android:label="SMS Activity"
+            android:theme="@style/Theme.DeepSee" />
+
+        <activity
+            android:name=".accessibility.TextAndSpeech"
+            android:exported="true"
+            android:parentActivityName=".MainActivity">
+        </activity>
 
     </application>
     <uses-permission android:name="android.permission.READ_CONTACTS" />
@@ -68,4 +89,8 @@
     <uses-permission android:name=" android.permission.READ_PROFILE "/>
 
     <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" tools:ignore="QueryAllPackagesPermission" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES"/>
 </manifest>
