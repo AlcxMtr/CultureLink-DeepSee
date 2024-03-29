@@ -35,8 +35,12 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.emerg_contact_rectangle,parent,false);
-        return new ViewHolder(view);
+        if(EmergencyContactAdd.number.contains(number.get(0))){
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.emerg_contact_rectangle,parent,false);
+            return new ViewHolder(view);
+        }
+        else{View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.emerg_contact_delete_rectangle,parent,false);
+        return new ViewHolder(view);}
     }
 
     @Override
@@ -44,6 +48,7 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
         //holder.contactPhoto.setImageResource(photo[position]);
         holder.name.setText("" + name.get(position));
         holder.number.setText("" + number.get(position));
+
 
     }
 
@@ -69,6 +74,13 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
             number = (TextView) itemView.findViewById(R.id.Emerg_Contact_Number);
             addButton = (Button) itemView.findViewById(R.id.button);
             addButton.setOnClickListener(this::onClick);
+
+        }
+
+        public void bind() {
+            if(EmergencyContactAdd.added_number.contains(number)){
+                addButton.setText("moose");
+            }
         }
 
 
@@ -76,14 +88,37 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
 
             int position = getBindingAdapterPosition();
             if (position != RecyclerView.NO_POSITION) {
-//                 item = itemList.get(position);
-                EmergencyContactAdd.added_img.add(R.drawable.ic_launcher_foreground);
-                EmergencyContactAdd.added_name.add((String) name.getText());
-                EmergencyContactAdd.added_number.add((String) number.getText());
-                System.out.println("name: " + name.getText() + " num: " + number.getText());
-                EmergencyContactAdd.added_adapter.notifyItemInserted(EmergencyContactAdd.added_img.size());
-                EmergencyContactAdd.adapter.notifyItemRemoved(position);
-                addButton.setText("remove");
+//
+                if(addButton.getText().toString().equals("Remove")){
+                    EmergencyContactAdd.img.add(R.drawable.ic_launcher_foreground);
+                    EmergencyContactAdd.name.add((String) name.getText());
+                    EmergencyContactAdd.number.add((String) number.getText());
+                    EmergencyContactAdd.added_img.remove(position);
+                    EmergencyContactAdd.added_name.remove(position);
+                    EmergencyContactAdd.added_number.remove(position);
+                    System.out.println("name: " + name.getText() + " num: " + number.getText());
+                    EmergencyContactAdd.adapter.notifyItemInserted(EmergencyContactAdd.added_img.size());
+                    EmergencyContactAdd.added_adapter.notifyItemRemoved(position);
+                    //addButton.setText("Add");
+
+                }
+                else if (addButton.getText().toString().equals("Add") ){
+                    System.out.println(addButton.getText());
+                    //addButton.setText("Remove");
+                    System.out.println(addButton.getText());
+                    EmergencyContactAdd.added_img.add(R.drawable.ic_launcher_foreground);
+                    EmergencyContactAdd.added_name.add((String) name.getText());
+                    EmergencyContactAdd.added_number.add((String) number.getText());
+                    EmergencyContactAdd.img.remove(position);
+                    EmergencyContactAdd.name.remove(position);
+                    EmergencyContactAdd.number.remove(position);
+                    EmergencyContactAdd.adapter.notifyItemRemoved(position);
+
+                    System.out.println("name: " + name.getText() + " num: " + number.getText());
+                    EmergencyContactAdd.added_adapter.notifyItemInserted(EmergencyContactAdd.added_img.size());
+
+
+                }
             }
 
         }

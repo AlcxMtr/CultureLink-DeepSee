@@ -27,9 +27,9 @@ public class EmergencyContactAdd extends Fragment {
 //    String [] name = {"bob acious"};
 //    String [] number = {"1234567890"};
 
-    ArrayList<Integer> img = new ArrayList<>();
-    ArrayList<String> name = new ArrayList<>();
-    ArrayList<String> number = new ArrayList<>();
+    public static ArrayList<Integer> img = new ArrayList<>();
+    public static ArrayList<String> name = new ArrayList<>();
+    public static ArrayList<String> number = new ArrayList<>();
     ArrayList<Contact> contacts;
     //ArrayList<Contact> added_contacts = new ArrayList<>();
 
