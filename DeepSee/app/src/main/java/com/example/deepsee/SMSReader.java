@@ -33,6 +33,10 @@ public class SMSReader {
                 
 
                 String address = cursor.getString(addressIndex);
+                address = getContactNameFromPhoneNumber(context, address);
+                if (address == null) {
+                    continue;
+                }
                 String body = cursor.getString(bodyIndex);
                 long timeMillis = cursor.getLong(timeIndex);
 
@@ -76,19 +80,27 @@ public class SMSReader {
         return smsMessages;
     }
 
-//    public static String getPhoneNumberFromContactName(Context context, String contactName) {
-//        String phoneNumber = null;
-//        ContentResolver contentResolver = context.getContentResolver();
-//
-//        Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(contactName));
-//        Cursor cursor = contentResolver.query(uri, new String[]{ContactsContract.PhoneLookup.NUMBER}, null, null, null);
-//
-//        if (cursor != null && cursor.moveToFirst()) {
-//            phoneNumber = cursor.getString(cursor.getColumnIndex(ContactsContract.PhoneLookup.NUMBER));
-//            cursor.close();
-//        }
-//
-//        return phoneNumber;
-//    }
+    private static String getContactNameFromPhoneNumber(Context context, String phoneNumber) {
+        String contactName = null;
+        ContentResolver contentResolver = context.getContentResolver();
+
+        Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phoneNumber));
+        Cursor cursor = contentResolver.query(uri, new String[]{ContactsContract.PhoneLookup.DISPLAY_NAME}, null, null, null);
+
+        if (cursor != null) {
+            try {
+                if (cursor.moveToFirst()) {
+                    int index = cursor.getColumnIndex(ContactsContract.PhoneLookup.DISPLAY_NAME);
+                    if (index != -1) {
+                        contactName = cursor.getString(index);
+                    }
+                }
+            } finally {
+                cursor.close();
+            }
+        }
+
+        return contactName;
+    }
 }
 

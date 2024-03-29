@@ -1,4 +1,5 @@
 package com.example.deepsee;
+import android.Manifest;
 
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
@@ -13,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 
 import androidx.cardview.widget.CardView;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -31,10 +33,39 @@ public class MainActivity extends AppCompatActivity {
     public List<PackageInfo> apps;
     public HashMap<Integer, List<PackageInfo>> categories;
 
+    String [] permissions;
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                           int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == 1) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                System.out.println("Read sms permission granted");
+            } else {
+                System.out.println("Read sms permission not granted");
+            }
+
+            if (grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                System.out.println("Contact permission granted");
+            } else {
+                System.out.println("Contact permission not granted");
+            }
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        permissions = new String[]{
+                Manifest.permission.READ_SMS,
+                Manifest.permission.READ_CONTACTS
+        };
+
+        ActivityCompat.requestPermissions(MainActivity.this, permissions, 1);
 
         Button showHideButton = findViewById(R.id.show_hide_button);
         Button messagesButton = findViewById(R.id.messagesbutton);
