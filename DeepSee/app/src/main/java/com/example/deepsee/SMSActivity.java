@@ -20,14 +20,17 @@ import java.text.SimpleDateFormat;
 public class SMSActivity extends AppCompatActivity {
 
     private Handler handler;
+    ArrayList<String> contacts;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.message);
-        
+
+        contacts = getContacts();
+
         SMSReader smsReader = new SMSReader();
-        List<SMSMessages> smsMessages = smsReader.readSMS(SMSActivity.this);
+        List<SMSMessages> smsMessages = smsReader.readSMS(SMSActivity.this, contacts);
         displaySMSMessages(smsMessages);
 
         handler = new Handler();
@@ -39,7 +42,7 @@ public class SMSActivity extends AppCompatActivity {
         public void run() {
 
             SMSReader smsReader = new SMSReader();
-            List<SMSMessages> smsMessages = smsReader.readSMS(SMSActivity.this);
+            List<SMSMessages> smsMessages = smsReader.readSMS(SMSActivity.this, contacts);
             displaySMSMessages(smsMessages);
             handler.postDelayed(this, 1000);
         }
@@ -74,6 +77,46 @@ public class SMSActivity extends AppCompatActivity {
             });
         }
     }
+
+    private ArrayList<String> getContacts() {
+
+        ArrayList <String> names = new ArrayList<>();
+        String[] projection = new String[]{
+                ContactsContract.Profile._ID,
+                ContactsContract.Profile.DISPLAY_NAME_PRIMARY,
+                ContactsContract.Profile.LOOKUP_KEY,
+                ContactsContract.Profile.HAS_PHONE_NUMBER
+        };
+        Cursor cursor = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, projection, null, null, null);
+        if (cursor.moveToFirst()) {
+            do {
+                int id = cursor.getColumnIndex(ContactsContract.Contacts._ID);
+                int displayName = cursor.getColumnIndex(ContactsContract.Profile.DISPLAY_NAME);
+
+                if (id >= 0 && displayName >= 0) {
+                    String contactID = cursor.getString(id);
+                    Cursor phoneNumCursor = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                            null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + "=?", new String[]{contactID}, null);
+
+                    if (phoneNumCursor.moveToFirst()) {
+                        int num = phoneNumCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
+                        if (num >= 0) {
+                            names.add(cursor.getString(displayName));
+                        }
+                    }
+                    phoneNumCursor.close();
+
+
+                }
+
+
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+
+        return names;
+    }
+
 
     @Override
     protected void onDestroy() {
