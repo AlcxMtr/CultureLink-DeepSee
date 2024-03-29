@@ -95,7 +95,6 @@ public class TranslationActivity extends AppCompatActivity {
 
 
 
-
         // Enable drawing over other apps
         if (!Settings.canDrawOverlays(this)) {
             Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
@@ -152,9 +151,6 @@ public class TranslationActivity extends AppCompatActivity {
                                                         Toast.makeText(TranslationActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
                                                     }
                                                 });
-
-
-
 
                             }
                         })

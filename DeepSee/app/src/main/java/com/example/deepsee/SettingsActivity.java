@@ -38,6 +38,7 @@ public class SettingsActivity extends AppCompatActivity {
 
 
     ListView lvSettings;
+    AlertDialog.Builder builder;
 
     int textSize = -1;
 
@@ -62,7 +63,7 @@ public class SettingsActivity extends AppCompatActivity {
                     if (settingsPer) {
                         //Log.d("ListView", "Item clicked: " + i);
                         String[] options = {"Small", "Medium", "Large"};
-                        AlertDialog.Builder builder = new AlertDialog.Builder(SettingsActivity.this);
+                        builder = new AlertDialog.Builder(SettingsActivity.this);
                         builder.setTitle("Set Text Size");
                         builder.setItems(options, new DialogInterface.OnClickListener() {
                             @Override
@@ -71,7 +72,7 @@ public class SettingsActivity extends AppCompatActivity {
 
                                     //SettingsActivity.this.setTheme((R.style.FontSizeSmall));
                                     Settings.System.putFloat(getBaseContext().getContentResolver(),
-                                            Settings.System.FONT_SCALE, (float) 0.5);
+                                            Settings.System.FONT_SCALE, (float) 0.8);
 
 
                                 } else if (size == 1) {
@@ -84,7 +85,7 @@ public class SettingsActivity extends AppCompatActivity {
 
                                     //SettingsActivity.this.setTheme((R.style.FontSizeLarge));
                                     Settings.System.putFloat(getBaseContext().getContentResolver(),
-                                            Settings.System.FONT_SCALE, (float) 2.0);
+                                            Settings.System.FONT_SCALE, (float) 1.5);
                                 }
                             }
                         });
@@ -100,39 +101,43 @@ public class SettingsActivity extends AppCompatActivity {
                     }
                 } else if (i == 1) {
 
-                    boolean settingsPer = Settings.System.canWrite(SettingsActivity.this);
-                    if (settingsPer) {
-                        //Log.d("ListView", "Item clicked: " + i);
-                        String[] options = {"Light Mode", "Dark Mode"};
-                        AlertDialog.Builder builder = new AlertDialog.Builder(SettingsActivity.this);
-                        builder.setTitle("Set Theme");
-                        builder.setItems(options, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int opt) {
-                                if (opt == 0) {
 
-                                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                    Intent intent = new Intent();
+                    intent.setAction("android.settings.DISPLAY_SETTINGS");
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-                                } else if (opt == 1) {
+                    // for Android 8 and above
+                    intent.putExtra("android.provider.extra.APP_PACKAGE", getPackageName());
 
-                                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                    startActivity(intent);
 
-                                }
-                            }
-                        });
-                        builder.show();
 
-                    } else {
-                        Toast.makeText(SettingsActivity.this, "Please allow write permissions", Toast.LENGTH_LONG).show();
-                        Intent intent = new Intent(android.provider.Settings.ACTION_MANAGE_WRITE_SETTINGS);
-                        intent.setData(Uri.parse("package:" + SettingsActivity.this.getPackageName()));
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(intent);
+                } else if (i == 2) {
 
-                    }
+                    Intent intent = new Intent();
+                    intent.setAction("android.settings.WIRELESS_SETTINGS");
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
+                    // for Android 8 and above
+                    intent.putExtra("android.provider.extra.APP_PACKAGE", getPackageName());
+
+                    startActivity(intent);
                 } else if (i == 3) {
+                    startActivityForResult(new Intent(Settings.ACTION_BLUETOOTH_SETTINGS), 0);
+                } else if (i == 4) {
+                    startActivityForResult(new Intent(Settings.ACTION_BATTERY_SAVER_SETTINGS), 0);
+                } else if(i == 5) {
+                    startActivityForResult(new Intent(Settings.ACTION_LOCALE_SETTINGS), 0);
+                } else if(i == 6) {
+                    Intent intent = new Intent();
+                    intent.setAction("android.settings.ALL_APPS_NOTIFICATION_SETTINGS");
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
+                    intent.putExtra("android.provider.extra.APP_PACKAGE", getPackageName());
+
+                    startActivity(intent);
+                } else if(i == 7) {
+                    startActivityForResult(new Intent(android.provider.Settings.ACTION_SETTINGS), 0);
                 }
 
             }
@@ -140,22 +145,43 @@ public class SettingsActivity extends AppCompatActivity {
         });
 
 
+        // Enable drawing over other apps
+        if (!Settings.canDrawOverlays(this)) {
+            Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                    Uri.parse("package:" + getPackageName()));
+            // TODO: REQUEST PERMISSION FOR DRAWING OVER OTHER APPS!!
+        } else {
+            // Start the service to draw over other apps
+            startDrawOverlaysService();
+        }
+
+
     }
 
     @NonNull
     private ArrayAdapter<String> getStringArrayAdapter() {
         ArrayList<String> setting_arr = new ArrayList<String>();
-        setting_arr.add("Easy Viewing");
+        setting_arr.add("Text Size");
         setting_arr.add("Display Settings");
-        setting_arr.add("Sound Volume");
+        setting_arr.add("Network & Internet");
         setting_arr.add("Bluetooth");
-        setting_arr.add("Night Mode");
-        setting_arr.add("Notifications");
-        setting_arr.add("Voice Commands");
+        setting_arr.add("Battery");
         setting_arr.add("Language");
+        setting_arr.add("Notifications");
+        setting_arr.add("All Settings");
+
 
 
         ArrayAdapter<String> array_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, setting_arr);
         return array_adapter;
     }
+
+
+    private void startDrawOverlaysService() {
+        // Start the service to draw over other apps
+        Intent serviceIntent = new Intent(this, DrawOverlaysService.class);
+        serviceIntent.putExtra("activityClass", SettingsActivity.class);
+        startService(serviceIntent);
+    }
+
 }

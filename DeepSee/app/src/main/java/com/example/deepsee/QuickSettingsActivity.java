@@ -34,6 +34,8 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.deepsee.accessibility.TextAndSpeech;
+
 import java.util.ArrayList;
 
 public class QuickSettingsActivity extends AppCompatActivity {
@@ -73,7 +75,7 @@ public class QuickSettingsActivity extends AppCompatActivity {
 
                     boolean settingsPer = Settings.System.canWrite(QuickSettingsActivity.this);
                     if (settingsPer) {
-                        //Log.d("ListView", "Item clicked: " + i);
+
                         String[] options = {"Small", "Medium", "Large"};
                         AlertDialog.Builder builder = new AlertDialog.Builder(QuickSettingsActivity.this);
                         builder.setTitle("Set Text Size");
@@ -83,7 +85,7 @@ public class QuickSettingsActivity extends AppCompatActivity {
                                 if (size == 0) {
 
                                     Settings.System.putFloat(getBaseContext().getContentResolver(),
-                                            Settings.System.FONT_SCALE, (float) 0.5);
+                                            Settings.System.FONT_SCALE, (float) 0.8);
 
 
                                 } else if (size == 1) {
@@ -96,7 +98,7 @@ public class QuickSettingsActivity extends AppCompatActivity {
 
                                     //SettingsActivity.this.setTheme((R.style.FontSizeLarge));
                                     Settings.System.putFloat(getBaseContext().getContentResolver(),
-                                            Settings.System.FONT_SCALE, (float) 2.0);
+                                            Settings.System.FONT_SCALE, (float) 1.5);
                                 }
                             }
                         });
@@ -104,7 +106,7 @@ public class QuickSettingsActivity extends AppCompatActivity {
 
                     } else {
                         Toast.makeText(QuickSettingsActivity.this, "Please allow write permissions", Toast.LENGTH_LONG).show();
-                        Intent intent = new Intent(android.provider.Settings.ACTION_MANAGE_WRITE_SETTINGS);
+                        Intent intent = new Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS);
                         intent.setData(Uri.parse("package:" + QuickSettingsActivity.this.getPackageName()));
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);
@@ -114,40 +116,56 @@ public class QuickSettingsActivity extends AppCompatActivity {
 
                     boolean settingsPer = Settings.System.canWrite(QuickSettingsActivity.this);
                     if (settingsPer) {
-                        //Log.d("ListView", "Item clicked: " + i);
-                        String[] options = {"Light Mode", "Dark Mode"};
-                        AlertDialog.Builder builder = new AlertDialog.Builder(QuickSettingsActivity.this);
-                        builder.setTitle("Set Theme");
-                        builder.setItems(options, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int opt) {
-                                if (opt == 0) {
+//                        //Log.d("ListView", "Item clicked: " + i);
+//                        String[] options = {"Light Mode", "Dark Mode"};
+//                        AlertDialog.Builder builder = new AlertDialog.Builder(QuickSettingsActivity.this);
+//                        builder.setTitle("Set Theme");
+//                        builder.setItems(options, new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int opt) {
+//                                if (opt == 0) {
+//
+//                                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+//
+//                                } else if (opt == 1) {
+//
+//                                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+//
+//                                }
+//                            }
+//                        });
+//                        builder.show();
 
-                                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
-                                } else if (opt == 1) {
 
-                                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
 
-                                }
-                            }
-                        });
-                        builder.show();
 
                     } else {
                         Toast.makeText(QuickSettingsActivity.this, "Please allow write permissions", Toast.LENGTH_LONG).show();
-                        Intent intent = new Intent(android.provider.Settings.ACTION_MANAGE_WRITE_SETTINGS);
+                        Intent intent = new Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS);
                         intent.setData(Uri.parse("package:" + QuickSettingsActivity.this.getPackageName()));
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);
 
                     }
 
+
                 } else if (i == 2) {
 
-                    Toast.makeText(QuickSettingsActivity.this, "Jello", Toast.LENGTH_LONG).show();
+                    startActivityForResult(new Intent(Settings.ACTION_WIFI_SETTINGS), 0);
+
+                } else if (i == 3) {
+
+                    startActivityForResult(new Intent(Settings.ACTION_BLUETOOTH_SETTINGS), 0);
+
+                } else if(i == 4) {
+                    startActivityForResult(new Intent(Settings.ACTION_BATTERY_SAVER_SETTINGS), 0);
 
 
+                } else if(i == 5) {
+
+                    Intent intent = new Intent(QuickSettingsActivity.this, SettingsActivity.class);
+                    startActivity(intent);
                 }
 
             }
@@ -160,14 +178,12 @@ public class QuickSettingsActivity extends AppCompatActivity {
     @NonNull
     private ArrayAdapter<String> getStringArrayAdapter() {
         ArrayList<String> setting_arr = new ArrayList<String>();
-        setting_arr.add("Easy Viewing");
-        setting_arr.add("Display Settings");
-        setting_arr.add("Language");
-        setting_arr.add("Bluetooth");
-        setting_arr.add("Night Mode");
-        setting_arr.add("Notifications");
-        setting_arr.add("Voice Commands");
-        setting_arr.add("Language");
+        setting_arr.add(" T Text Size");
+        setting_arr.add(" ✎ Theme");
+        setting_arr.add(" ⇅ Wifi");
+        setting_arr.add(" ᛒ Bluetooth");
+        setting_arr.add("▯ Battery Saver");
+        setting_arr.add("⚙ Settings");
 
 
         ArrayAdapter<String> array_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, setting_arr);

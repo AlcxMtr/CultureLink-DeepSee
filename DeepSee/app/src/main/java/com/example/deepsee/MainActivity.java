@@ -44,13 +44,12 @@ import android.provider.ContactsContract;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String CHANNEL_ID = "Persistneces";
+    private static final String CHANNEL_ID = "Persistence";
     private boolean isAppDrawerVisible = false;
     public List<ApplicationInfo> apps;
     public HashMap<Integer, List<ApplicationInfo>> categories;
 
     private AppBarConfiguration appBarConfiguration;
-    Button btnSettings;
     private ActivityMainBinding binding;
 
     @Override
@@ -89,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 cursor.close();
             } else {
-                System.out.println("Woops...");
+                System.out.println("Whoops...");
             }
         }
     }
@@ -160,13 +159,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        btnSettings = (Button) findViewById(R.id.btnSettings);
-        btnSettings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, QuickSettingsActivity.class));
-            }
-        });
+
     }
 
 
@@ -187,7 +180,7 @@ public class MainActivity extends AppCompatActivity {
         notificationManager.createNotificationChannel(channel);
 
         /// TODO: HERE AKS!!! THIS IS WHERE YOU ADD YOUR INTENT
-        Intent intent = new Intent(this, SettingsActivity.class);
+        Intent intent = new Intent(this, QuickSettingsActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
 
@@ -195,7 +188,7 @@ public class MainActivity extends AppCompatActivity {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
                 .setContentTitle("Persistent Notification")
-                .setContentText("Akshath, check here to fix stuff. Change the pendingIntent above.")
+                .setContentText("Access your most important settings")
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setColor(451)  // Customise in Visual Overhaul
                 .setOngoing(true)   // Persistence.
