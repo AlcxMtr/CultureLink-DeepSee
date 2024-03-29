@@ -77,11 +77,7 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
 
         }
 
-        public void bind() {
-            if(EmergencyContactAdd.added_number.contains(number)){
-                addButton.setText("moose");
-            }
-        }
+
 
 
         public void onClick(View v) {
@@ -112,10 +108,10 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
                     EmergencyContactAdd.img.remove(position);
                     EmergencyContactAdd.name.remove(position);
                     EmergencyContactAdd.number.remove(position);
-                    EmergencyContactAdd.adapter.notifyItemRemoved(position);
 
                     System.out.println("name: " + name.getText() + " num: " + number.getText());
                     EmergencyContactAdd.added_adapter.notifyItemInserted(EmergencyContactAdd.added_img.size());
+                    EmergencyContactAdd.adapter.notifyItemRemoved(position);
 
 
                 }

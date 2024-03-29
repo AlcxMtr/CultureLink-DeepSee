@@ -8,8 +8,11 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.deepsee.R;
+import com.example.deepsee.contacts.ContactListAdapter;
 import com.example.deepsee.databinding.EmrgContentViewBinding;
 
 public class EmergencyContactView extends Fragment {
@@ -29,6 +32,11 @@ public class EmergencyContactView extends Fragment {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        EmergencyContactAdd.added_adapter = new ContactListAdapter(EmergencyContactAdd.added_img,EmergencyContactAdd.added_name,EmergencyContactAdd.added_number);
+        RecyclerView added_recyclerView = binding.emergencyContactsRecycler;
+        added_recyclerView.setAdapter(EmergencyContactAdd.added_adapter);
+        added_recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
 
         binding.buttonFirst.setOnClickListener(v ->
                 NavHostFragment.findNavController(EmergencyContactView.this)
