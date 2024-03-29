@@ -1,7 +1,6 @@
 package com.example.deepsee;
 import android.Manifest;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
@@ -9,23 +8,19 @@ import android.database.Cursor;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.Bundle;
 
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.example.deepsee.accessibility.TextAndSpeech;
+import com.example.deepsee.auto_suggest.AlgoStruct;
 import com.example.deepsee.databinding.ActivityMainBinding;
 import com.example.deepsee.weather.WeatherListener;
 import com.example.deepsee.weather.WeatherRequest;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
-
-
-import com.example.deepsee.accessibility.TextAndSpeech;
-import com.example.deepsee.databinding.ActivityMainBinding;
 
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -38,18 +33,15 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.navigation.ui.AppBarConfiguration;
 
-import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 
 import java.io.IOException;
 
-import android.widget.Button;
-
-
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -59,8 +51,6 @@ import com.example.deepsee.messaging.SMSActivity;
 import android.provider.ContactsContract;
 
 import android.widget.TextView;
-
-import org.w3c.dom.Text;
 
 import android.widget.ImageButton;
 
@@ -94,11 +84,12 @@ public class MainActivity extends AppCompatActivity {
 
     private Handler handler;
 
+    public static AlgoStruct reccomender;
+
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions,
                                            int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
 //         if (requestCode == 1) {
 //             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 //                 System.out.println("Location permission granted");
@@ -137,6 +128,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        initializeRecommender();
 
         permissions = new String[]{
                 Manifest.permission.ACCESS_FINE_LOCATION,
@@ -197,16 +189,16 @@ public class MainActivity extends AppCompatActivity {
         });
         List<ShortcutContainer> launchables = new ArrayList<>();
 
-        shortcutsFragment = new ShortcutsContainerFragment(launchables, pm);
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.shortcuts_holder, shortcutsFragment);
-        transaction.commit();
-        shortcutsContainerButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                shortcutsFragment.toggleVisibility();
-            }
-        });
+//        shortcutsFragment = new ShortcutsContainerFragment(launchables, pm);
+//        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+//        transaction.replace(R.id.shortcuts_holder, shortcutsFragment);
+//        transaction.commit();
+//        shortcutsContainerButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                shortcutsFragment.toggleVisibility();
+//            }
+//        });
 
         Button t2s = findViewById(R.id.t2s_button);
         t2s.setOnClickListener(new View.OnClickListener() {
@@ -244,6 +236,13 @@ public class MainActivity extends AppCompatActivity {
 
         handler = new Handler();
         handler.postDelayed(updateTask, 10000);
+    }
+
+    /*TODO
+    *  Tie storage manager and app-recommender together, and initialize them on app launch.*/
+    private void initializeRecommender() {
+        reccomender = new AlgoStruct();
+//        System.out.println(Arrays.toString(reccomender.mostRelevant(10)));
     }
 
     private boolean hasPermissions() {

@@ -21,7 +21,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.deepsee.AppDrawerFragment;
+import com.example.deepsee.MainActivity;
 import com.example.deepsee.R;
+import com.example.deepsee.auto_suggest.AlgoStruct;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -124,19 +126,36 @@ public class AppsAdapter extends RecyclerView.Adapter<AppContainer> {
         v.setClickable(true);
     }
 
+//    /*
+//     * Bind app name, app icon, and app launch-intent to app square*/
+//    @Override
+//    public void onBindViewHolder(@NonNull AppContainer holder, int position) {
+//        holder.icon.setImageDrawable(icons.get(position));
+//        holder.name.setText(labels.get(position));
+//        holder.icon.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent launchIntent = new Intent(pm.getLaunchIntentForPackage(p.packageName));
+//                // TODO: THIS IS WHERE WE NOTIFY ALEX'S ALGORITHM
+//                holder.con.startActivity(launchIntent);
+//            }
+//        });
+//
+//        toggleAppMode.add(x -> toggleAppDeleteMode(holder, x));
+//        toggleAppDeleteMode(holder, AppDrawerFragment.deleteMode);
+//    }
+
     /*
      * Bind app name, app icon, and app launch-intent to app square*/
     @Override
     public void onBindViewHolder(@NonNull AppContainer holder, int position) {
         holder.icon.setImageDrawable(icons.get(position));
         holder.name.setText(labels.get(position));
-        holder.icon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent launchIntent = new Intent(pm.getLaunchIntentForPackage(p.packageName));
-                // TODO: THIS IS WHERE WE NOTIFY ALEX'S ALGORITHM
-                holder.con.startActivity(launchIntent);
-            }
+
+        holder.itemView.setOnClickListener(view -> launchApp(holder, position));
+        holder.itemView.setOnLongClickListener(view -> {
+            longPressHandler.run();
+            return true;
         });
 
         toggleAppMode.add(x -> toggleAppDeleteMode(holder, x));
@@ -145,6 +164,7 @@ public class AppsAdapter extends RecyclerView.Adapter<AppContainer> {
 
     //Launches app represented by pos
     private void launchApp(AppContainer v, int pos){
+        MainActivity.reccomender.appOpened(apps.get(pos).packageName);
         Intent launchIntent = launchers.get(pos);
         v.con.startActivity(launchIntent);
     }

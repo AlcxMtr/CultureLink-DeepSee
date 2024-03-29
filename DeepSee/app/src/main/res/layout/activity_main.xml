@@ -210,18 +210,6 @@ I thought not. It's not a story the Jedi would tell you. It's a Sith legend. Dar
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <LinearLayout
-        android:id="@+id/shortcuts_holder"
-        android:layout_width="298dp"
-        android:layout_height="65dp"
-        android:layout_marginStart="100dp"
-        android:layout_marginTop="2dp"
-        android:layout_marginEnd="300dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.344"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/shortcutsContainerButton" />
-
     <ImageButton
         android:id="@+id/shDrawerButton"
         android:layout_width="wrap_content"
@@ -252,5 +240,12 @@ I thought not. It's not a story the Jedi would tell you. It's a Sith legend. Dar
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="messages" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
 
