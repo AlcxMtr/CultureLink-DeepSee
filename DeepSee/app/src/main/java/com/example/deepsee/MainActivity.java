@@ -24,6 +24,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 
@@ -68,6 +69,8 @@ public class MainActivity extends AppCompatActivity {
     private RequestQueue requestQueue;
 
     private String[] permissions;
+
+    private Handler handler;
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions,
@@ -176,6 +179,9 @@ public class MainActivity extends AppCompatActivity {
         requestQueue = Volley.newRequestQueue(this);
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         getLastLocation();
+
+        handler = new Handler();
+        handler.postDelayed(updateTask, 10000);
     }
 
     private boolean hasPermissions() {
@@ -186,6 +192,14 @@ public class MainActivity extends AppCompatActivity {
         }
         return true;
     }
+
+    private Runnable updateTask = new Runnable() {
+        @Override
+        public void run() {
+            getLastLocation();
+            handler.postDelayed(this, 10000);
+        }
+    };
 
     private void getContacts() {
 
@@ -290,5 +304,11 @@ public class MainActivity extends AppCompatActivity {
         }
 
         isAppDrawerVisible = !isAppDrawerVisible;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        handler.removeCallbacks(updateTask);
     }
 }
