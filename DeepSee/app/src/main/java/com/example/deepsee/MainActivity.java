@@ -1,7 +1,6 @@
 package com.example.deepsee;
 import android.Manifest;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
@@ -9,20 +8,18 @@ import android.database.Cursor;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.Bundle;
 
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.example.deepsee.databinding.ActivityMainBinding;
+import com.example.deepsee.emerg.EmrgActivity;
 import com.example.deepsee.weather.WeatherListener;
 import com.example.deepsee.weather.WeatherRequest;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
-
-import com.example.deepsee.databinding.ActivityMainBinding;
 
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -35,15 +32,11 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.navigation.ui.AppBarConfiguration;
 
-import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 
 import java.io.IOException;
-
-import android.widget.Button;
-
 
 
 import java.util.ArrayList;
@@ -56,8 +49,6 @@ import com.example.deepsee.messaging.SMSActivity;
 import android.provider.ContactsContract;
 
 import android.widget.TextView;
-
-import org.w3c.dom.Text;
 
 import android.widget.ImageButton;
 

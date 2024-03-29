@@ -1,4 +1,4 @@
-package com.example.deepsee;
+package com.example.deepsee.emerg;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
+import com.example.deepsee.R;
 import com.example.deepsee.databinding.EmrgContentViewBinding;
 
 public class EmergencyContactView extends Fragment {

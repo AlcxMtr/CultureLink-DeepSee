@@ -1,4 +1,4 @@
-package com.example.deepsee;
+package com.example.deepsee.emerg;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -8,13 +8,21 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.deepsee.R;
+import com.example.deepsee.contacts.ContactListAdapter;
 import com.example.deepsee.databinding.EmrgContentAddBinding;
-import com.example.deepsee.databinding.EmrgContentViewBinding;
 
 public class EmergencyContactAdd extends Fragment {
 
     private EmrgContentAddBinding binding;
+
+    int [] img = {R.drawable.ic_launcher_foreground};
+    String [] name = {"bob acious"};
+    String [] number = {"1234567890"};
+
 
     @Override
     public View onCreateView(
@@ -29,6 +37,10 @@ public class EmergencyContactAdd extends Fragment {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        ContactListAdapter adapter = new ContactListAdapter(img,name,number);
+        RecyclerView recyclerView = binding.addNewRecyclerview;
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
 
         binding.buttonSecond.setOnClickListener(v ->
                 NavHostFragment.findNavController(EmergencyContactAdd.this)

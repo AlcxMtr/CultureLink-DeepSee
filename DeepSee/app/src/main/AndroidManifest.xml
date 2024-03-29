@@ -45,7 +45,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".EmrgActivity"
+            android:name=".emerg.EmrgActivity"
             android:exported="false"
             android:theme="@style/Theme.DeepSee" />
         <activity
