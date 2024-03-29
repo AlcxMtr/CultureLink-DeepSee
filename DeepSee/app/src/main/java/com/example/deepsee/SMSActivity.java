@@ -25,9 +25,7 @@ public class SMSActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.message);
-
-        ArrayList<String> contacts = getContacts();
-
+        
         SMSReader smsReader = new SMSReader();
         List<SMSMessages> smsMessages = smsReader.readSMS(SMSActivity.this);
         displaySMSMessages(smsMessages);
