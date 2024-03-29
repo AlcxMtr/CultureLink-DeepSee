@@ -15,14 +15,14 @@ import java.io.*;
 // The get and set functions can be used without the object but ensure
 public class StorageManager {
 
-    //public Matrices matrices;   // For Alex. Replace "Matrices" with the object you use to store stuff.
+    public AlgoStruct algoStruct;
     public HashMap categories;
     public List<ApplicationInfo> apps;      // For Fahim
 
     private Context context;
 
     public StorageManager(Context context) {
-        //this.matrices = null;
+        this.algoStruct = null;
         this.categories = null;
         this.apps = null;
         this.context = context;
@@ -48,16 +48,18 @@ public class StorageManager {
         writeObjectToFile("categories.dat", categories);
     }
 
-    // MATRICES:
-    //If file does not exist yet, need to handle it
-//    private Matrices getMatrices() {
-//        this.matrices = readObjectFromFile("matrices.dat");
-//        return this.matrices;
-//    }
+    // Structures containing data for app suggestion algorithm
+    private AlgoStruct getAlgoStruct() {
+        this.algoStruct = readObjectFromFile("matrices.dat");
+        if (this.algoStruct == null) {
+            this.algoStruct = new AlgoStruct();
+        }
+        return this.algoStruct;
+    }
 
-//    private void setMatrices(Matrices matrices) {
-//        writeObjectToFile("matrices.dat", matrices);
-//    }
+    private void setMatrices(AlgoStruct struct) {
+        writeObjectToFile("algoStruct.dat", struct);
+    }
 
     // General reader and writer helper functions. They return null if the read or write failed
     // for any reason.
