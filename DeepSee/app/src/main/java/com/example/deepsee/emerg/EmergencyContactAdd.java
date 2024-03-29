@@ -12,17 +12,25 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.deepsee.R;
+import com.example.deepsee.contacts.Contact;
 import com.example.deepsee.contacts.ContactListAdapter;
 import com.example.deepsee.databinding.EmrgContentAddBinding;
+import com.example.deepsee.messaging.SMSActivity;
+
+import java.util.ArrayList;
 
 public class EmergencyContactAdd extends Fragment {
 
     private EmrgContentAddBinding binding;
 
-    int [] img = {R.drawable.ic_launcher_foreground};
-    String [] name = {"bob acious"};
-    String [] number = {"1234567890"};
+//    int [] img = {R.drawable.ic_launcher_foreground};
+//    String [] name = {"bob acious"};
+//    String [] number = {"1234567890"};
 
+    ArrayList<Integer> img = new ArrayList<>();
+    ArrayList<String> name = new ArrayList<>();
+    ArrayList<String> number = new ArrayList<>();
+    ArrayList<Contact> contacts;
 
     @Override
     public View onCreateView(
@@ -37,6 +45,15 @@ public class EmergencyContactAdd extends Fragment {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        contacts = Contact.getContacts(binding.addNewRecyclerview.getContext());
+
+        for (Contact contact: contacts) {
+            img.add(R.drawable.ic_launcher_foreground);
+            name.add(contact.getName());
+            number.add(contact.getContactNumber());
+
+            System.out.println("name: " + contact.getName() + " num: " + contact.getContactNumber());
+        }
         ContactListAdapter adapter = new ContactListAdapter(img,name,number);
         RecyclerView recyclerView = binding.addNewRecyclerview;
         recyclerView.setAdapter(adapter);

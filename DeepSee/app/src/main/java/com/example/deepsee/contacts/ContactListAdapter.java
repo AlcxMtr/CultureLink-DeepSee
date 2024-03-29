@@ -12,12 +12,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.deepsee.R;
 
+import java.util.ArrayList;
+
 
 public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.ViewHolder>{
-    int[] photo;
-    String[] name;
-    String[] number;
-    public ContactListAdapter(int[] photo, String[] name, String[] number) {
+    ArrayList<Integer> photo;
+    ArrayList<String> name;
+    ArrayList<String> number;
+    public ContactListAdapter(ArrayList<Integer> photo, ArrayList<String> name, ArrayList<String> number) {
         this.photo = photo;
         this.name = name;
         this.number = number;
@@ -33,14 +35,14 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         //holder.contactPhoto.setImageResource(photo[position]);
-        holder.name.setText("" + name[position]);
-        holder.number.setText("" + number[position]);
+        holder.name.setText("" + name.get(position));
+        holder.number.setText("" + number.get(position));
 
     }
 
     @Override
     public int getItemCount() {
-        return name.length;
+        return name.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{

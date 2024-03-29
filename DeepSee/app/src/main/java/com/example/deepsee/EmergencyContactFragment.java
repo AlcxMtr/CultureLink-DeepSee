@@ -40,14 +40,14 @@ public class EmergencyContactFragment extends Fragment {
 
     }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        ContactListAdapter adapter = new ContactListAdapter(img,name,number);
-        RecyclerView recyclerView = binding.findViewById(R.id.add_new_recyclerview);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
-    }
+//    @Override
+//    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+//        super.onViewCreated(view, savedInstanceState);
+//        ContactListAdapter adapter = new ContactListAdapter(img,name,number);
+//        RecyclerView recyclerView = binding.findViewById(R.id.add_new_recyclerview);
+//        recyclerView.setAdapter(adapter);
+//        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+//    }
 
 
 
