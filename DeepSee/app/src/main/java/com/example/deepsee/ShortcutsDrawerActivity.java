@@ -50,7 +50,7 @@ public class ShortcutsDrawerActivity extends Activity {
         emcButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ShortcutsDrawerActivity.this, MainActivity.class);
+                Intent intent = new Intent(ShortcutsDrawerActivity.this, EmrgActivity.class);
                 startActivity(intent);
             }
         });
@@ -66,7 +66,6 @@ public class ShortcutsDrawerActivity extends Activity {
     }
 
     // TODO: NEED DRAWABLES
-    // TODO: NEED TO ADD THIS TO QUICKSETTINGS AND TRANSLATION
     // Closes this activity when touched:
     @Override
     public boolean onTouchEvent(MotionEvent event) {

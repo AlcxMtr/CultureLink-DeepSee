@@ -246,7 +246,7 @@ public class MainActivity extends AppCompatActivity {
                                     String loc = addresses.get(0).getLocality() + ", " + addresses.get(0).getCountryName();
                                     weather_location.setText(loc);
                                     getWeather(location.getLatitude(), location.getLongitude());
-                                } catch (IOException e) {
+                                } catch (Exception e) {
                                     e.printStackTrace();
                                 }
                             } else {
