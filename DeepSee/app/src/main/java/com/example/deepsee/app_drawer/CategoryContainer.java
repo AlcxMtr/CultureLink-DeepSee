@@ -28,17 +28,13 @@ import java.util.function.Function;
 public class CategoryContainer extends RecyclerView.ViewHolder {
     public TextView category_name;
     public RecyclerView apps;
-    private PackageManager pm;
 
     private AppsAdapter adapter;
     public Context con;
     private boolean open;
-    private ImageView arrow;
-
-    private int pos = -1;
-    public CategoryContainer(@NonNull View itemView, PackageManager pm) {
+    private final ImageView arrow;
+    public CategoryContainer(@NonNull View itemView) {
         super(itemView);
-        this.pm = pm;
 
         //Find reference to RecyclerView and TextView within category_card layout
         this.apps = itemView.findViewById(R.id.apps_recycler);
@@ -56,15 +52,10 @@ public class CategoryContainer extends RecyclerView.ViewHolder {
     public void initRecyclerView(List<ApplicationInfo> apps, AppsAdapter adapter){
         this.adapter = adapter;
         this.apps.setAdapter(adapter);
-        this.apps.setLayoutManager(new GridLayoutManager(con, Math.min(Math.max(3, apps.size()/3), 6)));
+        this.apps.setLayoutManager(new GridLayoutManager(con, 3));
     }
 
-
-
-    public void setPos(int pos) {
-        if (this.pos == -1)
-            this.pos = pos;
-    }
+    //Open/close category
     public void toggleCategoryView(){
         open = !open;
         apps.setVisibility(open ? View.VISIBLE : GONE);
