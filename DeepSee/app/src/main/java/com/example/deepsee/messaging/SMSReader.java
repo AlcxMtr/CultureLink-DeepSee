@@ -23,11 +23,18 @@ public class SMSReader {
         ContentResolver contentResolver = context.getContentResolver();
 
         Uri uri = Uri.parse("content://sms/");
-        Cursor cursor = contentResolver.query(uri, null, null, null, null);
+
+        String [] projections = {
+                Telephony.Sms.ADDRESS,
+                Telephony.Sms.BODY,
+                Telephony.Sms.DATE
+        };
+
+        Cursor cursor = contentResolver.query(uri, projections, null, null, null);
         int num = 0;
 
-        if (cursor != null) {
-            while (cursor.moveToNext()) {
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
                 if (num == 100) {
                     break;
                 }
@@ -87,7 +94,7 @@ public class SMSReader {
                     smsMessages.add(smsMessage);
                 }
                 num++;
-            }
+            } while (cursor.moveToNext());
             cursor.close();
         }
 

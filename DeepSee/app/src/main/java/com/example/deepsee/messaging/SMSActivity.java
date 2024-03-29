@@ -1,11 +1,14 @@
 package com.example.deepsee.messaging;
 
+import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.ContactsContract;
+import android.provider.Telephony;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -31,8 +34,9 @@ public class SMSActivity extends AppCompatActivity {
         setContentView(R.layout.message);
 
         contacts = Contact.getContacts(SMSActivity.this);
+
         for (Contact contact: contacts) {
-            System.out.println("name: " + contact.getName() + " " + contact.getContactNumber());
+            System.out.println("name: " + contact.getName() + " num: " + contact.getContactNumber());
         }
         SMSReader smsReader = new SMSReader();
         List<SMSMessages> smsMessages = smsReader.readSMS(SMSActivity.this, contacts);

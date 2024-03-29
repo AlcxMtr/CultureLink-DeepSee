@@ -49,7 +49,8 @@ public class Contact {
                     if (phoneNumCursor.moveToFirst()) {
                         int num = phoneNumCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
                         if (num >= 0) {
-                            contacts.add(new Contact(cursor.getString(displayName), phoneNumCursor.getString(num)));
+                            String name = "ss";
+                            contacts.add(new Contact(cursor.getString(displayName), cleanPhoneNumber(phoneNumCursor.getString(num))));
                         }
                     }
                     phoneNumCursor.close();
@@ -60,5 +61,16 @@ public class Contact {
 
         return contacts;
     }
+
+    private static String cleanPhoneNumber(String phoneNumber) {
+        StringBuilder cleanedNumber = new StringBuilder();
+        for (char c : phoneNumber.toCharArray()) {
+            if (Character.isDigit(c)) {
+                cleanedNumber.append(c);
+            }
+        }
+        return cleanedNumber.toString();
+    }
+
 
 }
