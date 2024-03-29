@@ -7,7 +7,6 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Bundle;
 
-import com.example.deepsee.accessibility.TextAndSpeech;
 import com.example.deepsee.databinding.ActivityMainBinding;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -130,14 +129,6 @@ public class MainActivity extends AppCompatActivity {
 
         requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, 1);
 
-        Button t2s = findViewById(R.id.t2s_button);
-        t2s.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(MainActivity.this, TextAndSpeech.class);
-                startActivity(i);
-            }
-        });
 
         btnSettings = (Button) findViewById(R.id.btnSettings);
         btnSettings.setOnClickListener(new View.OnClickListener() {
