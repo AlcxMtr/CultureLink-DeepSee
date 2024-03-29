@@ -130,13 +130,11 @@ public class AppsAdapter extends RecyclerView.Adapter<AppContainer> {
     public void onBindViewHolder(@NonNull AppContainer holder, int position) {
         holder.icon.setImageDrawable(icons.get(position));
         holder.name.setText(labels.get(position));
-        holder.icon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent launchIntent = new Intent(pm.getLaunchIntentForPackage(p.packageName));
-                // TODO: THIS IS WHERE WE NOTIFY ALEX'S ALGORITHM
-                holder.con.startActivity(launchIntent);
-            }
+
+        holder.itemView.setOnClickListener(view -> launchApp(holder, position));
+        holder.itemView.setOnLongClickListener(view -> {
+            longPressHandler.run();
+            return true;
         });
 
         toggleAppMode.add(x -> toggleAppDeleteMode(holder, x));
