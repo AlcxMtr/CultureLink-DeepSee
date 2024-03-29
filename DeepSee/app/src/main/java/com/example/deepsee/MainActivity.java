@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Bundle;
 
+
 import com.example.deepsee.accessibility.TextAndSpeech;
 import com.example.deepsee.databinding.ActivityMainBinding;
 
@@ -17,12 +18,18 @@ import android.widget.Button;
 
 import androidx.navigation.ui.AppBarConfiguration;
 
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+
+import android.widget.Button;
+
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import com.example.deepsee.messaging.SMSActivity;
 
 import android.provider.ContactsContract;
 import android.widget.ImageButton;
@@ -80,16 +87,47 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    String [] permissions;
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                           int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == 1) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                System.out.println("Read sms permission granted");
+            } else {
+                System.out.println("Read sms permission not granted");
+            }
+
+            if (grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                System.out.println("Contact permission granted");
+            } else {
+                System.out.println("Contact permission not granted");
+            }
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        permissions = new String[]{
+                Manifest.permission.READ_SMS,
+                Manifest.permission.READ_CONTACTS
+        };
+
+        ActivityCompat.requestPermissions(MainActivity.this, permissions, 1);
+
         Button showHideButton = findViewById(R.id.show_hide_button);
+
+        Button messagesButton = findViewById(R.id.messagesbutton);
+
         Button emergencyButton = findViewById(R.id.emergency_button);
         ImageButton shortcutsButton = findViewById(R.id.shDrawerButton);
         Button shortcutsContainerButton = findViewById(R.id.shortcutsContainerButton);
-
 
         final PackageManager pm = getPackageManager();
         // Get Package List:
@@ -121,6 +159,17 @@ public class MainActivity extends AppCompatActivity {
                 transaction.commit();
             }
         });
+
+
+        messagesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View k) {
+                // Create an instance of the SMSReader class
+                Intent msg_intent = new Intent(MainActivity.this, SMSActivity.class);
+                startActivity(msg_intent);
+            }
+        });
+
 
         emergencyButton.setOnClickListener(new View.OnClickListener() {
             @Override

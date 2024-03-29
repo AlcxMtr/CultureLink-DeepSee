@@ -4,7 +4,10 @@
 
     <uses-permission android:name="android.permission.WRITE_SETTINGS"
         tools:ignore="ProtectedPermissions" />
-
+    <uses-feature
+        android:name="android.hardware.telephony"
+        android:required="false" />
+  
     <application
         android:enableOnBackInvokedCallback="true"
         android:allowBackup="true"
@@ -47,6 +50,10 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+      <activity
+            android:name=".messaging.SMSActivity"
+            android:label="SMS Activity"
+            android:theme="@style/Theme.DeepSee" />
 
         <activity
             android:name=".accessibility.TextAndSpeech"
@@ -61,4 +68,5 @@
     <uses-permission android:name=" android.permission.READ_PROFILE "/>
 
     <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" tools:ignore="QueryAllPackagesPermission" />
+    <uses-permission android:name="android.permission.READ_SMS" />
 </manifest>
