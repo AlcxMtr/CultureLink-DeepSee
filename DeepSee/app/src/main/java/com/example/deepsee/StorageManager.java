@@ -2,18 +2,19 @@ package com.example.deepsee;
 
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
-import android.util.Log;
+
+import com.example.deepsee.auto_suggest.AlgoStruct;
 
 import java.util.HashMap;
 import java.util.List;
 import java.io.*;
-import java.util.HashMap;
-import java.util.List;
+
 // This class handles the storage, reading, and management of app-local files.
 // Use it to get or set data structures and effectively memoize them for use later.
 // Ideally one instance of this is created at a given time.
 // The get and set functions can be used without the object but ensure
 public class StorageManager {
+
     //public Matrices matrices;   // For Alex. Replace "Matrices" with the object you use to store stuff.
     public HashMap categories;
     public List<ApplicationInfo> apps;      // For Fahim
@@ -48,6 +49,7 @@ public class StorageManager {
     }
 
     // MATRICES:
+    //If file does not exist yet, need to handle it
 //    private Matrices getMatrices() {
 //        this.matrices = readObjectFromFile("matrices.dat");
 //        return this.matrices;

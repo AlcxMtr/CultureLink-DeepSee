@@ -11,7 +11,7 @@ android {
     defaultConfig {
         applicationId "com.example.deepsee"
         minSdk 30
-        //noinspection ExpiredTargetSdkVersion
+        // noinspection ExpiredTargetSdkVersion
         targetSdk 30
         versionCode 1
         versionName "1.0"
