@@ -1,7 +1,6 @@
 package com.example.deepsee;
 import android.Manifest;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
@@ -9,17 +8,13 @@ import android.database.Cursor;
 import android.os.Bundle;
 
 import com.example.deepsee.accessibility.TextAndSpeech;
-import com.example.deepsee.app_drawer.AppContainer;
 import com.example.deepsee.databinding.ActivityMainBinding;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 
-import androidx.fragment.app.FragmentContainerView;
 import androidx.navigation.ui.AppBarConfiguration;
 
 import androidx.fragment.app.Fragment;
@@ -31,8 +26,6 @@ import java.util.List;
 
 import android.provider.ContactsContract;
 
-import org.xmlpull.v1.XmlPullParser;
-
 
 public class MainActivity extends AppCompatActivity {
 
@@ -43,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     private AppBarConfiguration appBarConfiguration;
     Button btnSettings;
     private ActivityMainBinding binding;
+    private ShortcutsContainerFragment shortcutsFragment;
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions,
@@ -135,17 +129,16 @@ public class MainActivity extends AppCompatActivity {
                 transaction.commit();
             }
         });
+        List<ShortcutContainer> launchables = new ArrayList<>();
 
+        shortcutsFragment = new ShortcutsContainerFragment(launchables, pm);
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.shortcuts_holder, shortcutsFragment);
+        transaction.commit();
         shortcutsContainerButton.setOnClickListener(new View.OnClickListener() {
-
-            // Create your list:
-            List<AppContainer> launchables = new ArrayList<AppContainer>();
             @Override
             public void onClick(View view) {
-                ShortcutsContainerFragment shortcutsFragment = new ShortcutsContainerFragment(launchables, pm);
-                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.shortcuts_container, shortcutsFragment);
-                transaction.commit();
+                shortcutsFragment.toggleVisibility();
             }
         });
 

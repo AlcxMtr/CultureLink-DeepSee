@@ -1,36 +1,19 @@
 package com.example.deepsee;
 
-import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import com.example.deepsee.app_drawer.AppContainer;
-import com.example.deepsee.app_drawer.AppsAdapter;
-import com.example.deepsee.app_drawer.CategoriesAdapter;
-import com.example.deepsee.placeholder.PlaceholderContent;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 /**
  * A fragment representing a container that can contain AppContainers, or buttons for settings.
@@ -39,15 +22,17 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 public class ShortcutsContainerFragment extends Fragment {
 
     // List holding AppContainers that allow us to have app shortcuts
-    private List<AppContainer> launchables;
+    private List<ShortcutContainer> launchables;
     private PackageManager pm;
     RecyclerView launchablesContainer;
     View binding;
+    boolean visible;
 
-    public ShortcutsContainerFragment (List<AppContainer> launchables, PackageManager pm) {
+    public ShortcutsContainerFragment (List<ShortcutContainer> launchables, PackageManager pm) {
         super();
         this.launchables = launchables;
         this.pm = pm;
+        this.visible = true;
     }
 
     @Override
@@ -58,40 +43,35 @@ public class ShortcutsContainerFragment extends Fragment {
         populateLaunchables();
 
         // Set up the dropdown button
-        this.launchablesContainer = view.findViewById(R.id.launchablesContainer);
-//        setVisibility();
+        System.out.println("Shortcut created");
     }
 
+    public void toggleVisibility(){
+        this.visible = !visible;
+        this.binding.findViewById(R.id.shortcut_layout).setVisibility(visible?View.VISIBLE : View.GONE);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        System.out.println("Shortcut binder");
         this.binding = inflater.inflate(R.layout.shortcuts_fragment, container, false);
-        System.out.println("Called binder");
+        toggleVisibility();
+        setupShortcutsRecyclerView(binding);
         // Use the inflated rootView as needed
         ViewGroup.LayoutParams params = launchablesContainer.getLayoutParams();
         launchablesContainer.setLayoutParams(params);
         return binding;
     }
 
-    private void setupShortcutsRecyclerView() {
+    private void setupShortcutsRecyclerView(View binding) {
+        this.launchablesContainer = binding.findViewById(R.id.launchablesContainer);
         // Find RecyclerView within AppDrawerLayout and initialize it
-        RecyclerView appRecyclerView = binding.findViewById(R.id.categories_recycler);
-        CategoriesAdapter adapter = new AppsAdapter(this.binding.getContext(), launchables, pm);
+        RecyclerView appRecyclerView = launchablesContainer;
+        ShortcutsAdapter adapter = new ShortcutsAdapter();
         appRecyclerView.setAdapter(adapter);
         appRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
     }
-
-    public void setVisibility() {
-        int newVisibility = (this.launchablesContainer.getVisibility() == View.VISIBLE) ? View.GONE : View.VISIBLE;
-        this.launchablesContainer.setVisibility(newVisibility);
-
-        // Adjust RecyclerView height based on visibility
-        ViewGroup.LayoutParams params = launchablesContainer.getLayoutParams();
-        params.height = newVisibility == View.VISIBLE ? ViewGroup.LayoutParams.WRAP_CONTENT : 0;
-        launchablesContainer.setLayoutParams(params);
-    }
-
     private void populateLaunchables() {
         // Everyone put your buttons and things here.
         // Format them as AppContainers.

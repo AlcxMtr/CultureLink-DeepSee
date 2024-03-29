@@ -40,13 +40,14 @@ public class AppDrawerFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = inflater.inflate(R.layout.fragment_app_drawer, container, false);
+        System.out.println("Drawer Binder");
         return binding;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        System.out.println("Drawer created");
         setupAppRecyclerView();
     }
 

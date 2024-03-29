@@ -27,9 +27,12 @@ public class ShortcutsAdapter extends RecyclerView.Adapter<ShortcutContainer> {
 
     private List<ShortcutContainer> getLaunchables() {
         // Fill out here the hardcoded list; you want to fill in your icon and push it to the list:
-        List<ShortcutContainer> launches = new ArrayList<ShortcutContainer>();
+        List<ShortcutContainer> launches;
         // Internal Settings:
-        ShortcutContainer sett = new ShortcutContainer(
+        if (launchables == null)
+            launchables = new ArrayList<ShortcutContainer>();
+
+        return launchables;
     }
 
     /*
@@ -42,7 +45,7 @@ public class ShortcutsAdapter extends RecyclerView.Adapter<ShortcutContainer> {
 
         View app_square = inflater.inflate(R.layout.app_square, parent, false);
 
-        ShortcutContainer v = new ShortcutContainer(app_square);
+        ShortcutContainer v = new ShortcutContainer(app_square, null, null);
         v.con = context;
         return v;
     }

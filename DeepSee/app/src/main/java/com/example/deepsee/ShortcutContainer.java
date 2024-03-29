@@ -19,10 +19,10 @@ public class ShortcutContainer extends RecyclerView.ViewHolder {
     public Context con;
     public Intent shortcutIntent;
 
-    public ShortcutContainer(@NonNull View itemView, ImageView icon; ,Intent shortcutIntent) {
+
+    public ShortcutContainer(@NonNull View itemView, ImageView icon, Intent intent) {
         super(itemView);
-        this.con = itemView.getContext();
         this.icon = icon;
-        this.shortcutIntent = shortcutIntent;
+        this.shortcutIntent = intent;
     }
 }
