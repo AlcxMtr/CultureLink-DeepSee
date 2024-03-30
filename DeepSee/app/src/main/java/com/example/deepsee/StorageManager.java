@@ -2,68 +2,102 @@ package com.example.deepsee;
 
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
-import android.util.Log;
+
+import com.example.deepsee.auto_suggest.AlgoStruct;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.io.*;
-import java.util.HashMap;
-import java.util.List;
+
 // This class handles the storage, reading, and management of app-local files.
 // Use it to get or set data structures and effectively memoize them for use later.
 // Ideally one instance of this is created at a given time.
 // The get and set functions can be used without the object but ensure
 public class StorageManager {
-    //public Matrices matrices;   // For Alex. Replace "Matrices" with the object you use to store stuff.
-    public HashMap categories;
+
+    public AlgoStruct algoStruct;
+    public HashMap<Integer, List<ApplicationInfo>> categories;
     public List<ApplicationInfo> apps;      // For Fahim
 
     private Context context;
 
     public StorageManager(Context context) {
-        //this.matrices = null;
+        this.algoStruct = null;
         this.categories = null;
         this.apps = null;
         this.context = context;
     }
 
     // APPS LIST FOR APP DRAWER:
-    private List<ApplicationInfo> getApps() {
-        this.apps = readObjectFromFile("apps.dat");
+    public List<ApplicationInfo> getApps() {
+        this.apps = stringToApp((List<String>) readObjectFromFile("apps.dat"));
         return this.apps;
     }
 
-    private void setApps(List<ApplicationInfo> apps) {
-        writeObjectToFile("apps.dat", apps);
+    public void setApps(List<ApplicationInfo> apps) {
+        writeObjectToFile("apps.dat", (Serializable) appToString(apps));
+    }
+
+    private List<ApplicationInfo> stringToApp(List<String> strings){
+        if (strings != null) {
+            List<ApplicationInfo> list = new LinkedList<>();
+            for (String s : strings) {
+                ApplicationInfo info = new ApplicationInfo();
+                info.packageName = s;
+                list.add(info);
+            }
+            return list;
+        }
+        else
+            return null;
+    }
+
+    public List<String> appToString(List<ApplicationInfo> infos){
+        List<String> strings = new LinkedList<>();
+        for (ApplicationInfo info:infos){
+            strings.add(info.packageName);
+        }
+
+        return strings;
     }
 
     // CATEGORIES:
-    private HashMap getCategories() {
-        this.categories = readObjectFromFile("categories.dat");
-        return this.categories;
+    public HashMap<Integer, List<ApplicationInfo>> getCategories() {
+        HashMap<Integer, List<String>> unconverted = (HashMap<Integer, List<String>>) readObjectFromFile("categories.dat");
+        if (unconverted != null){
+            this.categories = new HashMap<>();
+            unconverted.forEach((key,val) -> this.categories.put(key, stringToApp(val)));
+            return this.categories;
+        }
+        return null;
     }
 
-    private void setCategories(HashMap categories) {
-        writeObjectToFile("categories.dat", categories);
+    public void setCategories(HashMap<Integer, List<ApplicationInfo>> unconverted) {
+        HashMap<Integer, List<String>> converted = new HashMap<>();
+        unconverted.forEach((key,val) -> converted.put(key, appToString(val)));
+        writeObjectToFile("categories.dat", converted);
     }
 
-    // MATRICES:
-//    private Matrices getMatrices() {
-//        this.matrices = readObjectFromFile("matrices.dat");
-//        return this.matrices;
-//    }
+    // Structures containing data for app suggestion algorithm
+    public AlgoStruct getAlgoStruct() {
+        this.algoStruct = (AlgoStruct) readObjectFromFile("algoStruct.dat");
+        return this.algoStruct;
+    }
 
-//    private void setMatrices(Matrices matrices) {
-//        writeObjectToFile("matrices.dat", matrices);
-//    }
+    public void setAlgoStruct(AlgoStruct struct) {
+        writeObjectToFile("algoStruct.dat", struct);
+    }
 
     // General reader and writer helper functions. They return null if the read or write failed
     // for any reason.
-    private <T> T readObjectFromFile(String filename) {
+    private Serializable readObjectFromFile(String filename) {
         try (FileInputStream fis = this.context.openFileInput(filename);
-            ObjectInputStream ois = new ObjectInputStream(fis)) {
+             ObjectInputStream ois = new ObjectInputStream(fis)) {
             // bad bad unchecked cast:
-            return (T) ois.readObject();
+            Serializable obj = (Serializable) ois.readObject();
+            ois.close();
+            return obj;
         } catch (Exception e) {
             // Handle file not found or failed to read
             System.out.println( "Error reading from file " + filename + e.toString());
@@ -71,13 +105,21 @@ public class StorageManager {
         }
     }
 
-    private <T> void writeObjectToFile(String filename, T object) {
-        try (FileOutputStream fos = this.context.openFileOutput(filename, Context.MODE_PRIVATE);
-             ObjectOutputStream oos = new ObjectOutputStream(fos)) {
-            oos.writeObject(object);
+    public void syncStorageManage(){
+        setAlgoStruct(MainActivity.reccomender);
+        System.out.println("Updated file sys....-----------------------------------------------------------------------------\n\n\n");
+    }
+
+    private void writeObjectToFile(String filename, Serializable object) {
+        try {
+            FileOutputStream fos = this.context.openFileOutput(filename, Context.MODE_PRIVATE);
+            ObjectOutputStream out = new ObjectOutputStream(fos);
+            out.writeObject(object);
+            out.flush();
+            out.close();
         } catch (Exception e) {
-            // Handle failed to write
             System.out.println( "Error writing to file " + filename + e.toString());
         }
     }
+
 }

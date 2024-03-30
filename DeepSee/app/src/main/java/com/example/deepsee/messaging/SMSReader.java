@@ -18,7 +18,7 @@ import java.util.Locale;
 
 public class SMSReader {
 
-    public List<SMSMessages> readSMS(Context context, ArrayList <Contact> contacts) {
+    public List<SMSMessages> readSMS(Context context, ArrayList <Contact> contacts, int numofcontacts) {
         List<SMSMessages> smsMessages = new ArrayList<>();
         ContentResolver contentResolver = context.getContentResolver();
 
@@ -33,9 +33,10 @@ public class SMSReader {
         Cursor cursor = contentResolver.query(uri, projections, null, null, null);
         int num = 0;
 
+
         if (cursor != null && cursor.moveToFirst()) {
             do {
-                if (num == 100) {
+                if (num == numofcontacts) {
                     break;
                 }
                 int addressIndex = cursor.getColumnIndex(Telephony.Sms.ADDRESS);
@@ -92,8 +93,9 @@ public class SMSReader {
                 if (!addressExists) {
                     SMSMessages smsMessage = new SMSMessages(address, shortBody, timestamp);
                     smsMessages.add(smsMessage);
+                    num++;
                 }
-                num++;
+
             } while (cursor.moveToNext());
             cursor.close();
         }
