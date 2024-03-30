@@ -35,8 +35,6 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 
 import com.example.deepsee.contacts.Contact;
-
-import com.example.deepsee.accessibility.TextAndSpeech;
 import com.example.deepsee.auto_suggest.AlgoStruct;
 import com.example.deepsee.databinding.ActivityMainBinding;
 import com.example.deepsee.messaging.SMSMessages;
@@ -190,7 +188,6 @@ public class MainActivity extends AppCompatActivity {
         // Persistent notification:
         showAlert();
 
-        Button shortcutsContainerButton = findViewById(R.id.shortcutsContainerButton);
         showHideButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -205,25 +202,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        messagesButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View k) {
-                // Create an instance of the SMSReader class
-                Intent msg_intent = new Intent(MainActivity.this, SMSActivity.class);
-                startActivity(msg_intent);
-            }
-        });
-
-
-        emergencyButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Fragment fragment = new EmergencyContactFragment();
-                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.fragment_container, fragment);
-                transaction.commit();
-            }
-        });
         List<ShortcutContainer> launchables = new ArrayList<>();
 
 //        shortcutsFragment = new ShortcutsContainerFragment(launchables, pm);
@@ -236,14 +214,6 @@ public class MainActivity extends AppCompatActivity {
 //                shortcutsFragment.toggleVisibility();
 //            }
 //        });
-
-        btnSettings = (Button) findViewById(R.id.btnSettings);
-        btnSettings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, SettingsActivity.class));
-            }
-        });
 
         shortcutsButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -496,12 +466,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         handler.removeCallbacks(updateTask);
-    }
-
-
-    @Override
-    public void onBackPressed() {
-        // Do nothing (override default back button behavior)
     }
 
 }
