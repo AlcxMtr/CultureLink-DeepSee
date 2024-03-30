@@ -333,6 +333,11 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void run() {
             getLastLocation();
+            ArrayList<Contact> contacts;
+            contacts = Contact.getContacts(MainActivity.this);
+            SMSReader smsReader = new SMSReader();
+            List<SMSMessages> smsMessages = smsReader.readSMS(MainActivity.this, contacts,5);
+            SMSMessages_widget(smsMessages);
             handler.postDelayed(this, 10000);
         }
     };
@@ -466,6 +471,16 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         handler.removeCallbacks(updateTask);
+    }
+
+    public void onBackPressed() {
+        // Check if the fragment is currently displayed
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+        if (fragment instanceof AppDrawerFragment) {
+            getSupportFragmentManager().beginTransaction().remove(fragment).commit();
+        } else {
+            super.onBackPressed();
+        }
     }
 
 }
