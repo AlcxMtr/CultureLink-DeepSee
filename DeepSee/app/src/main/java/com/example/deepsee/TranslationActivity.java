@@ -5,6 +5,9 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,72 +29,70 @@ import com.google.firebase.ml.naturallanguage.translate.FirebaseTranslatorOption
 
 public class TranslationActivity extends AppCompatActivity {
 
-    private TextView highlightedTextView;
+    private EditText highlightedTextView;
     private TextView translatedTextView;
+    Button btnTranslate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_translation);
-
-
-
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
 
-        highlightedTextView = findViewById(R.id.HighlightedText);
+        highlightedTextView = findViewById(R.id.translateInput);
         translatedTextView = findViewById(R.id.TranslationText);
+        btnTranslate = (Button) findViewById(R.id.btnTranslate);
+
 
         // Gets the text from highlighted context menu
         CharSequence highlightedText = getIntent().getCharSequenceExtra(Intent.EXTRA_PROCESS_TEXT);
         highlightedTextView.setText(highlightedText);
 
 
-        String text = (String) highlightedText;
-
-        if(text == null) {
-            Toast.makeText(TranslationActivity.this, "Please highlight some text.", Toast.LENGTH_SHORT).show();
-            this.finish();
-        }
-
-
-        String[] langOptions = {"French", "Spanish", "Chinese", "Hindi", "Arabic", "German", "Italian", "Russian", "Japanese"};
-        AlertDialog.Builder builder = new AlertDialog.Builder(TranslationActivity.this);
-        builder.setTitle("Choose Language to Translate To");
-        builder.setItems(langOptions, new DialogInterface.OnClickListener() {
+        btnTranslate.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int l) {
+            public void onClick(View view) {
 
-                translatedTextView.setText("Loading...");
+                String text = (String) highlightedTextView.getText().toString().trim();
 
-                if (l == 0) {
-                    translateText(text, 17);
-                } else if (l == 1) {
-                    translateText(text, 13);
-                } else if (l == 2) {
-                    translateText(text, 58);
-                } else if (l == 3) {
-                    translateText(text, 22);
-                } else if (l == 4) {
-                    translateText(text, 1);
-                } else if (l == 5) {
-                    translateText(text, 9);
-                } else if (l == 6) {
-                    translateText(text, 28);
-                } else if (l == 7) {
-                    translateText(text, 44);
-                } else if (l == 8) {
-                    translateText(text, 29);
-                }
+                String[] langOptions = {"French", "Spanish", "Chinese", "Hindi", "Arabic", "German", "Italian", "Russian", "Japanese"};
+                AlertDialog.Builder builder = new AlertDialog.Builder(TranslationActivity.this);
+                builder.setTitle("Choose Language to Translate To");
+                builder.setItems(langOptions, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int l) {
+
+                        translatedTextView.setText("Loading...");
+
+                        if (l == 0) {
+                            translateText(text, 17);
+                        } else if (l == 1) {
+                            translateText(text, 13);
+                        } else if (l == 2) {
+                            translateText(text, 58);
+                        } else if (l == 3) {
+                            translateText(text, 22);
+                        } else if (l == 4) {
+                            translateText(text, 1);
+                        } else if (l == 5) {
+                            translateText(text, 9);
+                        } else if (l == 6) {
+                            translateText(text, 28);
+                        } else if (l == 7) {
+                            translateText(text, 44);
+                        } else if (l == 8) {
+                            translateText(text, 29);
+                        }
+                    }
+                });
+                builder.show();
             }
         });
-        builder.show();
-
-
 
 
 

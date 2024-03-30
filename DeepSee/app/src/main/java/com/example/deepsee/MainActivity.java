@@ -1,13 +1,14 @@
 package com.example.deepsee;
 
-
-
-
 import android.Manifest;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+
+import static java.util.concurrent.TimeUnit.HOURS;
+
+import android.Manifest;
 
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -18,12 +19,15 @@ import android.database.Cursor;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
+
 import android.os.Bundle;
 
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
+
 import com.example.deepsee.contacts.Contact;
 import com.example.deepsee.auto_suggest.AlgoStruct;
 import com.example.deepsee.databinding.ActivityMainBinding;
@@ -34,6 +38,7 @@ import com.example.deepsee.weather.WeatherRequest;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
+
 
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -55,16 +60,32 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.work.ExistingPeriodicWorkPolicy;
+
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
+
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
+import androidx.work.WorkRequest;
+
+
+import java.io.IOException;
+
+import android.widget.Button;
 
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
+
+
+import com.example.deepsee.messaging.SMSActivity;
+
 
 import android.provider.ContactsContract;
 
@@ -174,6 +195,19 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        List<ShortcutContainer> launchables = new ArrayList<>();
+
+//        shortcutsFragment = new ShortcutsContainerFragment(launchables, pm);
+//        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+//        transaction.replace(R.id.shortcuts_holder, shortcutsFragment);
+//        transaction.commit();
+//        shortcutsContainerButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                shortcutsFragment.toggleVisibility();
+//            }
+//        });
+
         shortcutsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -236,6 +270,7 @@ public class MainActivity extends AppCompatActivity {
         ShortcutsAdapter adapter = new ShortcutsAdapter(getBaseContext(), apps, pm);
         recommendedApp.setAdapter(adapter);
         recommendedApp.setLayoutManager(new LinearLayoutManager(getBaseContext(), LinearLayoutManager.HORIZONTAL, false));
+
         IntentFilter filter = new IntentFilter();
         filter.addAction(getPackageName() + "android.net.conn.PACKAGE_INSTALL");
         filter.addAction(getPackageName() + "android.net.conn.PACKAGE_ADDED");
@@ -244,6 +279,7 @@ public class MainActivity extends AppCompatActivity {
         BroadcastReader myReceiver = new BroadcastReader(storageManager);
         registerReceiver(myReceiver, filter);
 //        storageManager.updateStorageManager();
+
     }
 
     private boolean hasPermissions() {

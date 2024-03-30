@@ -130,6 +130,7 @@ public class StorageManager {
         setAlgoStruct(MainActivity.reccomender);
         setApps(apps);
         setCategories(categories);
+
         System.out.println("Updated file sys....-----------------------------------------------------------------------------\n\n\n");
     }
 
