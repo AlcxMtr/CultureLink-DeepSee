@@ -27,6 +27,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.compose.ui.text.font.FontVariation;
 import androidx.core.app.ActivityCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -157,6 +158,9 @@ public class QuickSettingsActivity extends AppCompatActivity {
 
                 } else if(i == 5) {
 
+                    Intent intent = new Intent(QuickSettingsActivity.this, TranslationActivity.class);
+                    startActivity(intent);
+                } else if(i == 6) {
                     Intent intent = new Intent(QuickSettingsActivity.this, SettingsActivity.class);
                     startActivity(intent);
                 }
@@ -172,6 +176,7 @@ public class QuickSettingsActivity extends AppCompatActivity {
         setting_arr.add("\uD83D\uDCF6 Wifi");
         setting_arr.add("\uD83C\uDFA7 Bluetooth");
         setting_arr.add("\uD83D\uDD0B Battery Saver");
+        setting_arr.add("\uD83D\uDDE3\uFE0F Translation");
         setting_arr.add("⚙\uFE0F Settings");
 
         ArrayAdapter<String> array_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, setting_arr);
