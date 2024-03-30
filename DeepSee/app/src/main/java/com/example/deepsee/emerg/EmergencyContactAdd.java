@@ -64,14 +64,14 @@ public class EmergencyContactAdd extends Fragment {
             System.out.println("name: " + contact.getName() + " num: " + contact.getContactNumber());
         }
         //ContactListAdapter adapter = new ContactListAdapter(img,name,number);
-        adapter = new ContactListAdapter(img,name,number);
+        adapter = new ContactListAdapter(img,name,number,0);
         RecyclerView recyclerView = binding.addNewRecyclerview;
         //RecyclerView recyclerView = binding.addedContactsView;
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
 
         //ContactListAdapter added_adapter = new ContactListAdapter(added_img,added_name,added_number);
-        added_adapter = new ContactListAdapter(added_img,added_name,added_number);
+        added_adapter = new ContactListAdapter(added_img,added_name,added_number,1);
         RecyclerView added_recyclerView = binding.addedContactsView;
         added_recyclerView.setAdapter(added_adapter);
         added_recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));

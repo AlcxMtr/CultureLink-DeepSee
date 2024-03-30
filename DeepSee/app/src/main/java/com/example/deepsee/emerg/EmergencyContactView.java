@@ -33,7 +33,7 @@ public class EmergencyContactView extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        EmergencyContactAdd.added_adapter = new ContactListAdapter(EmergencyContactAdd.added_img,EmergencyContactAdd.added_name,EmergencyContactAdd.added_number);
+        //EmergencyContactAdd.added_adapter = new ContactListAdapter(EmergencyContactAdd.added_img,EmergencyContactAdd.added_name,EmergencyContactAdd.added_number);
         RecyclerView added_recyclerView = binding.emergencyContactsRecycler;
         added_recyclerView.setAdapter(EmergencyContactAdd.added_adapter);
         added_recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));

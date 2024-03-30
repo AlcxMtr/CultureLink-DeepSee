@@ -22,25 +22,41 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
     ArrayList<String> name;
     ArrayList<String> number;
 
+    int flag_added;
+
     //public static ArrayList<Contact> addedList;
 
 
-    public ContactListAdapter(ArrayList<Integer> photo, ArrayList<String> name, ArrayList<String> number) {
+    public ContactListAdapter(ArrayList<Integer> photo, ArrayList<String> name, ArrayList<String> number, int flag) {
         //ContactListAdapter.addedList = addedList;
         this.photo = photo;
         this.name = name;
         this.number = number;
+        this.flag_added = flag;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        if(EmergencyContactAdd.number.contains(number.get(0))){
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.emerg_contact_rectangle,parent,false);
-            return new ViewHolder(view);
+//        if(EmergencyContactAdd.number.contains(number.get(0))){
+//            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.emerg_contact_rectangle,parent,false);
+//            return new ViewHolder(view);
+//        }
+//        else if(EmergencyContactAdd.added_number.contains(number.get(0))){
+//            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.emerg_contact_delete_rectangle,parent,false);
+//            return new ViewHolder(view);
+//        }
+//        else{View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.emerg_contact_delete_rectangle,parent,false);
+//        return new ViewHolder(view);}
+
+        View view;
+        if(this.flag_added == 0){
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.emerg_contact_rectangle, parent, false);
         }
-        else{View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.emerg_contact_delete_rectangle,parent,false);
-        return new ViewHolder(view);}
+        else{
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.emerg_contact_delete_rectangle, parent, false);
+        }
+        return new ViewHolder(view);
     }
 
     @Override
@@ -93,6 +109,10 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
                     EmergencyContactAdd.added_name.remove(position);
                     EmergencyContactAdd.added_number.remove(position);
                     System.out.println("name: " + name.getText() + " num: " + number.getText());
+//                    EmergencyContactAdd.adapter = new ContactListAdapter(EmergencyContactAdd.img,EmergencyContactAdd.name,EmergencyContactAdd.number);
+//                    EmergencyContactAdd.added_adapter = new ContactListAdapter(EmergencyContactAdd.added_img,EmergencyContactAdd.added_name,EmergencyContactAdd.added_number);
+////
+
                     EmergencyContactAdd.adapter.notifyItemInserted(EmergencyContactAdd.added_img.size());
                     EmergencyContactAdd.added_adapter.notifyItemRemoved(position);
                     //addButton.setText("Add");
@@ -110,6 +130,9 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
                     EmergencyContactAdd.number.remove(position);
 
                     System.out.println("name: " + name.getText() + " num: " + number.getText());
+//                    EmergencyContactAdd.adapter = new ContactListAdapter(EmergencyContactAdd.img,EmergencyContactAdd.name,EmergencyContactAdd.number);
+//                    EmergencyContactAdd.added_adapter = new ContactListAdapter(EmergencyContactAdd.added_img,EmergencyContactAdd.added_name,EmergencyContactAdd.added_number);
+//
                     EmergencyContactAdd.added_adapter.notifyItemInserted(EmergencyContactAdd.added_img.size());
                     EmergencyContactAdd.adapter.notifyItemRemoved(position);
 
