@@ -29,7 +29,10 @@
             android:text=""
             android:textColor="#FFFFFF"
             android:textSize="12sp"
+            app:layout_constraintBottom_toTopOf="@+id/textmsg_shortened"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.969"
+            app:layout_constraintStart_toEndOf="@+id/contact_name"
             app:layout_constraintTop_toTopOf="@+id/contact_name" />
 
         <TextView
@@ -39,6 +42,7 @@
             android:layout_marginTop="8dp"
             android:text=""
             android:textColor="#FFFFFF"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/contact_name" />

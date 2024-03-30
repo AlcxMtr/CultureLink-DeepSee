@@ -1,4 +1,19 @@
 package com.example.deepsee;
+
+
+
+
+import android.Manifest;
+
+import android.annotation.SuppressLint;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Context;
+
 import static java.util.concurrent.TimeUnit.HOURS;
 
 import android.Manifest;
@@ -7,32 +22,49 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+
+import android.os.Build;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
+import com.example.deepsee.contacts.Contact;
 import com.example.deepsee.accessibility.TextAndSpeech;
 import com.example.deepsee.auto_suggest.AlgoStruct;
 import com.example.deepsee.databinding.ActivityMainBinding;
+import com.example.deepsee.messaging.SMSMessages;
+import com.example.deepsee.messaging.SMSReader;
 import com.example.deepsee.weather.WeatherListener;
 import com.example.deepsee.weather.WeatherRequest;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 
+import com.example.deepsee.databinding.ActivityMainBinding;
+
+
+import androidx.appcompat.app.AlertDialog;
+
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Handler;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
+
 import androidx.core.content.ContextCompat;
+
 import androidx.navigation.ui.AppBarConfiguration;
 
 import androidx.fragment.app.Fragment;
@@ -48,7 +80,10 @@ import androidx.work.WorkRequest;
 
 import java.io.IOException;
 
+import android.widget.Button;
 
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -60,6 +95,7 @@ import com.example.deepsee.messaging.SMSActivity;
 
 import android.provider.ContactsContract;
 
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import android.widget.ImageButton;
@@ -68,12 +104,12 @@ import android.widget.ImageButton;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final String CHANNEL_ID = "Persistence";
     private boolean isAppDrawerVisible = false;
     public List<ApplicationInfo> apps;
     public HashMap<Integer, List<ApplicationInfo>> categories;
 
     private AppBarConfiguration appBarConfiguration;
-    Button btnSettings;
     private ActivityMainBinding binding;
     PackageManager pm;
 
@@ -101,21 +137,9 @@ public class MainActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, String[] permissions,
                                            int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-//         if (requestCode == 1) {
-//             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                 System.out.println("Location permission granted");
-//             } else {
-//                 System.out.println("Location permission not granted");
-//             }
-
-//             if (grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-//                 System.out.println("Contact permission granted");
-//                 getContacts();
-//             } else {
-//                 System.out.println("Contact permission not granted");
-//             }
-//         }
     }
+
+
     void sortAppCategories(){
         // Get Package List:
         apps = pm.getInstalledApplications(PackageManager.GET_META_DATA);
@@ -152,17 +176,17 @@ public class MainActivity extends AppCompatActivity {
         if (!hasPermissions()) {
             ActivityCompat.requestPermissions(MainActivity.this, permissions, 1);
         }
-
-
         ActivityCompat.requestPermissions(MainActivity.this, permissions, 1);
 
 
-        Button showHideButton = findViewById(R.id.show_hide_button);
+        ImageButton showHideButton = findViewById(R.id.show_hide_button);
 
-        Button messagesButton = findViewById(R.id.messagesbutton);
-
-        Button emergencyButton = findViewById(R.id.emergency_button);
         ImageButton shortcutsButton = findViewById(R.id.shDrawerButton);
+
+
+        // Persistent notification:
+        showAlert();
+
         Button shortcutsContainerButton = findViewById(R.id.shortcutsContainerButton);
         showHideButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -175,47 +199,6 @@ public class MainActivity extends AppCompatActivity {
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                 transaction.replace(R.id.fragment_container, fragment);
                 transaction.commit();
-            }
-        });
-
-
-        messagesButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View k) {
-                // Create an instance of the SMSReader class
-                Intent msg_intent = new Intent(MainActivity.this, SMSActivity.class);
-                startActivity(msg_intent);
-            }
-        });
-
-
-        emergencyButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Fragment fragment = new EmergencyContactFragment();
-                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.fragment_container, fragment);
-                transaction.commit();
-            }
-        });
-        List<ShortcutContainer> launchables = new ArrayList<>();
-
-//        shortcutsFragment = new ShortcutsContainerFragment(launchables, pm);
-//        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-//        transaction.replace(R.id.shortcuts_holder, shortcutsFragment);
-//        transaction.commit();
-//        shortcutsContainerButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                shortcutsFragment.toggleVisibility();
-//            }
-//        });
-
-        btnSettings = (Button) findViewById(R.id.btnSettings);
-        btnSettings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, SettingsActivity.class));
             }
         });
 
@@ -236,6 +219,14 @@ public class MainActivity extends AppCompatActivity {
         requestQueue = Volley.newRequestQueue(this);
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         getLastLocation();
+
+
+        ArrayList<Contact> contacts;
+        contacts = Contact.getContacts(MainActivity.this);
+        SMSReader smsReader = new SMSReader();
+        List<SMSMessages> smsMessages = smsReader.readSMS(MainActivity.this, contacts,5);
+        SMSMessages_widget(smsMessages);
+
 
         handler = new Handler();
         handler.postDelayed(updateTask, 10000);
@@ -284,6 +275,47 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+
+    // Creates a persistent Notification for the accessibility shortcut
+    private void showAlert() {
+
+        // Creates a Channel (Needed after API 26)
+        CharSequence name = "Accessibility Shortcut";
+        String description = "Persistent Notification for Accessibility Features.";
+        int importance = NotificationManager.IMPORTANCE_HIGH;
+        NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+        channel.setDescription(description);
+
+
+        // Register the channel with the system; you can't change the importance
+        // or other notification behaviors after this.
+        NotificationManager notificationManager = getSystemService(NotificationManager.class);
+        notificationManager.createNotificationChannel(channel);
+
+        //Quick Settings Notification
+        Intent intent = new Intent(MainActivity.this, QuickSettingsActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+
+        // This generates the properties and Intent/Content for the notification.
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .setContentTitle("Quick-Settings")
+                .setContentText("Access Your Most Important Settings")
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setColor(451)  // Customise in Visual Overhaul
+                .setOngoing(true)   // Persistence.
+                .setContentIntent(pendingIntent);
+
+        // This is a hacky fix that just DEPLOYS the notification.
+        NotificationManagerCompat nm = NotificationManagerCompat.from(this);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+                != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        nm.notify(0, builder.build());
+    }
+
     private Runnable updateTask = new Runnable() {
         @Override
         public void run() {
@@ -300,7 +332,9 @@ public class MainActivity extends AppCompatActivity {
                 ContactsContract.Profile.LOOKUP_KEY,
                 ContactsContract.Profile.HAS_PHONE_NUMBER
         };
-        Cursor cursor = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, projection, null, null, null);
+        Cursor cursor = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                projection, null, null, null);
+
         if (cursor.moveToFirst()) {
             do {
                 int id = cursor.getColumnIndex(ContactsContract.Contacts._ID);
@@ -308,8 +342,11 @@ public class MainActivity extends AppCompatActivity {
 
                 if(id >= 0 && displayName >= 0){
                     String contactID = cursor.getString(id);
-                    Cursor phoneNumCursor = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                            null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + "=?", new String[] { contactID }, null);
+                    Cursor phoneNumCursor = getContentResolver()
+                            .query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                            null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + "=?",
+                                    new String[] { contactID }, null);
+
 
                     if (phoneNumCursor.moveToFirst()){
                         int num = phoneNumCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
@@ -318,16 +355,14 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                     phoneNumCursor.close();
-
-
                 }
-
-
             } while (cursor.moveToNext());
         }
         cursor.close();
     }
 
+    // TODO: CAUSING A CRASH ON RELOAD OF MAINACTIVITY. POSSIBLE DESYNC. LINE 259.
+    // TODO: CRASH ONLY RESOLVED ON CLEARING APP STORAGE. COULD BE TIED TO "WHILE USING APP" PERMISSION
     private void getLastLocation() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             fusedLocationProviderClient.getLastLocation()
@@ -342,7 +377,7 @@ public class MainActivity extends AppCompatActivity {
                                     String loc = addresses.get(0).getLocality() + ", " + addresses.get(0).getCountryName();
                                     weather_location.setText(loc);
                                     getWeather(location.getLatitude(), location.getLongitude());
-                                } catch (IOException e) {
+                                } catch (Exception e) {
                                     e.printStackTrace();
                                 }
                             } else {
@@ -377,33 +412,41 @@ public class MainActivity extends AppCompatActivity {
         WeatherRequest.getWeatherInfo(requestQueue, weatherListener, latitude, longitude);
 
     }
+    private void SMSMessages_widget(List<SMSMessages> smsMessages) {
+        LinearLayout linearLayout = findViewById(R.id.Messages_widget_layout);
+        linearLayout.removeAllViews();
 
-    public void startDrawer(View v){
-        // Start AppDrawerFragment
-        Fragment fragment = new AppDrawerFragment(categories, apps, pm);
+        for (SMSMessages smsMessage : smsMessages) {
+            View cardView = LayoutInflater.from(this).inflate(R.layout.widget_msgs, null);
+            TextView contactNameTextView = cardView.findViewById(R.id.contact_name);
+            TextView timeTextView = cardView.findViewById(R.id.timeofmsg);
+            TextView messageTextView = cardView.findViewById(R.id.textmsg_shortened);
 
-        //Draw AppDrawerFragment overtop current view
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragment_container, fragment);
-        transaction.commit();
-    }
-    // Toggles the App Drawer:
-    private void toggleAppDrawer() {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
+            String time = dateFormat.format(smsMessage.getTimestamp());
 
-        if (!isAppDrawerVisible) {
-            // If the App Drawer is not visible, show it
+            contactNameTextView.setText(smsMessage.getContactName());
+            timeTextView.setText(time);
+            messageTextView.setText(smsMessage.getMessage());
 
-            // TODO: THIS DOES NOT WORK JAANI FIX IT ILY
-            // supportFragmentManager is an inbuilt, we should be using it:
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, new AppDrawerFragment(categories, apps, getPackageManager()))
-                    .commit();
-        } else {
-            // If it is visible, hide it:
-            isAppDrawerVisible = !isAppDrawerVisible; // placeholder
+            // Set layout parameters to make each card fill the layout
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.MATCH_PARENT
+            );
+            cardView.setLayoutParams(layoutParams);
+
+            linearLayout.addView(cardView);
+
+            cardView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    intent.setData(Uri.parse("smsto:" + smsMessage.getContactName())); // Opens default messaging app with the specific contact
+                    startActivity(intent);
+                }
+            });
         }
-
-        isAppDrawerVisible = !isAppDrawerVisible;
     }
 
     @Override
@@ -411,4 +454,5 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
         handler.removeCallbacks(updateTask);
     }
+
 }

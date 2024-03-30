@@ -5,108 +5,110 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageButton
-        android:id="@+id/Conversations"
-        android:layout_width="93dp"
-        android:layout_height="88dp"
-        android:layout_marginStart="40dp"
-        android:layout_marginEnd="239dp"
-        android:layout_marginBottom="177dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.14"
-        app:srcCompat="@drawable/ic_launcher_foreground" />
 
     <ImageButton
         android:id="@+id/AssistantButton"
-        android:layout_width="93dp"
-        android:layout_height="88dp"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
         android:layout_marginStart="40dp"
-        android:layout_marginEnd="239dp"
         android:layout_marginBottom="177dp"
+        android:background="@drawable/google_assistant_logo_svg"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/AssistantText"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.348"
-        app:srcCompat="@drawable/ic_launcher_foreground" />
+        app:layout_constraintVertical_bias="0.438" />
 
     <ImageButton
         android:id="@+id/EMCButton"
-        android:layout_width="93dp"
-        android:layout_height="88dp"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
         android:layout_marginStart="40dp"
-        android:layout_marginEnd="239dp"
         android:layout_marginBottom="177dp"
+        android:background="@drawable/emergency_telephone_png_pic"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/EMCText"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.552"
-        app:srcCompat="@drawable/ic_launcher_foreground" />
+        app:layout_constraintVertical_bias="0.679" />
 
     <ImageButton
         android:id="@+id/AKSettings"
-        android:layout_width="93dp"
-        android:layout_height="88dp"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
         android:layout_marginStart="40dp"
-        android:layout_marginEnd="239dp"
         android:layout_marginBottom="177dp"
+        android:background="@drawable/settings_icon"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/SettingsText"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.761"
-        app:srcCompat="@drawable/ic_launcher_foreground" />
+        app:layout_constraintVertical_bias="0.895" />
+
 
     <TextView
         android:id="@+id/AssistantText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Voice Commands"
+        android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.144" />
-
-    <TextView
-        android:id="@+id/SettingsText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Settings"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.291" />
+        app:layout_constraintVertical_bias="0.326" />
 
     <TextView
         android:id="@+id/EMCText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Emergency Contacts"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/SettingsText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Settings"
+        android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.44" />
+        app:layout_constraintVertical_bias="0.651" />
+
+    <ImageButton
+        android:id="@+id/Conversations"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+
+        android:background="@drawable/messages_icon_3_removebg_preview"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/ConvoText"
+        app:layout_constraintHorizontal_bias="0.519"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.143" />
 
     <TextView
         android:id="@+id/ConvoText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Conversations"
+        android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.587" />
+        app:layout_constraintVertical_bias="0.163" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
