@@ -41,6 +41,8 @@ public class EmergencyContactAdd extends Fragment {
     public static ContactListAdapter added_adapter;
 
 
+
+
     @Override
     public View onCreateView(
             @NonNull LayoutInflater inflater, ViewGroup container,
