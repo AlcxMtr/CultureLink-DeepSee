@@ -403,10 +403,4 @@ public class MainActivity extends AppCompatActivity {
         handler.removeCallbacks(updateTask);
     }
 
-
-    @Override
-    public void onBackPressed() {
-        // Do nothing (override default back button behavior)
-    }
-
 }
