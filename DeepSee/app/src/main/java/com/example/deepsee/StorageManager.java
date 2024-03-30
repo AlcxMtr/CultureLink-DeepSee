@@ -2,9 +2,11 @@ package com.example.deepsee;
 
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 
 import com.example.deepsee.auto_suggest.AlgoStruct;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -105,8 +107,30 @@ public class StorageManager {
         }
     }
 
-    public void syncStorageManage(){
+    public void updateStorageManager(){
+        PackageManager pm = context.getPackageManager();
+        apps = pm.getInstalledApplications(PackageManager.GET_META_DATA);
+
+        // Remove System Packages from the list before drawing:
+        apps.removeIf(packageInfo ->
+                (pm.getLaunchIntentForPackage(packageInfo.packageName) == null));
+
+        //Create dictionary from category number -> list of apps in said category
+        categories = new HashMap<>();
+        for (ApplicationInfo p : apps) {
+            if (!categories.containsKey(p.category)) {
+                categories.put(p.category, new ArrayList<ApplicationInfo>());
+            }
+            categories.get(p.category).add(p);
+        }
+        syncStorageManager();
+    }
+
+    public void syncStorageManager(){
         setAlgoStruct(MainActivity.reccomender);
+        setApps(apps);
+        setCategories(categories);
+
         System.out.println("Updated file sys....-----------------------------------------------------------------------------\n\n\n");
     }
 

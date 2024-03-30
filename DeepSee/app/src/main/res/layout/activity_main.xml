@@ -21,6 +21,7 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:layout_editor_absoluteX="10dp">
 
+
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="24dp"
@@ -232,6 +233,5 @@
         app:layout_constraintBottom_toTopOf="@+id/show_hide_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>
 
