@@ -57,7 +57,7 @@ public class EmergencyContactAdd extends Fragment {
         contacts = Contact.getContacts(binding.addNewRecyclerview.getContext());
 
         for (Contact contact: contacts) {
-            img.add(R.drawable.ic_launcher_foreground);
+            img.add(R.drawable.contacts);
             name.add(contact.getName());
             number.add(contact.getContactNumber());
 

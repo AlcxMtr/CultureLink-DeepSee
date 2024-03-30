@@ -102,7 +102,7 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
             if (position != RecyclerView.NO_POSITION) {
 //
                 if(addButton.getText().toString().equals("Remove")){
-                    EmergencyContactAdd.img.add(R.drawable.ic_launcher_foreground);
+                    EmergencyContactAdd.img.add(R.drawable.contacts);
                     EmergencyContactAdd.name.add((String) name.getText());
                     EmergencyContactAdd.number.add((String) number.getText());
                     EmergencyContactAdd.added_img.remove(position);
@@ -122,7 +122,7 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
                     System.out.println(addButton.getText());
                     //addButton.setText("Remove");
                     System.out.println(addButton.getText());
-                    EmergencyContactAdd.added_img.add(R.drawable.ic_launcher_foreground);
+                    EmergencyContactAdd.added_img.add(R.drawable.contacts);
                     EmergencyContactAdd.added_name.add((String) name.getText());
                     EmergencyContactAdd.added_number.add((String) number.getText());
                     EmergencyContactAdd.img.remove(position);
