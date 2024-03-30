@@ -29,7 +29,7 @@
         android:layout_width="160dp"
         android:layout_height="30dp"
         android:layout_marginEnd="124dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="16dp"
         android:text="Number"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
