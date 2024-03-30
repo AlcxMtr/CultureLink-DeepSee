@@ -8,6 +8,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
 
+import com.example.deepsee.messaging.SMSActivity;
+
 
 public class ShortcutsDrawerActivity extends Activity {
 
@@ -30,8 +32,8 @@ public class ShortcutsDrawerActivity extends Activity {
         conversationsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ShortcutsDrawerActivity.this, MainActivity.class);
-                startActivity(intent);
+                Intent msg_intent = new Intent(ShortcutsDrawerActivity.this, SMSActivity.class);
+                startActivity(msg_intent);
             }
         });
 
@@ -39,7 +41,7 @@ public class ShortcutsDrawerActivity extends Activity {
         assistantButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://assistant.google.com"));
+                Intent intent = new Intent(Intent.ACTION_VOICE_COMMAND).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
             }
         });
@@ -48,7 +50,7 @@ public class ShortcutsDrawerActivity extends Activity {
         emcButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ShortcutsDrawerActivity.this, MainActivity.class);
+                Intent intent = new Intent(ShortcutsDrawerActivity.this, EmrgActivity.class);
                 startActivity(intent);
             }
         });
@@ -64,7 +66,6 @@ public class ShortcutsDrawerActivity extends Activity {
     }
 
     // TODO: NEED DRAWABLES
-    // TODO: NEED TO ADD THIS TO QUICKSETTINGS AND TRANSLATION
     // Closes this activity when touched:
     @Override
     public boolean onTouchEvent(MotionEvent event) {

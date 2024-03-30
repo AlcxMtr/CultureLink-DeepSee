@@ -15,9 +15,11 @@
         android:layout_height="150dp"
         android:layout_margin="10dp"
         android:background="@drawable/weather_widget"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
         app:layout_constraintTop_toTopOf="parent"
         tools:layout_editor_absoluteX="10dp">
-
 
         <ImageView
             android:id="@+id/imageView"
@@ -156,16 +158,30 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <Button
+    <!--    <androidx.fragment.app.FragmentContainerView-->
+<!--        android:id="@+id/fragmentContainerView2"-->
+<!--        android:name="com.example.deepsee.ShortcutsContainerFragment"-->
+<!--        android:layout_width="215dp"-->
+<!--        android:layout_height="344dp"-->
+<!--        android:layout_marginTop="48dp"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.214"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintVertical_bias="0.484" />-->
+
+    <ImageButton
         android:id="@+id/show_hide_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Show/Hide App Drawer"
+        android:background="@drawable/drawer_icon"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.954" />
+        app:layout_constraintVertical_bias="0.958" />
 
     <Button
         android:id="@+id/emergency_button"
@@ -218,12 +234,28 @@ I thought not. It's not a story the Jedi would tell you. It's a Sith legend. Dar
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.078"
+        app:layout_constraintHorizontal_bias="0.014"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.052"
+        app:layout_constraintVertical_bias="0.305"
         app:srcCompat="@android:drawable/ic_menu_add" />
+    <HorizontalScrollView
+        android:id="@+id/Messages_widget"
+        android:layout_width="327dp"
+        android:layout_height="167dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.809"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/weather"
+        app:layout_constraintVertical_bias="0.118">
 
+        <LinearLayout
+            android:id="@+id/Messages_widget_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" />
+    </HorizontalScrollView>
     <!--    <androidx.fragment.app.FragmentContainerView-->
     <!--        android:id="@+id/fragmentContainerView2"-->
     <!--        android:name="com.example.deepsee.ShortcutsContainerFragment"-->
@@ -253,5 +285,6 @@ I thought not. It's not a story the Jedi would tell you. It's a Sith legend. Dar
         app:layout_constraintBottom_toTopOf="@+id/show_hide_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
 

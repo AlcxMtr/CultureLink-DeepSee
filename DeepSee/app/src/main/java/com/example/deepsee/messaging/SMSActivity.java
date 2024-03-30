@@ -39,7 +39,7 @@ public class SMSActivity extends AppCompatActivity {
             System.out.println("name: " + contact.getName() + " num: " + contact.getContactNumber());
         }
         SMSReader smsReader = new SMSReader();
-        List<SMSMessages> smsMessages = smsReader.readSMS(SMSActivity.this, contacts);
+        List<SMSMessages> smsMessages = smsReader.readSMS(SMSActivity.this, contacts,contacts.size());
         displaySMSMessages(smsMessages);
 
         handler = new Handler();
@@ -51,7 +51,7 @@ public class SMSActivity extends AppCompatActivity {
         public void run() {
 
             SMSReader smsReader = new SMSReader();
-            List<SMSMessages> smsMessages = smsReader.readSMS(SMSActivity.this, contacts);
+            List<SMSMessages> smsMessages = smsReader.readSMS(SMSActivity.this, contacts,contacts.size());
             displaySMSMessages(smsMessages);
             handler.postDelayed(this, 1000);
         }
@@ -80,7 +80,8 @@ public class SMSActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(Intent.ACTION_VIEW);
-                    intent.setData(Uri.parse("smsto:" + smsMessage.getContactName())); // Opens default messaging app with the specific contact
+                    intent.setData(Uri.parse("smsto:" + smsMessage.getContactName()));
+                    // Opens default messaging app with the specific contact
                     startActivity(intent);
                 }
             });
