@@ -35,9 +35,11 @@ public class EmrgActivity extends AppCompatActivity {
         appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
 
-        EmergencyContactView.display_img.add(R.drawable.contacts);
-        EmergencyContactView.display_name.add("POLICE");
-        EmergencyContactView.display_number.add("911");
+        if(!EmergencyContactView.display_number.contains("911")){
+            EmergencyContactView.display_img.add(R.drawable.contacts);
+            EmergencyContactView.display_name.add("POLICE");
+            EmergencyContactView.display_number.add("911");
+        }
 
         binding.fab.setOnClickListener(new View.OnClickListener() {
             @Override

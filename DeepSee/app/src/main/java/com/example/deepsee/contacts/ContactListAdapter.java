@@ -110,9 +110,9 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
                     EmergencyContactAdd.name.add((String) name.getText());
                     EmergencyContactAdd.number.add((String) number.getText());
 
-                    EmergencyContactView.display_img.remove(position);
-                    EmergencyContactView.display_name.remove(position);
-                    EmergencyContactView.display_number.remove(position);
+                    EmergencyContactView.display_img.remove(position+1);
+                    EmergencyContactView.display_name.remove(position+1);
+                    EmergencyContactView.display_number.remove(position+1);
 
                     EmergencyContactAdd.added_img.remove(position);
                     EmergencyContactAdd.added_name.remove(position);
@@ -124,7 +124,7 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
 
                     EmergencyContactAdd.adapter.notifyItemInserted(EmergencyContactAdd.added_img.size());
                     EmergencyContactAdd.added_adapter.notifyItemRemoved(position);
-                    EmergencyContactView.display_adapter.notifyItemRemoved(position);
+                    EmergencyContactView.display_adapter.notifyItemRemoved(position+1);
                     //addButton.setText("Add");
 
                 }
