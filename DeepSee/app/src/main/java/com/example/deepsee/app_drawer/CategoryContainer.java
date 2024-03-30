@@ -39,7 +39,7 @@ public class CategoryContainer extends RecyclerView.ViewHolder {
         //Find reference to RecyclerView and TextView within category_card layout
         this.apps = itemView.findViewById(R.id.apps_recycler);
         this.category_name = itemView.findViewById(R.id.category_grid_name);
-        this.open = true;
+        this.open = false;
         this.arrow = itemView.findViewById(R.id.category_arrow);
         itemView.findViewById(R.id.category_grid_name).setOnClickListener(view -> toggleCategoryView());
     }
