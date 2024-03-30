@@ -4,32 +4,4 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".accessibility.TextAndSpeech">
-
-    <Button
-        android:id="@+id/t2s"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="readText"
-        android:text="Read"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.499" />
-
-    <EditText
-        android:id="@+id/message"
-        android:layout_width="405dp"
-        android:layout_height="59dp"
-        android:layout_marginBottom="76dp"
-        android:hint="Enter text here"
-        android:inputType="text"
-        app:layout_constraintBottom_toTopOf="@+id/t2s"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.94" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    tools:context=".ScreenReaderActivity"/>
