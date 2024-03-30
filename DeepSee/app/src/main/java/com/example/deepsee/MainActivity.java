@@ -31,6 +31,8 @@ import com.android.volley.toolbox.Volley;
 import com.example.deepsee.contacts.Contact;
 import com.example.deepsee.auto_suggest.AlgoStruct;
 import com.example.deepsee.databinding.ActivityMainBinding;
+import com.example.deepsee.emerg.EmrgActivity;
+
 import com.example.deepsee.messaging.SMSMessages;
 import com.example.deepsee.messaging.SMSReader;
 import com.example.deepsee.weather.WeatherListener;
@@ -38,6 +40,9 @@ import com.example.deepsee.weather.WeatherRequest;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
+
+
+import androidx.appcompat.app.AlertDialog;
 
 
 
@@ -72,8 +77,8 @@ import androidx.work.WorkRequest;
 
 import java.io.IOException;
 
-import android.widget.Button;
 
+import android.widget.Button;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -336,6 +341,11 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void run() {
             getLastLocation();
+            ArrayList<Contact> contacts;
+            contacts = Contact.getContacts(MainActivity.this);
+            SMSReader smsReader = new SMSReader();
+            List<SMSMessages> smsMessages = smsReader.readSMS(MainActivity.this, contacts,5);
+            SMSMessages_widget(smsMessages);
             handler.postDelayed(this, 10000);
         }
     };
@@ -470,6 +480,7 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
         handler.removeCallbacks(updateTask);
     }
+
 
     @Override
     public void onBackPressed() {

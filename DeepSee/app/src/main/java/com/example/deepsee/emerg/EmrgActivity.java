@@ -1,7 +1,8 @@
-package com.example.deepsee;
+package com.example.deepsee.emerg;
 
 import android.os.Bundle;
 
+import com.example.deepsee.R;
 import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,6 +26,7 @@ public class EmrgActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         binding = ActivityEmergencyViewBinding.inflate(getLayoutInflater());
+
         setContentView(binding.getRoot());
 
         setSupportActionBar(binding.toolbar);
@@ -32,6 +34,10 @@ public class EmrgActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_emergency_view);
         appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+
+        EmergencyContactView.display_img.add(R.drawable.contacts);
+        EmergencyContactView.display_name.add("POLICE");
+        EmergencyContactView.display_number.add("911");
 
         binding.fab.setOnClickListener(new View.OnClickListener() {
             @Override

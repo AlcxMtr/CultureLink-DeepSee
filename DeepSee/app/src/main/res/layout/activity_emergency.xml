@@ -13,7 +13,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#D2EAED">
+        android:background="#FFFFFF">
 
         <Button
             android:id="@+id/Done_button"
@@ -21,6 +21,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="40dp"
             android:text="Done"
+            android:textColorLink="#2196F3"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"
