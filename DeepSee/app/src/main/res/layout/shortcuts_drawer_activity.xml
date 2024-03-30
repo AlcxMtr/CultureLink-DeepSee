@@ -17,8 +17,8 @@
         app:layout_constraintEnd_toStartOf="@+id/AssistantText"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.438" />
+        app:layout_constraintTop_toBottomOf="@+id/Conversations"
+        app:layout_constraintVertical_bias="0.149" />
 
     <ImageButton
         android:id="@+id/EMCButton"
@@ -31,8 +31,9 @@
         app:layout_constraintEnd_toStartOf="@+id/EMCText"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.679" />
+        app:layout_constraintTop_toBottomOf="@+id/AssistantButton"
+        app:layout_constraintVertical_bias="0.266" />
+
 
     <ImageButton
         android:id="@+id/AKSettings"
@@ -45,9 +46,8 @@
         app:layout_constraintEnd_toStartOf="@+id/SettingsText"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.895" />
-
+        app:layout_constraintTop_toBottomOf="@+id/EMCButton"
+        app:layout_constraintVertical_bias="0.473" />
 
     <TextView
         android:id="@+id/AssistantText"
@@ -55,11 +55,11 @@
         android:layout_height="wrap_content"
         android:text="Voice Commands"
         android:textSize="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/AssistantButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.326" />
+        app:layout_constraintVertical_bias="0.931" />
 
     <TextView
         android:id="@+id/EMCText"
@@ -67,11 +67,12 @@
         android:layout_height="wrap_content"
         android:text="Emergency Contacts"
         android:textSize="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/EMCButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.951" />
 
     <TextView
         android:id="@+id/SettingsText"
@@ -79,11 +80,11 @@
         android:layout_height="wrap_content"
         android:text="Settings"
         android:textSize="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/AKSettings"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.651" />
+        app:layout_constraintVertical_bias="0.96" />
 
     <ImageButton
         android:id="@+id/Conversations"
@@ -96,7 +97,7 @@
         app:layout_constraintHorizontal_bias="0.519"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.143" />
+        app:layout_constraintVertical_bias="0.149" />
 
     <TextView
         android:id="@+id/ConvoText"
@@ -104,11 +105,11 @@
         android:layout_height="wrap_content"
         android:text="Conversations"
         android:textSize="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/Conversations"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.163" />
+        app:layout_constraintVertical_bias="0.86" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
