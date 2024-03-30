@@ -1,9 +1,10 @@
 package com.example.deepsee.auto_suggest;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class SortedIncrementList {
+public class SortedIncrementList implements Serializable {
 
     // For apps used efficient times or less, insertion will be guaranteed O(1)
     // For apps used more than efficient times, it will in practice be O(1)
