@@ -1,7 +1,8 @@
-package com.example.deepsee;
+package com.example.deepsee.emerg;
 
 import android.os.Bundle;
 
+import com.example.deepsee.R;
 import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,6 +26,7 @@ public class EmrgActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         binding = ActivityEmergencyViewBinding.inflate(getLayoutInflater());
+
         setContentView(binding.getRoot());
 
         setSupportActionBar(binding.toolbar);

@@ -37,6 +37,8 @@ import com.android.volley.toolbox.Volley;
 import com.example.deepsee.contacts.Contact;
 import com.example.deepsee.auto_suggest.AlgoStruct;
 import com.example.deepsee.databinding.ActivityMainBinding;
+import com.example.deepsee.emerg.EmrgActivity;
+
 import com.example.deepsee.messaging.SMSMessages;
 import com.example.deepsee.messaging.SMSReader;
 import com.example.deepsee.weather.WeatherListener;
@@ -44,8 +46,6 @@ import com.example.deepsee.weather.WeatherRequest;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
-
-import com.example.deepsee.databinding.ActivityMainBinding;
 
 
 import androidx.appcompat.app.AlertDialog;
@@ -80,8 +80,8 @@ import androidx.work.WorkRequest;
 
 import java.io.IOException;
 
-import android.widget.Button;
 
+import android.widget.Button;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
