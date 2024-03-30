@@ -1,7 +1,5 @@
 package com.example.deepsee;
 
-
-
 import android.Manifest;
 
 import android.annotation.SuppressLint;
@@ -13,6 +11,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Context;
 
+import static java.util.concurrent.TimeUnit.HOURS;
+
+import android.Manifest;
+
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
@@ -22,14 +24,20 @@ import android.os.Build;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+
 import android.location.LocationManager;
 import android.net.Uri;
+
 import android.os.Bundle;
 
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
+
 import com.example.deepsee.contacts.Contact;
+
+import com.example.deepsee.accessibility.TextAndSpeech;
+import com.example.deepsee.auto_suggest.AlgoStruct;
 import com.example.deepsee.databinding.ActivityMainBinding;
 import com.example.deepsee.messaging.SMSMessages;
 import com.example.deepsee.messaging.SMSReader;
@@ -43,6 +51,7 @@ import com.example.deepsee.databinding.ActivityMainBinding;
 
 
 import androidx.appcompat.app.AlertDialog;
+
 
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -60,21 +69,28 @@ import androidx.core.content.ContextCompat;
 
 import androidx.navigation.ui.AppBarConfiguration;
 
-import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.work.ExistingPeriodicWorkPolicy;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
+import androidx.work.WorkRequest;
 
 
 import java.io.IOException;
 
 import android.widget.Button;
 
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 import com.example.deepsee.messaging.SMSActivity;
 
@@ -82,8 +98,6 @@ import android.provider.ContactsContract;
 
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import org.w3c.dom.Text;
 
 import android.widget.ImageButton;
 
@@ -117,6 +131,9 @@ public class MainActivity extends AppCompatActivity {
 
     private Handler handler;
 
+    public static AlgoStruct reccomender;
+    public static StorageManager storageManager;
+
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions,
                                            int[] grantResults) {
@@ -125,7 +142,6 @@ public class MainActivity extends AppCompatActivity {
 
 
     void sortAppCategories(){
-        pm = getPackageManager();
         // Get Package List:
         apps = pm.getInstalledApplications(PackageManager.GET_META_DATA);
 
@@ -146,7 +162,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        pm = getPackageManager();
+
         setContentView(R.layout.activity_main);
+        initializeRecommender();
 
         permissions = new String[]{
                 Manifest.permission.ACCESS_FINE_LOCATION,
@@ -171,6 +190,7 @@ public class MainActivity extends AppCompatActivity {
         // Persistent notification:
         showAlert();
 
+        Button shortcutsContainerButton = findViewById(R.id.shortcutsContainerButton);
         showHideButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -185,12 +205,53 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        messagesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View k) {
+                // Create an instance of the SMSReader class
+                Intent msg_intent = new Intent(MainActivity.this, SMSActivity.class);
+                startActivity(msg_intent);
+            }
+        });
+
+
+        emergencyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Fragment fragment = new EmergencyContactFragment();
+                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.fragment_container, fragment);
+                transaction.commit();
+            }
+        });
+        List<ShortcutContainer> launchables = new ArrayList<>();
+
+//        shortcutsFragment = new ShortcutsContainerFragment(launchables, pm);
+//        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+//        transaction.replace(R.id.shortcuts_holder, shortcutsFragment);
+//        transaction.commit();
+//        shortcutsContainerButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                shortcutsFragment.toggleVisibility();
+//            }
+//        });
+
+        btnSettings = (Button) findViewById(R.id.btnSettings);
+        btnSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+            }
+        });
+
         shortcutsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(MainActivity.this, ShortcutsDrawerActivity.class));
             }
         });
+
 
         weather_location = (TextView) findViewById(R.id.weather_location);
         temp = (TextView) findViewById(R.id.temperature);
@@ -212,6 +273,40 @@ public class MainActivity extends AppCompatActivity {
 
         handler = new Handler();
         handler.postDelayed(updateTask, 10000);
+    }
+
+    /*TODO
+    *  Tie storage manager and app-recommender together, and initialize them on app launch.*/
+    private void initializeRecommender() {
+        storageManager = new StorageManager(getBaseContext());
+        reccomender = storageManager.getAlgoStruct();
+        if (reccomender == null){
+            reccomender = new AlgoStruct();
+            storageManager.setAlgoStruct(reccomender);
+            System.out.println("Created recommender file.");
+        }
+        apps = storageManager.getApps();
+        categories = storageManager.getCategories();
+        if (apps == null || categories == null){
+            sortAppCategories();
+            storageManager.setApps(apps);
+            storageManager.setCategories(categories);
+            System.out.println("Created apps and categories file.");
+        }
+
+        SynchronizingWork.addTask(storageManager::syncStorageManage);
+
+        PeriodicWorkRequest wr = new PeriodicWorkRequest.Builder(
+                SynchronizingWork.class, 16, TimeUnit.MINUTES).build();
+
+
+        WorkManager.getInstance(getBaseContext()).enqueueUniquePeriodicWork(
+                "Synchronizing app", ExistingPeriodicWorkPolicy.KEEP, wr);
+
+        RecyclerView recommendedApp = findViewById(R.id.recommended_app_recycler);
+        ShortcutsAdapter adapter = new ShortcutsAdapter(getBaseContext(), apps, pm);
+        recommendedApp.setAdapter(adapter);
+        recommendedApp.setLayoutManager(new LinearLayoutManager(getBaseContext(), LinearLayoutManager.HORIZONTAL, false));
     }
 
     private boolean hasPermissions() {

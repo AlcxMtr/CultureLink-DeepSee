@@ -39,16 +39,8 @@ public class ShortcutsContainerFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // Populate the list of Launchables
-        populateLaunchables();
-
         // Set up the dropdown button
         System.out.println("Shortcut created");
-    }
-
-    public void toggleVisibility(){
-        this.visible = !visible;
-        this.binding.findViewById(R.id.shortcut_layout).setVisibility(visible?View.VISIBLE : View.GONE);
     }
 
     @Override
@@ -56,11 +48,10 @@ public class ShortcutsContainerFragment extends Fragment {
                              Bundle savedInstanceState) {
         System.out.println("Shortcut binder");
         this.binding = inflater.inflate(R.layout.shortcuts_fragment, container, false);
-        toggleVisibility();
         setupShortcutsRecyclerView(binding);
         // Use the inflated rootView as needed
-        ViewGroup.LayoutParams params = launchablesContainer.getLayoutParams();
-        launchablesContainer.setLayoutParams(params);
+//        ViewGroup.LayoutParams params = launchablesContainer.getLayoutParams();
+//        launchablesContainer.setLayoutParams(params);
         return binding;
     }
 
@@ -68,9 +59,7 @@ public class ShortcutsContainerFragment extends Fragment {
         this.launchablesContainer = binding.findViewById(R.id.launchablesContainer);
         // Find RecyclerView within AppDrawerLayout and initialize it
         RecyclerView appRecyclerView = launchablesContainer;
-        ShortcutsAdapter adapter = new ShortcutsAdapter();
-        appRecyclerView.setAdapter(adapter);
-        appRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+
     }
     private void populateLaunchables() {
         // Everyone put your buttons and things here.
