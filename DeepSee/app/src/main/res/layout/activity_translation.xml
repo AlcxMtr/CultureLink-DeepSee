@@ -23,7 +23,7 @@
             android:layout_height="153dp"
             android:scrollbars="vertical"
             android:text="Press Translate To Get Result"
-            android:textSize="20px"
+            android:textSize="30sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.506"
@@ -34,7 +34,7 @@
         <EditText
             android:id="@+id/translateInput"
             android:inputType="textMultiLine"
-            android:textSize="20px"
+            android:textSize="30sp"
             android:hint="Please highlight or input text"
             android:layout_width="223dp"
             android:layout_height="168dp"
