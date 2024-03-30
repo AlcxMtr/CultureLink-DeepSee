@@ -1,4 +1,6 @@
 package com.example.deepsee;
+import static java.util.concurrent.TimeUnit.HOURS;
+
 import android.Manifest;
 
 import android.content.Intent;
@@ -35,6 +37,13 @@ import androidx.navigation.ui.AppBarConfiguration;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.work.ExistingPeriodicWorkPolicy;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
+import androidx.work.WorkRequest;
 
 
 import java.io.IOException;
@@ -45,6 +54,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 import com.example.deepsee.messaging.SMSActivity;
 
@@ -85,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
     private Handler handler;
 
     public static AlgoStruct reccomender;
+    public static StorageManager storageManager;
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions,
@@ -106,7 +117,6 @@ public class MainActivity extends AppCompatActivity {
 //         }
     }
     void sortAppCategories(){
-        pm = getPackageManager();
         // Get Package List:
         apps = pm.getInstalledApplications(PackageManager.GET_META_DATA);
 
@@ -127,6 +137,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        pm = getPackageManager();
+
         setContentView(R.layout.activity_main);
         initializeRecommender();
 
@@ -152,7 +164,6 @@ public class MainActivity extends AppCompatActivity {
         Button emergencyButton = findViewById(R.id.emergency_button);
         ImageButton shortcutsButton = findViewById(R.id.shDrawerButton);
         Button shortcutsContainerButton = findViewById(R.id.shortcutsContainerButton);
-        sortAppCategories();
         showHideButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -200,15 +211,6 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //        });
 
-        Button t2s = findViewById(R.id.t2s_button);
-        t2s.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(MainActivity.this, TextAndSpeech.class);
-                startActivity(i);
-            }
-        });
-
         btnSettings = (Button) findViewById(R.id.btnSettings);
         btnSettings.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -223,6 +225,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this, ShortcutsDrawerActivity.class));
             }
         });
+
 
         weather_location = (TextView) findViewById(R.id.weather_location);
         temp = (TextView) findViewById(R.id.temperature);
@@ -241,8 +244,35 @@ public class MainActivity extends AppCompatActivity {
     /*TODO
     *  Tie storage manager and app-recommender together, and initialize them on app launch.*/
     private void initializeRecommender() {
-        reccomender = new AlgoStruct();
-//        System.out.println(Arrays.toString(reccomender.mostRelevant(10)));
+        storageManager = new StorageManager(getBaseContext());
+        reccomender = storageManager.getAlgoStruct();
+        if (reccomender == null){
+            reccomender = new AlgoStruct();
+            storageManager.setAlgoStruct(reccomender);
+            System.out.println("Created recommender file.");
+        }
+        apps = storageManager.getApps();
+        categories = storageManager.getCategories();
+        if (apps == null || categories == null){
+            sortAppCategories();
+            storageManager.setApps(apps);
+            storageManager.setCategories(categories);
+            System.out.println("Created apps and categories file.");
+        }
+
+        SynchronizingWork.addTask(storageManager::syncStorageManage);
+
+        PeriodicWorkRequest wr = new PeriodicWorkRequest.Builder(
+                SynchronizingWork.class, 16, TimeUnit.MINUTES).build();
+
+
+        WorkManager.getInstance(getBaseContext()).enqueueUniquePeriodicWork(
+                "Synchronizing app", ExistingPeriodicWorkPolicy.KEEP, wr);
+
+        RecyclerView recommendedApp = findViewById(R.id.recommended_app_recycler);
+        ShortcutsAdapter adapter = new ShortcutsAdapter(getBaseContext(), apps, pm);
+        recommendedApp.setAdapter(adapter);
+        recommendedApp.setLayoutManager(new LinearLayoutManager(getBaseContext(), LinearLayoutManager.HORIZONTAL, false));
     }
 
     private boolean hasPermissions() {

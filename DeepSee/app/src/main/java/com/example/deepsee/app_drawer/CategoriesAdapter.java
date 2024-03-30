@@ -80,6 +80,7 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoryContainer>{
     }
 
     //Fetch Application Info data from package manager
+    //TODO: Should also be memoized
     private void initiateData() {
         icons = new ArrayList<>(categories.keySet().size());
         labels = new ArrayList<>(categories.keySet().size());
@@ -158,23 +159,25 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoryContainer>{
 
             int pos = Arrays.binarySearch(keys, p.first.category);
             CategoryContainer container = (CategoryContainer) rv.findViewHolderForAdapterPosition(pos);
-            AppsAdapter adapter = container.getAdapter();
-            adapter.apps.remove((int)p.second);
-            icons.get(pos).remove((int)p.second);
-            launchers.get(pos).remove((int)p.second);
-            labels.get(pos).remove((int)p.second);
+            if (container != null){
+                AppsAdapter adapter = container.getAdapter();
+                adapter.apps.remove((int) p.second);
 
-            adapter.notifyItemRemoved(p.second);
-            adapter.notifyItemRangeChanged(p.second, adapter.apps.size());
+                adapter.notifyItemRemoved(p.second);
+                adapter.notifyItemRangeChanged(p.second, adapter.apps.size());
+                //As of right now, doesn't work
+                //            Intent intent = new Intent(parent.getContext(), parent.getContext().getClass());
+                //            PendingIntent sender = PendingIntent.getActivity(parent.getContext(), 0, intent, 0);
+                //            PackageInstaller mPackageInstaller = pm.getPackageInstaller();
+                //            mPackageInstaller.uninstall(p.first.packageName, sender.getIntentSender());
+            }
             String stringPackageName = p.first.packageName;
-            //As of right now, doesn't work
-//            Intent intent = new Intent(parent.getContext(), parent.getContext().getClass());
+            icons.get(pos).remove((int) p.second);
+            launchers.get(pos).remove((int) p.second);
+            labels.get(pos).remove((int) p.second);
             Intent i = new Intent(Intent.ACTION_DELETE);
-            i.setData(Uri.parse("package:"+stringPackageName));
+            i.setData(Uri.parse("package:" + stringPackageName));
             rv.getContext().startActivity(i);
-//            PendingIntent sender = PendingIntent.getActivity(parent.getContext(), 0, intent, 0);
-//            PackageInstaller mPackageInstaller = pm.getPackageInstaller();
-//            mPackageInstaller.uninstall(p.first.packageName, sender.getIntentSender());
         }
         finishUninstalling(v);
     }

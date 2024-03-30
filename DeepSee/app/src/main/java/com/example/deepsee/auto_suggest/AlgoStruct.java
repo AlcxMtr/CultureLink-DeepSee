@@ -1,10 +1,11 @@
 package com.example.deepsee.auto_suggest;
 
+import java.io.Serializable;
 import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.PriorityQueue;
 
-public class AlgoStruct {
+public class AlgoStruct implements Serializable {
 
     // These will be used to initialize efficient SortedIncrementLists
     public static final int EFFICIENT = 10;

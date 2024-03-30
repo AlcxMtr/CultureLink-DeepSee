@@ -26,6 +26,7 @@ import com.example.deepsee.R;
 import com.example.deepsee.auto_suggest.AlgoStruct;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Consumer;
@@ -165,6 +166,7 @@ public class AppsAdapter extends RecyclerView.Adapter<AppContainer> {
     //Launches app represented by pos
     private void launchApp(AppContainer v, int pos){
         MainActivity.reccomender.appOpened(apps.get(pos).packageName);
+//        MainActivity.storageManager.syncStorageManage();
         Intent launchIntent = launchers.get(pos);
         v.con.startActivity(launchIntent);
     }
