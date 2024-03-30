@@ -167,7 +167,7 @@ public class AppsAdapter extends RecyclerView.Adapter<AppContainer> {
     //Launches app represented by pos
     private void launchApp(AppContainer v, int pos){
         MainActivity.reccomender.appOpened(apps.get(pos).packageName);
-//        MainActivity.storageManager.syncStorageManage();
+        MainActivity.storageManager.updateStorageManager();
         Intent launchIntent = launchers.get(pos);
         v.con.startActivity(launchIntent);
     }

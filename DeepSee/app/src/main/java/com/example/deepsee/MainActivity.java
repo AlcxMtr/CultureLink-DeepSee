@@ -5,29 +5,19 @@ package com.example.deepsee;
 
 import android.Manifest;
 
-import android.annotation.SuppressLint;
-import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Context;
-
-import static java.util.concurrent.TimeUnit.HOURS;
-
-import android.Manifest;
 
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 
-import android.os.Build;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
-import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -35,7 +25,6 @@ import android.os.Bundle;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.example.deepsee.contacts.Contact;
-import com.example.deepsee.accessibility.TextAndSpeech;
 import com.example.deepsee.auto_suggest.AlgoStruct;
 import com.example.deepsee.databinding.ActivityMainBinding;
 import com.example.deepsee.messaging.SMSMessages;
@@ -46,18 +35,12 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 
-import com.example.deepsee.databinding.ActivityMainBinding;
-
-
-import androidx.appcompat.app.AlertDialog;
-
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
@@ -72,26 +55,16 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.work.ExistingPeriodicWorkPolicy;
-import androidx.work.OneTimeWorkRequest;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
-import androidx.work.WorkRequest;
-
-
-import java.io.IOException;
-
-import android.widget.Button;
 
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
-
-import com.example.deepsee.messaging.SMSActivity;
 
 import android.provider.ContactsContract;
 
@@ -187,7 +160,6 @@ public class MainActivity extends AppCompatActivity {
         // Persistent notification:
         showAlert();
 
-        Button shortcutsContainerButton = findViewById(R.id.shortcutsContainerButton);
         showHideButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -251,7 +223,7 @@ public class MainActivity extends AppCompatActivity {
             System.out.println("Created apps and categories file.");
         }
 
-        SynchronizingWork.addTask(storageManager::syncStorageManage);
+        SynchronizingWork.addTask(storageManager::syncStorageManager);
 
         PeriodicWorkRequest wr = new PeriodicWorkRequest.Builder(
                 SynchronizingWork.class, 16, TimeUnit.MINUTES).build();
@@ -264,6 +236,14 @@ public class MainActivity extends AppCompatActivity {
         ShortcutsAdapter adapter = new ShortcutsAdapter(getBaseContext(), apps, pm);
         recommendedApp.setAdapter(adapter);
         recommendedApp.setLayoutManager(new LinearLayoutManager(getBaseContext(), LinearLayoutManager.HORIZONTAL, false));
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(getPackageName() + "android.net.conn.PACKAGE_INSTALL");
+        filter.addAction(getPackageName() + "android.net.conn.PACKAGE_ADDED");
+        filter.addAction(getPackageName() + "android.net.conn.PACKAGE_REMOVED");
+
+        BroadcastReader myReceiver = new BroadcastReader(storageManager);
+        registerReceiver(myReceiver, filter);
+//        storageManager.updateStorageManager();
     }
 
     private boolean hasPermissions() {
@@ -453,6 +433,17 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         handler.removeCallbacks(updateTask);
+    }
+
+    @Override
+    public void onBackPressed() {
+        // Check if the fragment is currently displayed
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+        if (fragment instanceof AppDrawerFragment) {
+            getSupportFragmentManager().beginTransaction().remove(fragment).commit();
+        } else {
+            super.onBackPressed();
+        }
     }
 
 }
