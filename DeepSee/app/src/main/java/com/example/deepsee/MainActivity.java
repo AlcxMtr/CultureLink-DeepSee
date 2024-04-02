@@ -106,6 +106,9 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String CHANNEL_ID = "Persistence";
     private boolean isAppDrawerVisible = false;
+
+    private boolean shouldSaveToSystem = true;
+
     public List<ApplicationInfo> apps;
     public HashMap<Integer, List<ApplicationInfo>> categories;
 
@@ -132,6 +135,8 @@ public class MainActivity extends AppCompatActivity {
 
     public static AlgoStruct reccomender;
     public static StorageManager storageManager;
+
+    ArrayList<Contact> contacts;
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions,
@@ -184,9 +189,12 @@ public class MainActivity extends AppCompatActivity {
         // Persistent notification:
         showAlert();
 
+        contacts = Contact.getContactsPhone(MainActivity.this);
+
         showHideButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                System.out.println("APP DRAWER BUTTON! APP DRAWER BUTTON! APP DRAWER BUTTON! \n\n");
 
                 // Start AppDrawerFragment
                 Fragment fragment = new AppDrawerFragment(categories, apps, pm);
@@ -230,9 +238,7 @@ public class MainActivity extends AppCompatActivity {
         getLastLocation();
 
 
-        ArrayList<Contact> contacts;
 
-        contacts = Contact.getContacts(MainActivity.this);
 
         SMSReader smsReader = new SMSReader();
         List<SMSMessages> smsMessages = smsReader.readSMS(MainActivity.this, contacts,5);
@@ -302,7 +308,11 @@ public class MainActivity extends AppCompatActivity {
         super.onStop();
         // Sync is being called likely more often than necessary
         // Could optimize by moving to onDestroy() + sync every 15 min
-        storageManager.syncStorageManager();
+        System.out.println("WE ARE CALLING ONSTOP()!!");
+        if (shouldSaveToSystem) {
+            storageManager.syncStorageManager();
+        }
+        shouldSaveToSystem = true;
     }
 
     private boolean hasPermissions() {
@@ -359,8 +369,6 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void run() {
             getLastLocation();
-            ArrayList<Contact> contacts;
-            contacts = Contact.getContacts(MainActivity.this);
             SMSReader smsReader = new SMSReader();
             List<SMSMessages> smsMessages = smsReader.readSMS(MainActivity.this, contacts,5);
             SMSMessages_widget(smsMessages);
@@ -505,6 +513,7 @@ public class MainActivity extends AppCompatActivity {
         // Check if the fragment is currently displayed
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
         if (fragment instanceof AppDrawerFragment) {
+            shouldSaveToSystem = false;
             getSupportFragmentManager().beginTransaction().remove(fragment).commit();
         } else {
             super.onBackPressed();
