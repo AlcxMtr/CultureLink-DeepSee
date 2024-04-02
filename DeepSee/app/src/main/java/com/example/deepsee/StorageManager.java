@@ -38,6 +38,7 @@ public class StorageManager {
     }
 
     public void setApps(List<ApplicationInfo> apps) {
+        this.apps = apps;
         writeObjectToFile("apps.dat", (Serializable) appToString(apps));
     }
 
@@ -88,6 +89,7 @@ public class StorageManager {
     }
 
     public void setAlgoStruct(AlgoStruct struct) {
+        this.algoStruct = struct;
         writeObjectToFile("algoStruct.dat", struct);
     }
 
@@ -127,10 +129,9 @@ public class StorageManager {
     }
 
     public void syncStorageManager(){
-        setAlgoStruct(MainActivity.reccomender);
+        setAlgoStruct(algoStruct);
         setApps(apps);
         setCategories(categories);
-
         System.out.println("Updated file sys....-----------------------------------------------------------------------------\n\n\n");
     }
 

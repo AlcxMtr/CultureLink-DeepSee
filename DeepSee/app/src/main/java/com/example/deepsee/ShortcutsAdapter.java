@@ -94,6 +94,8 @@ public class ShortcutsAdapter extends RecyclerView.Adapter<AppContainer> {
     //Launches app represented by pos
     private void launchApp(AppContainer v, int pos){
         MainActivity.reccomender.appOpened(apps.get(pos).packageName);
+        System.out.println("App open tracked: " + apps.get(pos).packageName);
+
         Intent launchIntent = launchers.get(pos);
         v.con.startActivity(launchIntent);
     }

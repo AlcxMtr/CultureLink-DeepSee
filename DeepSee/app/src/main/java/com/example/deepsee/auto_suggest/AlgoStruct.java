@@ -187,4 +187,28 @@ public class AlgoStruct implements Serializable {
         }
         return topApps;
     }
+
+    public void printNMostUsed(int n) {
+        HashMap<Integer, Integer> apps = appUsageList.nMostUsed(n);
+        for (int app: apps.keySet()) {
+            int usageCount = apps.get(app);
+            System.out.println("App name: " + idAppMap.get(app) + ", Usage Count: " + usageCount);
+        }
+    }
+
+    public void printAppCounts() {
+        appUsageList.printList();
+    }
+
+    public void printSequences() {
+        for (Integer s : sequenceMatrix.keySet()) {
+            System.out.println("App: " + idAppMap.get(s));
+            sequenceMatrix.get(s).printList();
+        }
+    }
+
+    public void printHour(int hour) {
+        System.out.println("Hour: " + hour);
+        hourOfDay[hour].printList();
+    }
 }

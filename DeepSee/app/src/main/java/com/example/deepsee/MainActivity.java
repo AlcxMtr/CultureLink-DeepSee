@@ -2,6 +2,7 @@ package com.example.deepsee;
 
 import android.Manifest;
 
+import android.app.Application;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -138,7 +139,6 @@ public class MainActivity extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
-
     void sortAppCategories(){
         // Get Package List:
         apps = pm.getInstalledApplications(PackageManager.GET_META_DATA);
@@ -175,13 +175,10 @@ public class MainActivity extends AppCompatActivity {
         if (!hasPermissions()) {
             ActivityCompat.requestPermissions(MainActivity.this, permissions, 1);
         }
-        ActivityCompat.requestPermissions(MainActivity.this, permissions, 1);
-
 
         ImageButton showHideButton = findViewById(R.id.show_hide_button);
 
         ImageButton shortcutsButton = findViewById(R.id.shDrawerButton);
-
 
         // Persistent notification:
         showAlert();
@@ -233,7 +230,9 @@ public class MainActivity extends AppCompatActivity {
 
 
         ArrayList<Contact> contacts;
+
         contacts = Contact.getContacts(MainActivity.this);
+
         SMSReader smsReader = new SMSReader();
         List<SMSMessages> smsMessages = smsReader.readSMS(MainActivity.this, contacts,5);
         SMSMessages_widget(smsMessages);
@@ -246,12 +245,13 @@ public class MainActivity extends AppCompatActivity {
     /*TODO
     *  Tie storage manager and app-recommender together, and initialize them on app launch.*/
     private void initializeRecommender() {
+        System.out.println("INITIALIZE RECOMMENDER");
         storageManager = new StorageManager(getBaseContext());
         reccomender = storageManager.getAlgoStruct();
         if (reccomender == null){
             reccomender = new AlgoStruct();
             storageManager.setAlgoStruct(reccomender);
-            System.out.println("Created recommender file.");
+            System.out.println("Created/overwritten recommender file.");
         }
         apps = storageManager.getApps();
         categories = storageManager.getCategories();
@@ -262,18 +262,18 @@ public class MainActivity extends AppCompatActivity {
             System.out.println("Created apps and categories file.");
         }
 
-        SynchronizingWork.addTask(storageManager::syncStorageManager);
+        // DELETE? ---------------------------------------------------------------------------
+        // SynchronizingWork.addTask(storageManager::syncStorageManager);
 
-        PeriodicWorkRequest wr = new PeriodicWorkRequest.Builder(
-                SynchronizingWork.class, 16, TimeUnit.MINUTES).build();
+        // PeriodicWorkRequest wr = new PeriodicWorkRequest.Builder(
+        //         SynchronizingWork.class, 16, TimeUnit.MINUTES).build();
 
-
-        WorkManager.getInstance(getBaseContext()).enqueueUniquePeriodicWork(
-                "Synchronizing app", ExistingPeriodicWorkPolicy.KEEP, wr);
+        // WorkManager.getInstance(getBaseContext()).enqueueUniquePeriodicWork(
+        //         "Synchronizing app", ExistingPeriodicWorkPolicy.KEEP, wr);
+        // DELETE? ---------------------------------------------------------------------------
 
         RecyclerView recommendedApp = findViewById(R.id.recommended_app_recycler);
-        ShortcutsAdapter adapter = new ShortcutsAdapter(getBaseContext(), apps, pm);
-        recommendedApp.setAdapter(adapter);
+        // RecyclerView DETAILS NOT NECESSARY BECAUSE PERFORMED IN onResume() BELOW
         recommendedApp.setLayoutManager(new LinearLayoutManager(getBaseContext(), LinearLayoutManager.HORIZONTAL, false));
 
         IntentFilter filter = new IntentFilter();
@@ -283,8 +283,25 @@ public class MainActivity extends AppCompatActivity {
 
         BroadcastReader myReceiver = new BroadcastReader(storageManager);
         registerReceiver(myReceiver, filter);
-//        storageManager.updateStorageManager();
+    }
 
+    // This method will recalculate and redraw app recommendations on each home page visit
+    @Override
+    protected void onResume() {
+        super.onResume();
+        System.out.println("Redrawing recommender recycler!");
+        RecyclerView recommendedApp = findViewById(R.id.recommended_app_recycler);
+        ShortcutsAdapter adapter = new ShortcutsAdapter(getBaseContext(), apps, pm);
+        recommendedApp.setAdapter(adapter);
+    }
+
+    // Save the app recommendation and other data when the application is stopped
+    @Override
+    protected void onStop() {
+        super.onStop();
+        // Sync is being called likely more often than necessary
+        // Could optimize by moving to onDestroy() + sync every 15 min
+        storageManager.syncStorageManager();
     }
 
     private boolean hasPermissions() {
