@@ -51,6 +51,7 @@ public class SMSReader {
                 for (Contact contact: contacts) {
                     if (contact.getName().equals(address) || contact.getContactNumber().equals(address)) {
                         exists = true;
+                        address = contact.getName();
                         break;
                     }
                 }
