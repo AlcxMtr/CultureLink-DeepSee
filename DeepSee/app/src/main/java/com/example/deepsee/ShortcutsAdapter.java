@@ -24,6 +24,8 @@ import com.example.deepsee.app_drawer.CategoriesAdapter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Consumer;
@@ -33,6 +35,8 @@ import java.util.stream.Collectors;
 // Handles pretty much purely internal activities.
 public class ShortcutsAdapter extends RecyclerView.Adapter<AppContainer> {
     private final Context con;
+
+    private final int LENGTH = 5;
     private final List<ApplicationInfo> apps;
     //Prefetched data for view holders
     private final List<Drawable> icons;
@@ -45,10 +49,20 @@ public class ShortcutsAdapter extends RecyclerView.Adapter<AppContainer> {
         this.icons = new ArrayList<>();
         this.labels = new ArrayList<>();
         this.launchers = new ArrayList<>();
-        String[] names = MainActivity.reccomender.mostRelevant(5);
-        apps = allApps.stream().filter(x -> Arrays.stream(names).anyMatch(
-                s -> x.packageName.equals(s)))
-                .collect(Collectors.toList());
+        this.apps = new ArrayList<>();
+
+        HashMap<String, ApplicationInfo> appMap = new HashMap<>();
+
+        for (ApplicationInfo app : allApps) {
+            appMap.put(app.packageName, app);
+        }
+
+        String[] names = MainActivity.reccomender.mostRelevant(LENGTH);
+        for (int i = 0; i < LENGTH; i++) {
+            if (appMap.containsKey(names[i])) {
+                apps.add(appMap.get(names[i]));
+            }
+        };
 
         for (ApplicationInfo info:apps){
             try {
