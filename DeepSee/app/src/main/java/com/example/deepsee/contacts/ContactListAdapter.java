@@ -1,6 +1,8 @@
 package com.example.deepsee.contacts;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,16 +41,6 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-//        if(EmergencyContactAdd.number.contains(number.get(0))){
-//            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.emerg_contact_rectangle,parent,false);
-//            return new ViewHolder(view);
-//        }
-//        else if(EmergencyContactAdd.added_number.contains(number.get(0))){
-//            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.emerg_contact_delete_rectangle,parent,false);
-//            return new ViewHolder(view);
-//        }
-//        else{View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.emerg_contact_delete_rectangle,parent,false);
-//        return new ViewHolder(view);}
 
         View view;
         if(this.flag_added == 0){
@@ -70,6 +62,7 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
         holder.number.setText("" + number.get(position));
 
 
+
     }
 
     @Override
@@ -83,17 +76,37 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
         public TextView name;
         public TextView number;
         public Button addButton;
+        public ImageView callButton;
 
 
 
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+            callButton = (ImageView) itemView.findViewById(R.id.callButton);
             contactPhoto = (ImageView) itemView.findViewById(R.id.emerg_contact_photo);
             name = (TextView) itemView.findViewById(R.id.Emerg_Contact_Name);
             number = (TextView) itemView.findViewById(R.id.Emerg_Contact_Number);
             addButton = (Button) itemView.findViewById(R.id.button);
             addButton.setOnClickListener(this::onClick);
+
+            if(callButton != null){
+
+                callButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        int position = getBindingAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION) {
+
+
+                        Intent callIntent = new Intent(Intent.ACTION_CALL);
+                        System.out.println("name: " + name.getText() + " num: " + number.getText());
+
+                        callIntent.setData(Uri.parse("tel:" + number.getText()));
+                        v.getContext().startActivity(callIntent);}
+                    }
+                });
+            }
 
         }
 
@@ -104,6 +117,8 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
 
             int position = getBindingAdapterPosition();
             if (position != RecyclerView.NO_POSITION) {
+
+
 //
                 if(addButton.getText().toString().equals("Remove")){
                     EmergencyContactAdd.img.add(R.drawable.contacts);
@@ -118,9 +133,7 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
                     EmergencyContactAdd.added_name.remove(position);
                     EmergencyContactAdd.added_number.remove(position);
                     System.out.println("name: " + name.getText() + " num: " + number.getText());
-//                    EmergencyContactAdd.adapter = new ContactListAdapter(EmergencyContactAdd.img,EmergencyContactAdd.name,EmergencyContactAdd.number);
-//                    EmergencyContactAdd.added_adapter = new ContactListAdapter(EmergencyContactAdd.added_img,EmergencyContactAdd.added_name,EmergencyContactAdd.added_number);
-////
+
 
                     EmergencyContactAdd.adapter.notifyItemInserted(EmergencyContactAdd.added_img.size());
                     EmergencyContactAdd.added_adapter.notifyItemRemoved(position);
@@ -151,9 +164,12 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
                     EmergencyContactAdd.added_adapter.notifyItemInserted(EmergencyContactAdd.added_img.size());
                     EmergencyContactView.display_adapter.notifyItemInserted(EmergencyContactView.display_img.size());
                     EmergencyContactAdd.adapter.notifyItemRemoved(position);
-
-
                 }
+
+
+
+
+
             }
 
         }
