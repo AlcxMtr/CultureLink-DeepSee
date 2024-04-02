@@ -48,7 +48,7 @@
         app:layout_constraintVertical_bias="0.146" />
 
     <ImageView
-        android:id="@+id/imageView7"
+        android:id="@+id/callButton"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_marginTop="2dp"

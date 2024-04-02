@@ -32,6 +32,8 @@ public class EmergencyContactView extends Fragment {
             Bundle savedInstanceState
     ) {
 
+
+
         binding = EmrgContentViewBinding.inflate(inflater, container, false);
         return binding.getRoot();
 
@@ -39,11 +41,6 @@ public class EmergencyContactView extends Fragment {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        //EmergencyContactAdd.added_adapter = new ContactListAdapter(EmergencyContactAdd.added_img,EmergencyContactAdd.added_name,EmergencyContactAdd.added_number);
-//        RecyclerView added_recyclerView = binding.emergencyContactsRecycler;
-//        added_recyclerView.setAdapter(EmergencyContactAdd.added_adapter);
-//        added_recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
 
         display_adapter = new ContactListAdapter(display_img,display_name,display_number,2);
         RecyclerView display_recyclerView = binding.emergencyContactsRecycler;
@@ -55,6 +52,8 @@ public class EmergencyContactView extends Fragment {
                         .navigate(R.id.action_FirstFragment_to_SecondFragment)
         );
     }
+
+
 
     @Override
     public void onDestroyView() {
