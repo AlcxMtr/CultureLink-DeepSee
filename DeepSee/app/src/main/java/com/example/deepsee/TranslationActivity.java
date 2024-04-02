@@ -96,15 +96,15 @@ public class TranslationActivity extends AppCompatActivity {
 
 
 
-        // Enable drawing over other apps
-        if (!Settings.canDrawOverlays(this)) {
-            Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                    Uri.parse("package:" + getPackageName()));
-          // TODO: REQUEST PERMISSION FOR DRAWING OVER OTHER APPS!!
-        } else {
-            // Start the service to draw over other apps
-            startDrawOverlaysService();
-        }
+//        // Enable drawing over other apps
+//        if (!Settings.canDrawOverlays(this)) {
+//            Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+//                    Uri.parse("package:" + getPackageName()));
+//          // TODO: REQUEST PERMISSION FOR DRAWING OVER OTHER APPS!!
+//        } else {
+//            // Start the service to draw over other apps
+//            startDrawOverlaysService();
+//        }
     }
 
     // Function to translate text TODO: ADD IN GOOGLE API STUFF!!

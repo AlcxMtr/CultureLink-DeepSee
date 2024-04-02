@@ -51,7 +51,17 @@ public class QuickSettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quick_settings);
 
-//        getSupportActionBar().setTitle("Deepsee Settings");
+
+        // Enable drawing over other apps
+        if (!Settings.canDrawOverlays(this)) {
+            Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                    Uri.parse("package:" + getPackageName()));
+            // TODO: REQUEST PERMISSION FOR DRAWING OVER OTHER APPS!!
+        } else {
+            // Start the service to draw over other apps
+            startDrawOverlaysService();
+        }
+
 
         lvQuickSettings = (ListView) findViewById(R.id.lvQuickSettings);
 
@@ -166,6 +176,7 @@ public class QuickSettingsActivity extends AppCompatActivity {
                 }
             }
         });
+
     }
 
     @NonNull
@@ -181,5 +192,13 @@ public class QuickSettingsActivity extends AppCompatActivity {
 
         ArrayAdapter<String> array_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, setting_arr);
         return array_adapter;
+    }
+
+    // Method to start the service to draw over other apps
+    private void startDrawOverlaysService() {
+        // Start the service to draw over other apps
+        Intent serviceIntent = new Intent(this, DrawOverlaysService.class);
+        serviceIntent.putExtra("activityClass", TranslationActivity.class);
+        startService(serviceIntent);
     }
 }
