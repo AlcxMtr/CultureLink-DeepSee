@@ -56,7 +56,7 @@ public class EmergencyContactAdd extends Fragment {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        contacts = Contact.getContacts(binding.addNewRecyclerview.getContext());
+        contacts = Contact.getContactsPhone(binding.addNewRecyclerview.getContext());
 
         for (Contact contact: contacts) {
             img.add(R.drawable.contacts);

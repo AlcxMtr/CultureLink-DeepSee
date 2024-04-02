@@ -17,23 +17,34 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.595">
 
-        <TextView
-            android:id="@+id/TranslationText"
-            android:layout_width="223dp"
-            android:layout_height="153dp"
-            android:scrollbars="vertical"
-            android:text="Press Translate To Get Result"
-            android:textSize="30sp"
+        <ScrollView
+            android:layout_width="225dp"
+            android:layout_height="198dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.506"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.712" />
+            app:layout_constraintTop_toBottomOf="@+id/translateInput">
+
+            <TextView
+                android:id="@+id/TranslationText"
+                android:textAlignment="center"
+                android:layout_width="223dp"
+                android:layout_height="153dp"
+                android:scrollbars="vertical"
+                android:text="Press Translate To Get Result"
+                android:textSize="30sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.506"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.712" />
+        </ScrollView>
 
         <EditText
             android:id="@+id/translateInput"
             android:inputType="textMultiLine"
+            android:textAlignment="center"
             android:textSize="30sp"
             android:hint="Please highlight or input text"
             android:layout_width="223dp"
@@ -55,9 +66,9 @@
             android:text="Translate"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.802"
+            app:layout_constraintHorizontal_bias="0.197"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/TranslationText"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintVertical_bias="0.953" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

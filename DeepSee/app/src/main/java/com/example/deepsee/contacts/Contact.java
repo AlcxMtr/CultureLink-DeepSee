@@ -43,13 +43,15 @@ public class Contact {
 
                 if (id >= 0 && displayName >= 0) {
                     String contactID = cursor.getString(id);
+                    System.out.println(cursor.getString(displayName));
                     Cursor phoneNumCursor = context.getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
                             null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + "=?", new String[]{contactID}, null);
 
                     if (phoneNumCursor.moveToFirst()) {
                         int num = phoneNumCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
                         if (num >= 0) {
-                            String name = "ss";
+                            //String name = "ss";
+                            System.out.print("," + cleanPhoneNumber(phoneNumCursor.getString(num)) );
                             contacts.add(new Contact(cursor.getString(displayName), cleanPhoneNumber(phoneNumCursor.getString(num))));
                         }
                     }
@@ -61,6 +63,45 @@ public class Contact {
 
         return contacts;
     }
+
+    public static ArrayList<Contact> getContactsPhone(Context context) {
+        ArrayList<Contact> contactsList = new ArrayList<>();
+
+        // Query the contacts content provider
+        ContentResolver contentResolver = context.getContentResolver();
+        Cursor cursor = contentResolver.query(ContactsContract.Contacts.CONTENT_URI,
+                null, null, null, null);
+
+        if (cursor != null && cursor.getCount() > 0) {
+            while (cursor.moveToNext()) {
+                int id = cursor.getColumnIndex(ContactsContract.Contacts._ID);
+                String contactId = cursor.getString(id);
+                int name = cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME);
+                String contactName = cursor.getString(name);
+
+                // Get the phone number(s) associated with the contact
+                Cursor phoneCursor = contentResolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                        null,
+                        ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
+                        new String[]{contactId},
+                        null);
+
+                if (phoneCursor != null) {
+                    while (phoneCursor.moveToNext()) {
+                        int num = phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
+                        String phoneNumber = phoneCursor.getString(num);
+                        contactsList.add(new Contact(contactName, phoneNumber));
+                    }
+                    phoneCursor.close();
+                }
+            }
+            cursor.close();
+        }
+
+        return contactsList;
+    }
+
+
 
     private static String cleanPhoneNumber(String phoneNumber) {
         StringBuilder cleanedNumber = new StringBuilder();

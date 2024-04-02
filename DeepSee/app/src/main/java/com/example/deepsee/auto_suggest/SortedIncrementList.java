@@ -99,7 +99,7 @@ public class SortedIncrementList implements Serializable {
         }
     }
 
-    // Return map of n most used apps and their use numbers
+    // Return map of n most used apps and their use counters
     public HashMap<Integer, Integer> nMostUsed(int n) {
         HashMap<Integer, Integer> mostUsed = new HashMap<Integer, Integer>();
         int m = indexToId.size();
@@ -119,5 +119,34 @@ public class SortedIncrementList implements Serializable {
             mostUsed[i] = indexToId.get(i);
         }
         return mostUsed;
+    }
+
+    public void printList() {
+        int mapSize = appIndices.size();
+        if (mapSize <= 0) return;
+
+        System.out.println("usageCounter Array Below:");
+        printArray(usageCounters);
+
+        System.out.println("indexToId Array Below:");
+        printArray(indexToId);
+    }
+
+    public void printArray(ArrayList<Integer> list) {
+        int size = list.size();
+
+        System.out.print("[");
+        for (int i = 0; i < size-1; i++) {
+            System.out.print(i + ", ");
+        }
+        System.out.print(size-1);
+        System.out.println("]");
+
+        System.out.print("[");
+        for (int i = 0; i < size-1; i++) {
+            System.out.print(list.get(i) + ", ");
+        }
+        System.out.print(list.get(size-1));
+        System.out.println("]");
     }
 }

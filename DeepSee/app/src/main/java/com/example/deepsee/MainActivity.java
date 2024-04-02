@@ -2,6 +2,7 @@ package com.example.deepsee;
 
 import android.Manifest;
 
+import android.app.Application;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -10,12 +11,14 @@ import static java.util.concurrent.TimeUnit.HOURS;
 
 import android.Manifest;
 
+import android.app.WallpaperManager;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 
+import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -94,6 +97,7 @@ import com.example.deepsee.messaging.SMSActivity;
 
 import android.provider.ContactsContract;
 
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -105,6 +109,9 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String CHANNEL_ID = "Persistence";
     private boolean isAppDrawerVisible = false;
+
+    private boolean shouldSaveToSystem = true;
+
     public List<ApplicationInfo> apps;
     public HashMap<Integer, List<ApplicationInfo>> categories;
 
@@ -132,12 +139,13 @@ public class MainActivity extends AppCompatActivity {
     public static AlgoStruct reccomender;
     public static StorageManager storageManager;
 
+    ArrayList<Contact> contacts;
+
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions,
                                            int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
-
 
     void sortAppCategories(){
         // Get Package List:
@@ -169,12 +177,11 @@ public class MainActivity extends AppCompatActivity {
                 Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.READ_CONTACTS,
                 Manifest.permission.READ_SMS,
-                Manifest.permission.WRITE_CONTACTS
+                Manifest.permission.WRITE_CONTACTS,
+                Manifest.permission.CALL_PHONE,
+                Manifest.permission.MANAGE_EXTERNAL_STORAGE,
         };
 
-        if (!hasPermissions()) {
-            ActivityCompat.requestPermissions(MainActivity.this, permissions, 1);
-        }
         ActivityCompat.requestPermissions(MainActivity.this, permissions, 1);
 
 
@@ -182,13 +189,15 @@ public class MainActivity extends AppCompatActivity {
 
         ImageButton shortcutsButton = findViewById(R.id.shDrawerButton);
 
-
         // Persistent notification:
         showAlert();
+
+        contacts = Contact.getContactsPhone(MainActivity.this);
 
         showHideButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                System.out.println("APP DRAWER BUTTON! APP DRAWER BUTTON! APP DRAWER BUTTON! \n\n");
 
                 // Start AppDrawerFragment
                 Fragment fragment = new AppDrawerFragment(categories, apps, pm);
@@ -232,8 +241,8 @@ public class MainActivity extends AppCompatActivity {
         getLastLocation();
 
 
-        ArrayList<Contact> contacts;
-        contacts = Contact.getContacts(MainActivity.this);
+
+
         SMSReader smsReader = new SMSReader();
         List<SMSMessages> smsMessages = smsReader.readSMS(MainActivity.this, contacts,5);
         SMSMessages_widget(smsMessages);
@@ -246,12 +255,13 @@ public class MainActivity extends AppCompatActivity {
     /*TODO
     *  Tie storage manager and app-recommender together, and initialize them on app launch.*/
     private void initializeRecommender() {
+        System.out.println("INITIALIZE RECOMMENDER");
         storageManager = new StorageManager(getBaseContext());
         reccomender = storageManager.getAlgoStruct();
         if (reccomender == null){
             reccomender = new AlgoStruct();
             storageManager.setAlgoStruct(reccomender);
-            System.out.println("Created recommender file.");
+            System.out.println("Created/overwritten recommender file.");
         }
         apps = storageManager.getApps();
         categories = storageManager.getCategories();
@@ -262,18 +272,18 @@ public class MainActivity extends AppCompatActivity {
             System.out.println("Created apps and categories file.");
         }
 
-        SynchronizingWork.addTask(storageManager::syncStorageManager);
+        // DELETE? ---------------------------------------------------------------------------
+        // SynchronizingWork.addTask(storageManager::syncStorageManager);
 
-        PeriodicWorkRequest wr = new PeriodicWorkRequest.Builder(
-                SynchronizingWork.class, 16, TimeUnit.MINUTES).build();
+        // PeriodicWorkRequest wr = new PeriodicWorkRequest.Builder(
+        //         SynchronizingWork.class, 16, TimeUnit.MINUTES).build();
 
-
-        WorkManager.getInstance(getBaseContext()).enqueueUniquePeriodicWork(
-                "Synchronizing app", ExistingPeriodicWorkPolicy.KEEP, wr);
+        // WorkManager.getInstance(getBaseContext()).enqueueUniquePeriodicWork(
+        //         "Synchronizing app", ExistingPeriodicWorkPolicy.KEEP, wr);
+        // DELETE? ---------------------------------------------------------------------------
 
         RecyclerView recommendedApp = findViewById(R.id.recommended_app_recycler);
-        ShortcutsAdapter adapter = new ShortcutsAdapter(getBaseContext(), apps, pm);
-        recommendedApp.setAdapter(adapter);
+        // RecyclerView DETAILS NOT NECESSARY BECAUSE PERFORMED IN onResume() BELOW
         recommendedApp.setLayoutManager(new LinearLayoutManager(getBaseContext(), LinearLayoutManager.HORIZONTAL, false));
 
         IntentFilter filter = new IntentFilter();
@@ -283,8 +293,29 @@ public class MainActivity extends AppCompatActivity {
 
         BroadcastReader myReceiver = new BroadcastReader(storageManager);
         registerReceiver(myReceiver, filter);
-//        storageManager.updateStorageManager();
+    }
 
+    // This method will recalculate and redraw app recommendations on each home page visit
+    @Override
+    protected void onResume() {
+        super.onResume();
+        System.out.println("Redrawing recommender recycler!");
+        RecyclerView recommendedApp = findViewById(R.id.recommended_app_recycler);
+        ShortcutsAdapter adapter = new ShortcutsAdapter(getBaseContext(), apps, pm);
+        recommendedApp.setAdapter(adapter);
+    }
+
+    // Save the app recommendation and other data when the application is stopped
+    @Override
+    protected void onStop() {
+        super.onStop();
+        // Sync is being called likely more often than necessary
+        // Could optimize by moving to onDestroy() + sync every 15 min
+        System.out.println("WE ARE CALLING ONSTOP()!!");
+        if (shouldSaveToSystem) {
+            storageManager.syncStorageManager();
+        }
+        shouldSaveToSystem = true;
     }
 
     private boolean hasPermissions() {
@@ -315,8 +346,8 @@ public class MainActivity extends AppCompatActivity {
 
         //Quick Settings Notification
         Intent intent = new Intent(MainActivity.this, QuickSettingsActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 1, intent, PendingIntent.FLAG_IMMUTABLE);
 
         // This generates the properties and Intent/Content for the notification.
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
@@ -341,8 +372,6 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void run() {
             getLastLocation();
-            ArrayList<Contact> contacts;
-            contacts = Contact.getContacts(MainActivity.this);
             SMSReader smsReader = new SMSReader();
             List<SMSMessages> smsMessages = smsReader.readSMS(MainActivity.this, contacts,5);
             SMSMessages_widget(smsMessages);
@@ -487,6 +516,7 @@ public class MainActivity extends AppCompatActivity {
         // Check if the fragment is currently displayed
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
         if (fragment instanceof AppDrawerFragment) {
+            shouldSaveToSystem = false;
             getSupportFragmentManager().beginTransaction().remove(fragment).commit();
         } else {
             super.onBackPressed();

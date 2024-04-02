@@ -17,7 +17,6 @@
         android:background="@drawable/weather_widget"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
         app:layout_constraintTop_toTopOf="parent"
         tools:layout_editor_absoluteX="10dp">
 
@@ -184,34 +183,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.958" />
 
-    <ImageButton
-        android:id="@+id/shDrawerButton"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
-        android:background="@drawable/shortcut"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.014"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.305" />
-    <HorizontalScrollView
-        android:id="@+id/Messages_widget"
-        android:layout_width="327dp"
-        android:layout_height="167dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.809"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/weather"
-        app:layout_constraintVertical_bias="0.118">
-
-        <LinearLayout
-            android:id="@+id/Messages_widget_layout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal" />
-    </HorizontalScrollView>
     <!--    <androidx.fragment.app.FragmentContainerView-->
     <!--        android:id="@+id/fragmentContainerView2"-->
     <!--        android:name="com.example.deepsee.ShortcutsContainerFragment"-->
@@ -225,6 +196,35 @@
     <!--        app:layout_constraintTop_toTopOf="parent"-->
     <!--        app:layout_constraintVertical_bias="0.484" />-->
 
+
+    <ImageButton
+        android:id="@+id/shDrawerButton"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:background="@drawable/shortcut"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/show_hide_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.958" />
+
+    <HorizontalScrollView
+        android:id="@+id/Messages_widget"
+        android:layout_width="323dp"
+        android:layout_height="160dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.525"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/weather"
+        app:layout_constraintVertical_bias="0.107">
+
+        <LinearLayout
+            android:id="@+id/Messages_widget_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" />
+    </HorizontalScrollView>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recommended_app_recycler"
