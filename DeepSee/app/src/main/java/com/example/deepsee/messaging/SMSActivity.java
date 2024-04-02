@@ -33,7 +33,7 @@ public class SMSActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.message);
 
-        contacts = Contact.getContacts(SMSActivity.this);
+        contacts = Contact.getContactsPhone(SMSActivity.this);
 
         for (Contact contact: contacts) {
             System.out.println("name: " + contact.getName() + " num: " + contact.getContactNumber());
