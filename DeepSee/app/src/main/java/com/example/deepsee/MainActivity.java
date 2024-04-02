@@ -11,12 +11,14 @@ import static java.util.concurrent.TimeUnit.HOURS;
 
 import android.Manifest;
 
+import android.app.WallpaperManager;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 
+import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -95,6 +97,7 @@ import com.example.deepsee.messaging.SMSActivity;
 
 import android.provider.ContactsContract;
 
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -176,11 +179,11 @@ public class MainActivity extends AppCompatActivity {
                 Manifest.permission.READ_SMS,
                 Manifest.permission.WRITE_CONTACTS,
                 Manifest.permission.CALL_PHONE,
+                Manifest.permission.MANAGE_EXTERNAL_STORAGE,
         };
 
-        if (!hasPermissions()) {
-            ActivityCompat.requestPermissions(MainActivity.this, permissions, 1);
-        }
+        ActivityCompat.requestPermissions(MainActivity.this, permissions, 1);
+
 
         ImageButton showHideButton = findViewById(R.id.show_hide_button);
 
