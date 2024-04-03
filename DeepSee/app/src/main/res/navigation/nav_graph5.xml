@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/FirstFragment"
         android:name="com.example.deepsee.emerg.EmergencyContactView"
-        android:label="@string/first_fragment_label"
+        android:label="View Contacts"
         tools:layout="@layout/emrg_content_view">
 
         <action
@@ -18,7 +18,7 @@
     <fragment
         android:id="@+id/SecondFragment"
         android:name="com.example.deepsee.emerg.EmergencyContactAdd"
-        android:label="@string/second_fragment_label"
+        android:label="Add Contacts"
         tools:layout="@layout/emrg_content_add">
 
         <action
